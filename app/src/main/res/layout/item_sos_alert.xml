@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/error_container"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/error"
+    app:strokeWidth="2dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <!-- Row: alert detail on the left (tap it to open the alert's marker on the
+         map), a private dismiss on the right edge. Dismiss is separated from the
+         Acknowledge/Resolve actions below on purpose — those change what the
+         circle sees, this one only changes what you see. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- @color/error, not a literal: the card sits on
+                 @color/error_container, which is a PALE red in the light theme
+                 and a DARK red at night. A hardcoded mid-red only clears 3:1
+                 against one of them. -->
+            <!-- Decorative: the alert text beside it already says what this is. -->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_warning"
+                android:importantForAccessibility="no"
+                app:tint="@color/error" />
+
+            <TextView
+                android:id="@+id/tvAlertTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                tools:text="Alex asked for attention"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/on_error_container" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2:30 PM"
+                android:textSize="12sp"
+                android:alpha="0.9"
+                android:textColor="@color/on_error_container" />
+
+        </LinearLayout>
+
+        <!-- on_error_container, not a hardcoded red: that token flips with
+             the container, so the status line clears 4.5:1 in both themes.
+             A literal red on @color/error_container measures 2.9:1 in the
+             light theme and 2.5:1 at night, which would make the
+             emergency's own status the least readable text on the card. -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Active - Needs Response"
+            android:textStyle="bold"
+            android:textColor="@color/on_error_container" />
+
+        <!-- Where the position stands: "Sending current location", "Last
+             known location · 3:05 PM", "Within about 1.2 mi"..., or the
+             raiser's own words. Hidden for a position taken as it was sent:
+             the address says it all. -->
+        <TextView
+            android:id="@+id/tvPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textSize="13sp"
+            android:textColor="@color/on_error_container"
+            android:visibility="gone"
+            tools:text="Last known location · 3:05 PM"
+            tools:visibility="visible" />
+
+        <!-- The raiser's own alert went without a location because this phone
+             has no location permission or Location Services are off: the way
+             to turn it on. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLocationSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/location_precise_required_open_settings"
+            android:textColor="@color/on_error_container"
+            android:visibility="gone"
+            style="@style/Widget.Material3.Button.TextButton"
+            tools:visibility="visible" />
+
+        <!-- WHERE the SOS was raised, reverse-geocoded on device from the
+             decrypted coordinates (the server holds them encrypted and cannot
+             supply this). Hidden until it resolves, and stays hidden when there
+             is no geocoding data to resolve it with — the map callout carries
+             the coordinates either way. -->
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textSize="13sp"
+            android:alpha="0.9"
+            android:textColor="@color/on_error_container"
+            android:visibility="gone"
+            tools:text="221B Baker Street, London"
+            tools:visibility="visible" />
+
+        <!-- Grace-period notice, shown only while dismissed: says when the row
+             disappears and offers the way back. The map marker is already gone
+             by this point; Undo brings it back. -->
+        <TextView
+            android:id="@+id/tvDismissedCountdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:alpha="0.9"
+            android:textColor="@color/on_error_container"
+            android:visibility="gone"
+            tools:text="Dismissed · removed in 23h 58m"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvAcknowledged"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="2 members acknowledged"
+            android:textSize="12sp"
+            android:alpha="0.9"
+            android:textColor="@color/on_error_container"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <!-- Outlined buttons default to colorPrimary for both label and
+                 stroke, which is the brand purple — 3.6:1 against the dark
+                 error container at night. Pinned to the container's own
+                 on-color so the actions stay readable in either theme. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUndismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sos_undismiss"
+                android:textColor="@color/on_error_container"
+                app:strokeColor="@color/error"
+                android:visibility="gone"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+            <!-- The primary action, whichever one applies (Acknowledge for
+                 somebody else's alert, Resolve for your own — never both). Left
+                 to their defaults these would be the brand-purple filled button
+                 and the green tonal button, both looking like they belong to a
+                 different screen on a red emergency card. Inverting the
+                 card's own pair keeps the action unmistakably primary and above
+                 4.5:1 in either theme. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAcknowledge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acknowledge"
+                android:textColor="@color/error_container"
+                app:backgroundTint="@color/on_error_container"
+                style="@style/Widget.Material3.Button" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResolve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Resolve"
+                android:textColor="@color/error_container"
+                app:backgroundTint="@color/on_error_container"
+                android:visibility="gone"
+                style="@style/Widget.Material3.Button" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="False Alarm"
+                android:textColor="@color/on_error_container"
+                app:strokeColor="@color/error"
+                android:visibility="gone"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <!-- Side dismiss. Hides the alert for this user only; it stays active
+             for everyone else. Icon-only to keep it clearly subordinate to the
+             Acknowledge/Resolve actions, with the meaning carried by the
+             content description for screen readers and long-press. -->
+        <ImageButton
+            android:id="@+id/btnDismiss"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:minHeight="48dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_close"
+            app:tint="@color/error"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/sos_dismiss_for_me"
+            android:tooltipText="@string/sos_dismiss_for_me" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

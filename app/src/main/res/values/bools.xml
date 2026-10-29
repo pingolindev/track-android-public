@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Is this a screen wide enough for the tablet treatment?
+         ...
+         Declared as a RESOURCE rather than computed in Kotlin so that code and
+         layout cannot disagree. The wide layouts are selected by the -w840dp
+         qualifier; a hand-rolled `isTablet()` reading smallestScreenWidthDp
+         would be a second, independent definition of the same thing, and the
+         two drift the moment one is changed — the classic symptom being a
+         navigation rail on screen while the code still reasons about a bottom
+         bar.
+
+         WIDTH, not "is it a tablet". The question worth asking is how much
+         horizontal room there is right now, which changes when a foldable
+         opens, when a tablet is rotated, and in split-screen — where a tablet
+         can legitimately be as narrow as a phone. `w840dp` follows the window,
+         so all three cases answer correctly and for free.
+
+         840dp, not 600dp: a 7-inch tablet in portrait is 600dp and the phone
+         layout is still the right one there. -->
+    <bool name="is_wide_screen">false</bool>
+</resources>

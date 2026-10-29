@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App-specific color aliases (dark) — values auto-flip via @color refs. -->
+<resources>
+    <color name="fab_label_background">@color/surface_container_high</color>
+    <color name="fab_label_text">@color/on_surface</color>
+    <color name="consent_pending">@color/warning_container</color>
+    <color name="consent_denied">@color/error_container</color>
+    <color name="accent">@color/secondary</color>
+
+    <!-- Lightened for the dark card surface (#1e1e32); see the light-mode file.
+         sos_notify_green is deliberately NOT overridden here — it is the button
+         background under white text and must stay dark in both modes. -->
+    <color name="sos_notify_green_on_surface">#4ADE80</color>
+</resources>

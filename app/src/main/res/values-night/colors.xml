@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Auto-generated from the design tokens — do not edit manually -->
+<!-- App: track (dark) -->
+<resources>
+    <color name="primary">#8b7aff</color>
+    <color name="primary_dark">#6d4aff</color>
+    <color name="on_primary">#1a1040</color>
+    <color name="primary_container">#2a2060</color>
+    <color name="on_primary_container">#e8e0ff</color>
+
+    <color name="secondary">#34d399</color>
+    <color name="on_secondary">#064E3B</color>
+    <color name="secondary_container">#065f46</color>
+    <color name="on_secondary_container">#D1FAE5</color>
+
+    <color name="surface">#1a1a2e</color>
+    <color name="surface_variant">#252542</color>
+    <color name="surface_container">#1e1e32</color>
+    <color name="surface_container_high">#2d2d48</color>
+    <color name="on_surface">#f0f0f5</color>
+    <color name="on_surface_variant">#a0a0b8</color>
+
+    <color name="background">#1a1a2e</color>
+    <color name="on_background">#f0f0f5</color>
+
+    <color name="outline">#7d7d94</color>
+    <!-- Same value as the light theme: the launcher icon does not follow it. -->
+    <color name="ic_launcher_background">#452276</color>
+    <color name="outline_variant">#49455a</color>
+
+    <color name="error">#f87171</color>
+    <color name="on_error">#7f1d1d</color>
+    <color name="error_container">#991b1b</color>
+    <color name="on_error_container">#fecaca</color>
+
+    <color name="warning">#fbbf24</color>
+    <color name="on_warning">#78350f</color>
+    <color name="warning_container">#78350f</color>
+
+    <!-- Semantic colours used AS INK on a surface, not as a fill. The fills above are
+         far too light to be text: error is 3.46:1 and warning 1.76:1 on
+         surface-hover. Use *_text for ink, the plain name for fills. -->
+    <color name="error_text">#f87171</color>
+    <color name="warning_text">#fbbf24</color>
+    <color name="success_text">#34d399</color>
+
+    <color name="status_online">#66bb6a</color>
+    <color name="status_offline">#757575</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

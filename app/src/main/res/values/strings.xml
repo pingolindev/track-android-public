@@ -1,0 +1,1263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pingolin Track</string>
+
+    <!-- Navigation -->
+    <string name="nav_map">Map</string>
+    <string name="nav_circles">Circles</string>
+    <string name="nav_safety">Alerts</string>
+    <string name="nav_places">Places</string>
+    <string name="nav_settings">Settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="no_notifications">No notifications</string>
+    <string name="mark_all_read">Mark all as read</string>
+
+    <!-- Authentication -->
+    <string name="auth_title">Welcome to Track</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_login">Sign in</string>
+    <!-- The sign-in screen (AuthActivity); its email, password and button take auth_email, auth_password and auth_login. -->
+    <string name="auth_welcome_back">Welcome back</string>
+    <string name="auth_sign_in_to_continue">Sign in to continue</string>
+    <!-- The app ended this sign-in itself and kept the account: the password only. -->
+    <string name="auth_password_to_carry_on">Enter your password to carry on</string>
+    <string name="auth_no_account_sign_up">Don\'t have an account? Sign up</string>
+    <string name="auth_invalid_verification_link">Invalid verification link</string>
+    <string name="auth_verify_email_cd">Email verification</string>
+    <string name="auth_verify_email_title">Verify your email</string>
+    <string name="auth_verify_email_body">We\'ve sent a verification link to your email address. Check your inbox and tap the link to verify your account.</string>
+    <string name="auth_open_email_app">Open email app</string>
+    <string name="auth_resend_verification">Resend verification email</string>
+    <string name="auth_waiting_for_verification">Waiting for verification…</string>
+    <string name="auth_no_email_app">No email app found</string>
+    <string name="auth_email_verified">Email verified</string>
+
+    <!-- Map -->
+    <string name="map_layer_places">Places</string>
+    <string name="map_custom_range">Custom</string>
+    <!-- The sheet for a place tapped on the map (bottom_sheet_tapped_location). -->
+    <string name="map_tapped_location_cd">Location</string>
+    <string name="map_tapped_add_to_places">Add to Places</string>
+    <string name="map_tapped_share_destination">Share destination</string>
+    <string name="map_tapped_copy_address">Copy address</string>
+
+    <!-- Coordinate Export -->
+    <string name="coord_export_title">Export coordinates</string>
+    <string name="coord_export_all">All members</string>
+    <string name="coord_export_you">You</string>
+    <string name="coord_export_points">%d points</string>
+    <string name="coord_export_button">Export JSON</string>
+
+    <!-- Circles -->
+    <string name="circles_empty">No circles yet</string>
+    <string name="circles_create">Create Circle</string>
+    <string name="circles_leave">Leave Circle</string>
+
+    <!-- Places -->
+    <string name="places_edit">Edit place</string>
+    <string name="places_delete">Delete place</string>
+    <string name="place_icon_home">Home</string>
+    <!-- What a screen reader says for a toolbar's back arrow. -->
+    <string name="navigate_back">Back</string>
+    <!-- What "Send location now" says, as it happened; %1$s is the circle on screen.
+         %1$s is only ever the circle's readable name; without one (a locked circle, a name not opened yet), the
+         line's _unnamed version, never a stand-in put into the frame. -->
+    <string name="send_now_sent">Location sent to %1$s</string>
+    <string name="send_now_sent_unnamed">Location sent to this circle</string>
+    <string name="send_now_saved_to_history">Saved to your history</string>
+    <string name="send_now_waiting">Waiting to send to %1$s</string>
+    <string name="send_now_waiting_unnamed">Waiting to send to this circle</string>
+    <string name="send_now_waiting_history">Waiting to save to your history</string>
+    <string name="send_now_waiting_for_circle">Waiting to send to %1$s: this phone is still catching up with the circle.</string>
+    <string name="send_now_waiting_for_circle_unnamed">Waiting to send to this circle: this phone is still catching up with it.</string>
+    <string name="send_now_not_sent_paused">Not sent: location sharing is paused in %1$s</string>
+    <string name="send_now_not_sent_paused_unnamed">Not sent: location sharing is paused in this circle</string>
+    <string name="send_now_not_sent_off">Not sent: location sharing is off in %1$s</string>
+    <string name="send_now_not_sent_off_unnamed">Not sent: location sharing is off in this circle</string>
+    <!-- The circle on screen at the tap is no longer this account's when the fix comes in, and nothing
+         is sent anywhere. %1$s is the circle's readable name; without one, the unnamed line below,
+         never a fallback name put into this frame. -->
+    <string name="send_now_not_sent_gone">Not sent: you\'re no longer in %1$s</string>
+    <string name="send_now_not_sent_gone_unnamed">Not sent: you\'re no longer in that circle</string>
+    <!-- The check-in screen with no circle chosen; %1$s as send_now_not_sent_gone's. -->
+    <string name="check_in_pick_circle_entry">Choose a circle</string>
+    <string name="check_in_pick_circle">Choose a circle to check in to.</string>
+    <string name="check_in_waiting_for_circles">Can\'t check in yet: this phone is still catching up with your circles.</string>
+    <string name="check_in_circle_gone">You\'re no longer in %1$s. Choose a circle to check in to.</string>
+    <string name="check_in_circle_gone_unnamed">You\'re no longer in the circle you chose. Choose a circle to check in to.</string>
+    <!-- The map's check-in menu opens the check-in screen, whose buttons send your location with the
+         check-in, and which lists the circle's recent ones. -->
+    <string name="check_in_screen_entry">With my location…</string>
+    <!-- "Add Place" before a fix arrives and with no address picked. -->
+    <string name="place_needs_a_position">Search for the place\'s address first: Track doesn\'t have your location yet.</string>
+
+    <!-- Notify my circle.
+         The resource names keep the sos_ prefix on purpose: it matches
+         the wire type and the /api/v1/sos routes, none of which are
+         user-facing. Only the VALUES here are read by anyone. -->
+    <!--
+        The Alerts TAB's screen title, matching the tab. The button at the top
+        of the screen says "Notify my circle", but the screen holds three
+        things: the notify button, open notifications, and alert rules;
+        "Alerts" is the only one of the two names that covers all three, and it
+        is the word the user tapped to get here. The button keeps saying
+        "Notify my circle" on itself, which is where that name belongs.
+        Key stays `sos_title` — a wire/resource name, never shown.
+    -->
+    <string name="sos_title">Alerts</string>
+    <string name="sos_button">Notify my circle - not emergency services</string>
+    <string name="sos_tap_hint">Tap to notify the active members of this circle and show them where you are — a short countdown lets you cancel</string>
+    <!--
+        What notifying actually does, shown while the countdown is running —
+        which is this flow's last moment before anything is sent, the countdown
+        being where Android cancels rather than confirms. Also appended to the
+        privacy-override dialog, the other pre-send surface.
+
+        Three facts: WHO receives it (active members of this circle, not a
+        dispatcher), that delivery is BEST-EFFORT (the sos_delivery_* strings
+        exist because "reached nobody" is a real outcome, so arrival must not be
+        promised here and denied there), and what to do INSTEAD in an emergency.
+    -->
+    <string name="sos_reach_explanation">This sends your location only to active members of this circle. Delivery is not guaranteed. If you are in immediate danger, contact your local emergency services.</string>
+    <string name="sos_sending">Notifying your circle…</string>
+    <!-- A raise that hasn't reached the circle: said on the SOS card until it does or is let go. -->
+    <string name="sos_not_sent_waiting">Not sent yet: no connection. Your circle will be notified as soon as this phone is back online. If you need them now, call or text them.</string>
+    <!-- Waiting on this phone's session store, not a connection: the phone is online. -->
+    <string name="sos_not_sent_waiting_store">Not sent yet: Track can\'t send right now. Your circle will be notified as soon as it can. If you need them now, call or text them.</string>
+    <string name="sos_not_sent_unsure">Couldn\'t tell whether your circle was notified. Trying again may notify them twice. If you need them now, call or text them.</string>
+    <string name="sos_not_sent">Your circle wasn\'t notified. Try again, or call or text them yourself.</string>
+    <!-- The help button while this phone can't read its circles, and for someone in none. -->
+    <string name="sos_cant_notify_title">Your circle wasn\'t notified</string>
+    <string name="sos_cant_notify_now">Track can\'t notify anyone right now. If you need help now, call or text someone directly, or contact your local emergency services. Then try again.</string>
+    <string name="sos_no_circle_to_notify">Track has no circle to notify on this phone yet. If you need help now, call or text someone directly, or contact your local emergency services.</string>
+    <string name="sos_not_sent_try_again">Try again</string>
+    <string name="sos_not_sent_close">Close</string>
+    <!-- The same, outside the app: a notice on the SOS channel, silent. %1$s is when it was asked. -->
+    <string name="sos_notice_waiting_title">Not sent yet: no connection</string>
+    <string name="sos_notice_waiting_text">Your circle will be notified as soon as this phone is back online. If you need them now, call or text them.</string>
+    <string name="sos_notice_waiting_store_title">Not sent yet</string>
+    <string name="sos_notice_waiting_store_text">Your circle will be notified as soon as Track can send it. If you need them now, call or text them.</string>
+    <string name="sos_notice_unsure_title">Your circle notification may not have gone · %1$s</string>
+    <string name="sos_notice_unsure_text">Couldn\'t tell whether your circle was notified. Trying again may notify them twice. If you need them now, call or text them.</string>
+    <string name="sos_notice_not_sent_title">Your circle notification wasn\'t sent · %1$s</string>
+    <string name="sos_notice_not_sent_text">Your circle wasn\'t notified. Try again, or call or text them yourself.</string>
+    <!-- Deliberately NOT "your circle has been notified". At this point the
+         server has stored the request and nothing more; whether it reached a
+         single device is what the delivery strings below report. -->
+    <string name="sos_sent">Sent — checking whether it arrived…</string>
+    <string name="sos_cancel">Cancel</string>
+    <string name="sos_active_alerts">Open notifications</string>
+    <string name="sos_no_alerts">Nobody has asked for attention</string>
+    <string name="sos_acknowledge">Acknowledge</string>
+    <string name="sos_resolve">Resolve</string>
+    <string name="sos_false_alarm">False Alarm</string>
+    <string name="sos_dismiss">Dismiss</string>
+    <string name="sos_dismiss_for_me">Dismiss for me</string>
+    <string name="sos_undismiss">Undo</string>
+    <string name="sos_dismissed_countdown">Dismissed · removed in %1$s</string>
+    <string name="sos_dismissed_expiring">Dismissed · removing now</string>
+    <string name="sos_restored">Restored — showing on the map again</string>
+    <string name="sos_no_location">This notification has no location to show on the map</string>
+    <string name="sos_dismissed">Dismissed — hidden for you only</string>
+    <string name="sos_dismiss_explainer">Dismissing only hides this for you. Other members still see it, and it stays open.</string>
+    <!-- Under the standalone map marker. Shown ONLY when the raiser has moved
+         away from where they sent it, so two triangles would otherwise sit on
+         the map with nothing distinguishing the person from the place they
+         left. "from" is what says this is the origin; %1$s is an age ("12m")
+         and says it is not current. -->
+    <string name="sos_sent_from_here">Sent from here · %1$s</string>
+    <!-- The tap-through explanation. Opens with the same words as the map
+         label so the two read as one thing. It does not say the location
+         stays as it is: the raiser's phone replaces it with a better one. -->
+    <string name="sos_location_snapshot">Sent from here. This location was recorded when the notification was sent.</string>
+    <!-- Where an SOS's position stands. %1$s is a clock time, with the
+         date when it isn't today. -->
+    <string name="sos_position_pending">Sending current location</string>
+    <string name="sos_position_unavailable">Location unavailable</string>
+    <string name="sos_position_last_known">Last known location</string>
+    <string name="sos_position_last_known_at">Last known location · %1$s</string>
+    <string name="sos_position_updated_at">Location updated · %1$s</string>
+    <!-- %1$s is a distance in the user's units ("1.2 mi", "300 m"). -->
+    <string name="sos_position_within">Within about %1$s</string>
+    <!-- The raiser's own card: what went out. -->
+    <string name="sos_own_position_pending">Sending your current location</string>
+    <string name="sos_own_position_unavailable">Sent without your location</string>
+    <string name="sos_own_position_from">Sent with your location from %1$s</string>
+    <string name="sos_own_position_added">Your location was added at %1$s</string>
+    <string name="sos_from_member">%1$s asked for attention</string>
+    <!-- The list row has no member name to hand (SosAlertRow carries the
+         alert and its address, nothing about who raised it), so this is the
+         nameless form used there. -->
+    <string name="sos_from_member_unknown">A circle member asked for attention</string>
+    <!-- The same with no readable name: never a stand-in put into sos_from_member's frame. -->
+    <string name="sos_from_member_unnamed">A circle member asked for attention</string>
+    <string name="sos_from_you">You asked for attention</string>
+    <string name="sos_triggered_at">Sent %1$s · %2$s</string>
+    <string name="sos_looking_up_address">Looking up address…</string>
+
+    <!-- Delivery outcome, shown to the person who pressed the button.
+         "Confirmed" throughout means a recipient's DEVICE reported that the
+         notification arrived. It is not acknowledgement and not a person
+         having read anything; keeping those apart is the whole point of
+         these strings. -->
+    <string name="sos_delivery_title">Did it get through?</string>
+    <string name="sos_delivery_checking">Checking whether your circle received it…</string>
+    <string name="sos_delivery_alone">Nobody else is in this circle, so there was no one to notify. Add someone, or pick a different circle.</string>
+    <string name="sos_delivery_confirmed">All %1$d confirmed their device received it.</string>
+    <string name="sos_delivery_partial">%1$d of %2$d confirmed their device received it. The rest have not yet — a phone that is off or has no signal cannot confirm.</string>
+    <string name="sos_delivery_no_confirmation">Nobody\'s device has confirmed yet. We sent it, but we cannot tell whether it arrived. If this matters right now, reach someone another way.</string>
+    <string name="sos_delivery_undeliverable">This did not reach anyone. Nobody in this circle has a device we can notify. Contact them another way.</string>
+    <string name="sos_delivery_emailed">We also emailed %1$d.</string>
+    <string name="sos_delivery_not_response">Confirmed means the notification reached their device — not that anyone has read it or is on their way.</string>
+    <!-- The checks ended with no answer at all: said, never "Checking…" for good (as iOS says it). -->
+    <string name="sos_delivery_no_answer">We couldn\'t find out whether it arrived. If this matters right now, reach someone another way.</string>
+    <!-- Once, outside the Safety tab, for a request that went (as on iOS): it reached nobody, or
+         its checks never answered. OK only. -->
+    <string name="sos_reached_nobody_title">Your circle notification didn\'t reach anyone</string>
+    <string name="sos_reached_nobody_alone">Nobody else is in this circle, so there was no one to notify. If you need help now, contact someone directly, or notify a different circle.</string>
+    <string name="sos_reached_nobody_undeliverable">Nobody in this circle has a device we can notify. Contact them another way.</string>
+    <string name="sos_no_answer_title">Your circle notification may not have arrived</string>
+    <string name="sos_no_answer_body">We couldn\'t find out whether it reached anyone. If you need help now, contact someone directly.</string>
+    <!-- Member sheet: tap through to the place this member is standing in. -->
+    <string name="member_at_place">At %1$s</string>
+    <!-- Tapping a member in the circle sheet focuses them on the map; this is
+         what we say when nothing of theirs has decrypted to focus on. -->
+    <string name="member_focus_no_location">No recent location for %1$s</string>
+    <!-- A member sharing an approximate location is an area on the map, never a pin.
+         No number: the radius the server sends is varied on purpose.
+         The same words on web and iPhone. -->
+    <string name="member_approximate_location">Approximate location</string>
+    <!-- Read out for the map, whose markers a screen reader cannot reach: who is on it.
+         %1$s is the members, "; " between them. -->
+    <string name="map_members_a11y">Map showing %1$s</string>
+    <string name="map_member_you_a11y">you</string>
+    <string name="member_map_approximate_a11y">%1$s, approximate location</string>
+    <string name="member_security_details">Security details</string>
+    <!-- Shown before notifying a circle the user has hidden their location from.
+         Notifying seals the location with the CIRCLE key, so there is no
+         per-member withholding available; the honest option is to say what is
+         about to happen and then do exactly what the user asks. -->
+    <string name="sos_privacy_override_title">Your location will be shared</string>
+    <string name="sos_privacy_override_paused">You have paused sharing with %1$s.\n\nSending will show everyone in this circle your exact location.</string>
+    <string name="sos_privacy_override_approximate">You are sharing only an approximate location with %1$s.\n\nSending will show everyone in this circle your exact location.</string>
+    <string name="sos_privacy_override_sharing_off">You have turned real-time sharing off for %1$s. Sending this will share your exact location with everyone in it anyway.</string>
+    <string name="sos_privacy_override_send">Send anyway</string>
+    <string name="sos_privacy_override_cancel">Cancel</string>
+    <string name="sos_privacy_override_this_circle">this circle</string>
+    <plurals name="sos_members_acknowledged">
+        <item quantity="one">%d member acknowledged</item>
+        <item quantity="other">%d members acknowledged</item>
+    </plurals>
+
+    <!-- Safety Rules -->
+    <string name="safety_rules_title">Alert Rules</string>
+    <string name="safety_rules_tab_alerts">Alerts</string>
+    <string name="safety_rules_tab_history">History</string>
+
+    <!-- Geocoding / Offline Maps -->
+    <string name="geocoding_title">Geocoding</string>
+    <string name="geocoding_download">Download</string>
+    <string name="geocoding_delete">Delete</string>
+    <string name="geocoding_downloaded">Downloaded</string>
+    <!-- Banner under the Geocoding rows. TWO variants, swapped to follow the
+         server-geocoder switch: a single string saying lookups are local would,
+         with the toggle ON, state the opposite of the truth one row above the
+         control that made it false. -->
+    <string name="geocoding_privacy_note">All address lookups are performed locally on your device</string>
+    <!-- These two state the CURRENT situation and nothing else. The switch
+         directly above is the instruction, so the note does not repeat "turn
+         this off to …", and the (i) dialog carries the detail. -->
+    <string name="geocoding_privacy_note_server">Address lookups are sent to our geocoder</string>
+    <string name="geocoding_server_title">Server-side geocoder</string>
+    <string name="geocoding_server_description">Look up addresses and places from our hosted geocoder instead of on-device data.\n\nYour search text and the coordinates you look up are sent to our server. Requests carry no account identifier, and coordinates are rounded to about 10 metres before they are sent, so the server does not link queries to you or your account.\n\nWhen this is off, nothing about your searches leaves the device — lookups use map data downloaded to your phone.</string>
+    <string name="geocoding_server_info_content_description">About the server-side geocoder</string>
+    <string name="premium_badge">Premium</string>
+
+    <!-- Map refresh-state strip -->
+    <string name="map_refresh_status_updating">Updating…</string>
+    <string name="map_refresh_status_offline">Couldn\'t reach server — showing last known</string>
+
+    <!-- Labels shown next to always-visible map FABs / icon buttons while
+         the dot menu is expanded, so the user can see what every on-screen
+         button does, not just the ones inside the speed dial. -->
+    <string name="map_fab_label_quick_checkin">Quick check-in</string>
+    <string name="map_fab_label_send_location">Send location</string>
+    <string name="map_fab_label_center_on_all">Center on all</string>
+    <string name="map_fab_label_recenter_on_me">Recenter on me</string>
+    <string name="map_fab_label_layers">Layers</string>
+    <string name="map_fab_label_compass">Reset north</string>
+    <string name="map_fab_label_notifications">Notifications</string>
+    <!-- The map screen's words (its layouts, MapFragment and MapViewModel). A name goes into a frame
+         only when it is readable; without one, the line's whole unnamed version. Times and dates are
+         the locale's own; the marker ages are as short as the web's. -->
+    <string name="map_switch_circle_cd">Switch circle</string>
+    <string name="map_layer_members">Members</string>
+    <string name="map_layer_shared_places">Shared places</string>
+    <string name="map_layer_destinations">Destinations</string>
+    <string name="map_layer_alert_areas">Alert areas</string>
+    <string name="map_close_filters_cd">Close filters</string>
+    <string name="map_center_on_all_members_cd">Center on all members</string>
+    <string name="map_recenter_on_me_cd">Recenter on my location</string>
+    <string name="map_toggle_layers_cd">Toggle layers</string>
+    <string name="map_view_history">View history</string>
+    <string name="map_close_history_cd">Close history</string>
+    <string name="map_range_live">Live</string>
+    <string name="map_range_1h">1h</string>
+    <string name="map_range_24h">24h</string>
+    <string name="map_range_today">Today</string>
+    <string name="map_range_7d">7d</string>
+    <string name="map_destinations">Destinations</string>
+    <string name="map_history">History</string>
+    <string name="map_more_actions_cd">More actions</string>
+    <string name="map_search_address">Search address</string>
+    <string name="map_tracking_active_cd">Tracking active</string>
+    <string name="map_start_tracking_cd">Start continuous tracking</string>
+    <string name="map_send_location_now_cd">Send location now</string>
+    <string name="map_place_icon_cd">Place icon</string>
+    <string name="map_place_alerts">Alerts</string>
+    <string name="map_share_as_destination">Share as destination</string>
+    <string name="map_check_in_message_heading">Add a message (optional)</string>
+    <string name="map_check_in_message_hint">What would you like to share?</string>
+    <string name="map_check_in_include_location">Include my current location</string>
+    <string name="coord_export_filter">Filter by member</string>
+    <string name="coord_export_none_in_range">No location data for selected range</string>
+    <string name="map_getting_address">Getting address…</string>
+    <string name="map_add_to_places_title">Add to Places?</string>
+    <string name="map_add">Add</string>
+    <string name="place_name_required">Name is required</string>
+    <string name="place_created">Place created</string>
+    <string name="place_create_failed">Couldn\'t add this place just now.</string>
+    <string name="map_just_me">Just me</string>
+    <string name="map_select_circle">Select circle</string>
+    <string name="map_select_date_range">Select date range</string>
+    <string name="map_date_range">%1$s – %2$s</string>
+    <string name="map_history_only_member">Only %1$s</string>
+    <plurals name="map_history_points_loaded">
+        <item quantity="one">%d point loaded</item>
+        <item quantity="other">%d points loaded</item>
+    </plurals>
+    <plurals name="map_history_points_truncated">
+        <item quantity="one">%d point — oldest left out, try a shorter range</item>
+        <item quantity="other">%d points — oldest left out, try a shorter range</item>
+    </plurals>
+    <string name="map_tracking_started">Continuous tracking started</string>
+    <string name="map_location_failed">Failed to get location</string>
+    <plurals name="send_now_not_sent_wait">
+        <item quantity="one">Not sent: you can send again in %d second</item>
+        <item quantity="other">Not sent: you can send again in %d seconds</item>
+    </plurals>
+    <string name="map_join_circle_to_share">Join or create a circle to share location</string>
+    <string name="map_location_sent_at">Location sent at %1$s</string>
+    <string name="map_dismiss">Dismiss</string>
+    <string name="place_deleted">Place deleted</string>
+    <string name="place_delete_failed">Couldn\'t delete the place just now.</string>
+    <string name="map_tapped_you_are_here">You are here: %1$s</string>
+    <string name="map_tapped_you_are_here_approx">You are here</string>
+    <string name="map_tapped_member_at">%1$s · %2$s: %3$s</string>
+    <string name="map_tapped_member_at_approx">%1$s · %2$s</string>
+    <string name="map_tapped_at">%1$s: %2$s</string>
+    <string name="map_you">You</string>
+    <string name="map_looking_up_address">Looking up address…</string>
+    <string name="map_address_unavailable">Address unavailable</string>
+    <string name="coord_export_no_app">No app available to share coordinates</string>
+    <string name="map_your_destination">Your destination</string>
+    <string name="map_member_destination">%1$s\'s destination</string>
+    <string name="map_member_destination_unnamed">A member\'s destination</string>
+    <string name="map_join_circle_first">Join or create a circle first</string>
+    <string name="map_custom_message">Custom message…</string>
+    <string name="map_check_in_message_title">Check-in message</string>
+    <string name="map_send">Send</string>
+    <string name="map_sending_check_in">Sending check-in…</string>
+    <string name="map_check_in_sent">Check-in sent</string>
+    <string name="map_check_in_failed">Couldn\'t send the check-in just now.</string>
+    <string name="map_please_select_circle">Please select a circle</string>
+    <string name="map_destination_tap_first">Tap a spot on the map first to set the destination location.</string>
+    <string name="map_sharing_destination">Sharing destination…</string>
+    <string name="map_destination_shared">Destination shared with %1$s</string>
+    <string name="map_destination_shared_unnamed">Destination shared with this circle</string>
+    <string name="map_destination_share_failed">Couldn\'t share the destination just now.</string>
+    <string name="map_cancelling_trip">Cancelling trip to %1$s…</string>
+    <string name="map_cancelling_trip_unnamed">Cancelling your current trip…</string>
+    <string name="map_cancel_trip_failed">Couldn\'t cancel that trip just now.</string>
+    <string name="destination_limit_body_unnamed">Your plan includes one active destination at a time. Cancel your current trip to share a new one — Premium includes unlimited destinations.</string>
+    <string name="map_last_seen">Last seen: %1$s</string>
+    <string name="map_shared_with_by">Shared with %1$s by %2$s</string>
+    <string name="map_shared_with_by_another">Shared with %1$s by another member</string>
+    <string name="map_shared_with_a_circle_by">Shared with a circle by %1$s</string>
+    <string name="map_shared_with_a_circle_by_another">Shared with a circle by another member</string>
+    <string name="map_delete_place_confirm_unnamed">Are you sure you want to delete this place?</string>
+    <string name="map_delete_place_confirm">Are you sure you want to delete “%1$s”?</string>
+    <string name="map_no_member_locations">No member locations available</string>
+    <string name="map_address_clip_label">Address</string>
+    <string name="map_address_copied">Address copied</string>
+    <string name="map_just_now">Just now</string>
+    <string name="map_minutes_ago">%1$dm ago</string>
+    <string name="map_hours_ago">%1$dh ago</string>
+    <string name="map_age_now">now</string>
+    <string name="map_age_minutes">%1$dm</string>
+    <string name="map_age_hours">%1$dh</string>
+    <string name="map_age_days">%1$dd</string>
+    <string name="map_age_years">%1$dy</string>
+    <!-- The map's sync warnings (a Snackbar, no action: the app fetches what it is missing by itself),
+         as send_now_waiting_for_circle says it: some locations open, or none. -->
+    <plurals name="map_locations_waiting_for_sync">
+        <item quantity="one">%d location can\'t be shown yet: this phone is still catching up with the circle.</item>
+        <item quantity="other">%d locations can\'t be shown yet: this phone is still catching up with the circle.</item>
+    </plurals>
+    <string name="map_awaiting_circle_sync">Locations can\'t be shown yet: this phone is still catching up with the circle.</string>
+    <string name="map_your_location">Your location</string>
+    <string name="map_historical_location">Historical location</string>
+    <string name="map_location_not_available">Location not available</string>
+    <string name="map_send_failed">Failed to send location</string>
+    <string name="member_unknown">Unknown</string>
+
+    <!-- Account recovery (Settings → Account recovery, and the sign-in screen).
+         Both are link-outs to the web account portal: nothing here performs a
+         reset. The wording mirrors the portal's own so the two screens do not
+         describe the same feature differently — in particular that a recovery
+         address restores ACCOUNT ACCESS, and that encrypted data still needs
+         the recovery key. -->
+    <string name="recovery_email_title">Recovery email</string>
+    <string name="recovery_email_desc">An optional second address that can receive a password-reset link if you lose access to your primary email. It recovers account access only — your encrypted data still needs your recovery key. It can only be added while you are signed in.</string>
+    <!-- Deliberately short. This is the state almost every account is in, so
+         it is on screen for almost everyone: a two-line bold red paragraph
+         here would be the loudest thing in Settings and drown the
+         explanation below it. The state gets the emphasis; the mechanism
+         ("only while signed in") lives in the neutral description, where it
+         is true in every state. -->
+    <string name="recovery_email_status_unknown">Checking…</string>
+    <string name="recovery_email_status_none">Not set up — add one before you are locked out.</string>
+    <string name="recovery_email_status_pending">%1$s — awaiting verification. Check that inbox for the link.</string>
+    <string name="recovery_email_status_verified">%1$s — verified</string>
+    <string name="recovery_email_info_cd">What is a recovery email?</string>
+    <string name="recovery_email_manage">Manage recovery email (opens in your browser)</string>
+    <string name="recovery_no_browser">No browser available</string>
+    <!-- Two-factor sign-in -->
+    <string name="two_factor_title">Two-factor authentication</string>
+    <string name="two_factor_prompt">Enter the 6-digit code from your authenticator app, or one of your backup codes.</string>
+    <string name="two_factor_code_hint">Code</string>
+    <string name="two_factor_verify">Verify</string>
+    <string name="two_factor_passkey_only_title">Sign in on the web for now</string>
+    <string name="two_factor_passkey_only_body">This account\'s second step uses a passkey, which this app can\'t use yet. Add an authenticator app in your account settings, or sign in on the web.</string>
+    <string name="two_factor_open_security_settings">Open account settings</string>
+    <!--
+        Both of these leave the app for a browser, including from its
+        first-run screens, so they say so. Resetting a password and changing a
+        recovery address are deliberately web-only — see the comment on the
+        click listener in AuthActivity — so the destination does not change;
+        saying where the tap goes is the honest half. A Custom Tab would frame
+        it better and needs a dependency the app does not carry.
+    -->
+    <string name="forgot_password">Forgot your password? (opens in your browser)</string>
+
+    <!-- Security & Devices (Settings → Security & Devices) -->
+    <string name="security_devices_section">Security &amp; Devices</string>
+    <string name="devices_button">Manage Devices</string>
+    <string name="devices_row_description">Sign devices out and review what\'s registered to this account</string>
+    <!-- The page has no repair button: this phone checks that copy by itself. -->
+    <string name="my_keys_row_description">What other members compare to confirm it\'s you</string>
+
+    <!-- Blocked people (Settings → Security & Devices). -->
+    <string name="blocked_people_title">Blocked people</string>
+    <string name="blocked_people_description">People you block can\'t invite you to a circle, even after changing their email address. They are not notified.</string>
+    <string name="blocked_people_email_label">Email address</string>
+    <string name="blocked_people_block">Block</string>
+    <string name="blocked_people_unblock">Unblock</string>
+    <string name="blocked_people_empty">You haven\'t blocked anyone.</string>
+    <string name="blocked_people_full">Your list of blocked people is full. Unblock someone to add another.</string>
+    <!-- For a screen reader: which row's button this is. "Unblock" and the address. -->
+    <string name="blocked_people_unblock_cd">Unblock %1$s</string>
+
+    <!-- Security details (Settings → Security & Devices → Security details). No
+         user-facing text talks about keys. The web app and the iOS app use the
+         same name, and point people here. -->
+    <string name="my_keys_title">Security details</string>
+    <string name="my_keys_button">Security details</string>
+    <string name="my_keys_explainer">Other members can compare these details with what their phone shows for you, to confirm they\'re really talking to you.</string>
+    <!-- Names both comparable values explicitly. Without this the screen reads as
+         a wall of hex that matches nothing: the safety number is pairwise and has
+         no counterpart here, and the keys below only line up against a DIFFERENT
+         screen on someone else's device.
+         Every path here routes through "Security details" — the label on the
+         member's overflow menu (member_security_details, added by
+         CircleMembersAdapter) and the only way into MemberDetailFragment.
+         "Safety number" and "Show technical details" name headings INSIDE that
+         screen, so a path that starts with either one dead-ends: there is
+         nothing by that name to tap. -->
+    <string name="my_keys_compare_heading">What matches what</string>
+    <string name="my_keys_compare_safety_number">To check a security code, open Circles → the circle → that member\'s ⋮ menu → Security details. They should open Security details for you on their phone. The twelve groups of digits will be the same on both phones — there is no security code of your own on this page, because it is always worked out from two people at once.</string>
+    <string name="my_keys_compare_keys">To check the details below, ask that member to open Circles → the circle → your ⋮ menu → Security details → Show technical details. What they see there is exactly what you see here, character for character.</string>
+    <string name="my_keys_sharing_label">Encryption ID (X25519)</string>
+    <string name="my_keys_signing_label">Signature ID (Ed25519)</string>
+    <string name="my_keys_user_id_label">User ID</string>
+    <string name="my_keys_copy">Copy</string>
+    <string name="my_keys_unavailable">Unavailable</string>
+    <string name="my_keys_footnote">Public values only. Nothing secret leaves this phone or is shown here.</string>
+
+    <!-- This phone lost what lets it sign for the account (its key store): the password, typed
+         once in place, puts it back on this session. Says what happens; no key talk. -->
+    <string name="password_in_place_title">Enter your password</string>
+    <string name="password_in_place_body">This phone needs your password once more to keep your circles working. You stay signed in.</string>
+    <string name="password_in_place_hint">Password</string>
+    <string name="password_in_place_continue">Continue</string>
+    <string name="password_in_place_not_now">Not now</string>
+    <string name="password_in_place_wrong">That password isn\'t right.</string>
+    <string name="password_in_place_failed">Couldn\'t check your password just now.</string>
+
+    <!-- Member detail (Circles → a member): the other half of the comparison
+         the Security details screen points at. -->
+    <string name="member_detail_safety_number">Security code</string>
+    <string name="member_detail_show_technical_details">Show technical details</string>
+    <string name="member_detail_hide_technical_details">Hide technical details</string>
+    <string name="member_detail_safety_number_hint">Compare these 60 digits with %1$s in person, or on a call you placed yourself. They should open Security details for you on their phone (Circles → the circle → your ⋮ menu); the twelve groups will be the same on both phones.</string>
+    <string name="member_detail_technical_hint">%1$s’s technical details. On their own phone these appear under Settings → Security &amp; Devices → Security details, character for character.</string>
+
+    <!-- App Lock -->
+    <string name="app_lock_title">App Lock</string>
+    <string name="app_lock_pin">Secure with PIN</string>
+    <string name="app_lock_pin_description">Use a 4-digit PIN to lock the app</string>
+    <string name="app_lock_biometrics">Use Biometrics</string>
+    <string name="app_lock_biometrics_description">Use fingerprint or face to unlock</string>
+    <string name="app_lock_auto_lock">Auto-lock</string>
+    <string name="app_lock_auto_lock_description">When to lock after leaving the app</string>
+    <string name="app_lock_immediately">Immediately</string>
+    <string name="app_lock_1_min">After 1 minute</string>
+    <string name="app_lock_2_min">After 2 minutes</string>
+    <string name="app_lock_5_min">After 5 minutes</string>
+    <string name="app_lock_10_min">After 10 minutes</string>
+    <string name="app_lock_15_min">After 15 minutes</string>
+    <string name="app_lock_30_min">After 30 minutes</string>
+    <string name="app_lock_60_min">After 60 minutes</string>
+    <string name="app_lock_enter_pin">Enter PIN</string>
+    <string name="app_lock_confirm_pin">Confirm PIN</string>
+    <string name="app_lock_pin_mismatch">PINs do not match</string>
+    <string name="app_lock_pin_set">PIN lock enabled</string>
+    <string name="app_lock_pin_removed">PIN lock disabled</string>
+    <string name="app_lock_biometrics_enabled">Biometric lock enabled</string>
+    <string name="app_lock_biometrics_disabled">Biometric lock disabled</string>
+    <string name="app_lock_biometrics_unavailable">Biometric authentication unavailable</string>
+    <string name="app_lock_no_hardware">This phone can\'t unlock apps with a fingerprint or face</string>
+    <!-- "Use Biometrics" needs a strong biometric enrolled; a screen lock alone isn't one, and many phones'
+         face unlock is the weak kind apps can't use. -->
+    <string name="app_lock_none_enrolled">Add a fingerprint in your phone\'s settings to use this; on some phones face unlock works too</string>
+    <string name="app_lock_hardware_unavailable">Fingerprint or face unlock isn\'t available right now</string>
+    <!-- A biometric lock set up by an earlier version, with no PIN, on a phone where biometrics no
+         longer run and that has no screen lock: nothing can check anyone, so it asks for a PIN or
+         to be off. -->
+    <string name="app_lock_mend_title">Set a PIN for App Lock</string>
+    <string name="app_lock_mend_body">This phone can\'t unlock Track with a fingerprint or face any more, and there\'s no PIN to fall back on. Set a PIN to keep Track locked, or turn App Lock off.</string>
+    <string name="app_lock_mend_set_pin">Set PIN</string>
+    <string name="app_lock_mend_turn_off">Turn off App Lock</string>
+    <!-- Before a lock is turned off, or replaced by a new PIN: the lock itself is asked for first.
+         A wrong PIN gets the unlock's own lines (PinAttempts). -->
+    <string name="app_lock_prove_off_title">Turn off App Lock</string>
+    <string name="app_lock_prove_change_title">Change App Lock</string>
+    <string name="app_lock_prove_subtitle">Confirm it\'s you</string>
+    <!-- The unlock's own words for the screen lock (MainActivity.showDeviceCredentialPrompt). -->
+    <string name="app_lock_prove_screen_lock_subtitle">Use your phone\'s screen lock</string>
+    <string name="app_lock_prove_use_pin">Use PIN</string>
+    <string name="app_lock_prove_pin_title">Enter your PIN</string>
+    <string name="app_lock_prove_off_pin_body">To turn off App Lock, enter your PIN.</string>
+    <string name="app_lock_prove_change_pin_body">To change App Lock, enter your PIN.</string>
+    <string name="app_lock_prove_add_biometrics_pin_body">To unlock Track with a fingerprint or face, enter your PIN.</string>
+    <string name="app_lock_prove_auto_lock_pin_body">To change when Track locks, enter your PIN.</string>
+    <!-- The locked screen (activity_main's lockOverlay) and the PIN field it asks with (dialog_pin_input). -->
+    <string name="app_lock_overlay_cd">Locked</string>
+    <string name="app_lock_overlay_title">Track is locked</string>
+    <string name="app_lock_overlay_message">Confirm it\'s you to continue</string>
+    <string name="app_lock_unlock">Unlock</string>
+    <string name="app_lock_pin_hint">PIN</string>
+
+    <!-- Diagnostics / Crash Reporting -->
+    <string name="diagnostics_title">Diagnostics</string>
+    <string name="crash_reporting_title">Crash Reporting</string>
+    <string name="crash_reporting_description">Log app crashes locally for troubleshooting</string>
+    <string name="crash_reporting_privacy_note">Crash logs are stored locally and never sent automatically</string>
+    <string name="crash_logs_title">Crash Logs</string>
+    <string name="crash_logs_none">No crash logs</string>
+    <string name="crash_logs_count">%d log(s) stored</string>
+    <string name="crash_logs_view">View</string>
+    <string name="crash_logs_delete_all">Delete All</string>
+    <string name="crash_logs_empty">No crash logs found</string>
+    <string name="crash_logs_deleted">Crash logs deleted</string>
+    <string name="crash_log_share">Share Log</string>
+    <string name="crash_log_delete">Delete Log</string>
+
+    <!-- Shown when the user answered the location prompt with "Approximate".
+         That grant is accepted by the system but useless here: a coarse fix is
+         kilometre-scale and every one of them is discarded by the accuracy
+         filter, so tracking records nothing at all. Say that plainly rather
+         than let the user believe sharing is on. -->
+    <string name="location_precise_required_title">Precise location needed</string>
+    <string name="location_precise_required_body">Pingolin Track has approximate location only, which is far too rough to share your position — nothing will be recorded.\n\nOpen Settings and turn on <b>Use precise location</b> under Permissions → Location.</string>
+    <string name="location_precise_required_open_settings">Open Settings</string>
+    <string name="location_precise_required_dismiss">Not now</string>
+
+    <!-- Settings -->
+    <string name="settings_logout">Sign Out</string>
+    <string name="settings_privacy">Privacy</string>
+    <string name="settings_bubble_mode">Bubble Mode</string>
+    <string name="settings_about">About</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_terms">Terms of Service</string>
+    <!-- Under the Privacy Policy and Terms of Service rows. -->
+    <string name="settings_opens_in_browser">Opens in your browser</string>
+    <string name="settings_contact_support">Contact Support</string>
+    <string name="settings_contact_support_description">Submit a support ticket</string>
+    <string name="settings_open_source_licenses">Open source licenses</string>
+
+    <!-- Tracking health: tells the user when location sharing stops and
+         cannot restart itself. -->
+    <string name="tracking_health_channel_name">Tracking problems</string>
+    <string name="tracking_health_channel_description">Tells you if location sharing stops and cannot restart itself</string>
+    <string name="tracking_health_stopped_title">Location sharing has stopped</string>
+    <!-- The stopped notification's one-tap restart. It starts sharing as opening the app does: it
+         lifts no pause. -->
+    <string name="tracking_health_restart_action">Try again</string>
+    <string name="tracking_health_stopped_body">Track tried to restart it and couldn\'t. Tap “Try again”, or open Track.</string>
+    <!-- The same notification when the cause is known: only "while using the app" was
+         granted. Opening the app restarts sharing and asks again. -->
+    <string name="tracking_health_all_the_time_body">Location access isn\'t set to \"Allow all the time\". Tap to allow it, and sharing restarts by itself.</string>
+    <string name="tracking_health_signed_out_title">You have been signed out of Track</string>
+    <!-- Only after the app itself ended the sign-in and kept the account
+         (SessionManager.triggerForceLogout): the sign-in screen then fills in the address,
+         so the password is all that is asked, and sharing starts again by itself after it
+         (AuthRepository: same user returning). -->
+    <string name="tracking_health_signed_out_body">Location sharing has stopped. Tap to enter your password, and it starts again by itself.</string>
+    <string name="settings_tracking_diagnostics">Tracking diagnostics</string>
+    <string name="settings_tracking_diagnostics_description">Recent starts and stops, and why</string>
+    <string name="tracking_diagnostics_title">Tracking diagnostics</string>
+    <string name="tracking_diagnostics_empty">No tracking events recorded yet.</string>
+    <string name="tracking_diagnostics_copy">Copy</string>
+    <string name="tracking_diagnostics_copied">Copied to clipboard</string>
+    <string name="tracking_diagnostics_record">Record tracking events</string>
+    <string name="tracking_diagnostics_record_description">Keep a log on this device of when tracking starts and stops, and why</string>
+    <string name="tracking_diagnostics_off">Recording is off. Turn it on to keep a record of why tracking starts and stops.</string>
+    <string name="settings_open_source_licenses_description">Licences for the software Track is built on</string>
+
+    <!-- Open source licenses screen. Content is assets/open_source_licenses.html,
+         generated by :app:generateThirdPartyLicenses. -->
+    <string name="licenses_title">Open source licenses</string>
+
+    <!-- Support Ticket -->
+    <string name="support_ticket_title">Contact Support</string>
+    <string name="support_ticket_description">Describe your issue and we\'ll get back to you as soon as possible.</string>
+    <string name="support_ticket_subject_hint">Subject</string>
+    <string name="support_ticket_message_hint">Describe your issue</string>
+    <string name="support_ticket_submit">Submit Ticket</string>
+    <string name="support_ticket_sent">Ticket Submitted</string>
+    <string name="support_ticket_sent_description">We\'ve received your ticket and will get back to you soon.</string>
+    <string name="support_ticket_sent_with_id">Your ticket #%1$s has been created. We\'ll get back to you soon.</string>
+    <string name="support_ticket_back">Back to Settings</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_alerts">Alerts</string>
+    <string name="notification_channel_places">Place Alerts</string>
+    <!-- QueueMonitor: when this phone's queue of unsent locations is full, the oldest are deleted
+         (LocationQueueDao keeps the newest MAX_QUEUE_SIZE), offline or not. -->
+    <string name="notification_channel_queue">Unsent locations</string>
+    <string name="notification_channel_queue_desc">When Track can\'t keep every location it hasn\'t sent yet</string>
+    <string name="notification_queue_full_title">Older unsent locations are being deleted</string>
+    <string name="notification_queue_full_body">Track couldn\'t send your locations for a while, so it keeps only the newest. It sends them when it can.</string>
+
+    <!-- General -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!--
+        What a data export is: a JSON file decrypted on this device, which
+        anyone who opens it can read, unless a passphrase seals it. The iPhone's
+        sentence (its Settings export footer), word for word in the export
+        dialog, above its passphrase field; in Settings, where no file exists
+        yet and no field follows, it says "An export file" and how to seal it.
+        The web says the same. Neither place calls a plaintext file encrypted.
+    -->
+    <string name="export_readable_notice">The file is written in JSON, decrypted on this device. Anyone who opens it can read it, so keep it somewhere safe — or seal it below.</string>
+    <string name="export_readable_notice_settings">An export file is written in JSON, decrypted on this device. Anyone who opens it can read it, so keep it somewhere safe — or seal it with a passphrase when you export.</string>
+    <!-- The export dialog's passphrase field: what "seal it below" points at. The web's words, all three. -->
+    <string name="export_passphrase_hint">Seal with a passphrase (optional)</string>
+    <string name="export_passphrase_placeholder">Leave blank for a readable file</string>
+    <string name="export_passphrase_help">With a passphrase the file is sealed and only that passphrase opens it. Without one it stays readable, which is what you want if another app needs to import it. There is no way to recover a lost passphrase.</string>
+
+    <!--
+        Shown before the system file picker opens, so Restore explains itself the
+        way Export does. Names the file the reader accepts and states that
+        restoring adds to what is here rather than replacing it — the question
+        anyone hesitating over this button is actually asking.
+    -->
+    <string name="restore_data_title">Restore from backup</string>
+    <string name="restore_data_explainer">Pick a Pingolin Track export — a .json file, or the .enc file if you exported with a passphrase. Its places and alerts are added to this account and nothing already here is deleted.\n\nYour notification settings are replaced by the ones in the file. Your privacy settings for each circle stay as they are; the file\'s are used only for a circle that has none yet.\n\nCircle membership can\'t be restored from a file; rejoining needs an invite. If the file is sealed, you\'ll be asked for its passphrase next.</string>
+    <string name="restore_data_choose">Choose file</string>
+
+    <!--
+        Shown before Android's own location prompts. The system dialog has room
+        for no reasoning, and after two denials it stops appearing at all, so the
+        explanation has to come first. Says what the permission is for and what
+        declining costs, without overselling: sharing is per-circle and off until
+        the user sets it up.
+    -->
+    <string name="location_rationale_title">Track needs your location</string>
+    <string name="location_rationale_body">Track shares where you are with the circles you choose, and shows you where they are. Nothing is shared until you join or create a circle, and you can pause it any time.\n\nAndroid will ask next.</string>
+    <string name="location_rationale_continue">Continue</string>
+    <string name="location_rationale_skip">Not now</string>
+    <!-- Location off, said on the map until it's on, and how to turn it on. -->
+    <string name="map_location_not_allowed">Location is off for Track, so your circles can\'t see where you are. Tap to turn it on.</string>
+    <string name="map_location_approximate">Precise location is off for Track, so your circles can\'t see where you are. Tap to turn it on.</string>
+    <string name="map_location_services_off">Location is off on this phone, so your circles can\'t see where you are. Tap to turn it on.</string>
+    <string name="map_location_not_allowed_no_circles">Location is off for Track. Tap to turn it on.</string>
+    <string name="map_location_approximate_no_circles">Precise location is off for Track. Tap to turn it on.</string>
+    <string name="map_location_services_off_no_circles">Location is off on this phone. Tap to turn it on.</string>
+    <string name="location_settings_title">Turn on location in Settings</string>
+    <string name="location_settings_body">Android won\'t ask again. To share where you are, open Settings and allow location for Pingolin Track under Permissions → Location.</string>
+    <string name="location_services_off_title">Location is off on this phone</string>
+    <string name="location_services_off_body">Track can\'t get your location until Location is turned on.</string>
+
+    <!-- Asked once, on phones whose battery manager stops background apps;
+         "Continue" opens Android's own question. -->
+    <string name="background_exemption_title">Let Track run in the background?</string>
+    <string name="background_exemption_body">This phone can stop apps that run in the background, and then your circles may stop getting your location. Letting Track run in the background helps keep sharing going. Android will ask you to confirm. It can use more battery, and you can change it any time in Track\'s settings.</string>
+    <string name="background_exemption_continue">Continue</string>
+    <string name="background_exemption_not_now">Not now</string>
+    <!-- The way back, in Settings, on those phones only. -->
+    <string name="settings_background_exemption_title">Run in the background</string>
+    <string name="settings_background_exemption_allowed">Allowed. Android\'s battery optimization no longer limits Track. Tap to change it.</string>
+    <string name="settings_background_exemption_not_allowed">Not allowed. Android may stop Track in the background to save battery, and your circles may stop getting your location. Tap to allow it.</string>
+    <string name="settings_oem_battery_title">This phone\'s own battery settings</string>
+    <string name="settings_oem_battery_summary">Some phones have their own setting that can stop Track. Open it and check that Track may run in the background.</string>
+    <!--
+        API 29+ grants background location only from the settings app, so this
+        request opens Settings rather than a dialog. The body names the destination
+        and the option to pick, because neither is obvious once you are there.
+    -->
+    <string name="background_location_rationale_title">Keep sharing when the app is closed</string>
+    <string name="background_location_rationale_body">To keep your circle up to date while Track is in the background, Android needs \"Allow all the time\". The next screen is Android\'s own settings page for this app — choose Location, then \"Allow all the time\".\n\nSkip this and Track still shares your location while the app is open.</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="share">Share</string>
+
+    <!-- ===== Premium / quota prompt =====
+         Shown when a free-tier user hits a count limit or a premium-only
+         feature. In the Play (gms) build it is informational only: it names no
+         purchase channel and offers no upgrade/checkout route — Google Play
+         prohibits directing users to an external purchase method for digital
+         goods when not using Play Billing, and Track is not on Play Billing
+         (matches the existing "No purchase CTA" destination notice). The libre
+         build, distributed outside Play, replaces the plain pointer with the
+         "Manage plan" button below (util/PlanManagement in each flavour). -->
+    <string name="premium_sheet_title_default">Premium feature</string>
+    <string name="premium_sheet_default_body">This is a Premium feature.</string>
+    <string name="premium_overview_title">Track Premium</string>
+    <string name="premium_overview_body">Premium removes the free limits on places, circles, alerts, and destinations, and keeps 365 days of history.</string>
+    <string name="premium_sheet_dismiss">Got it</string>
+    <string name="premium_sheet_manage">Manage your plan at pingolin.com</string>
+    <!-- Libre-only button that opens the account portal's subscription page. -->
+    <string name="premium_sheet_manage_action">Manage plan</string>
+    <!-- Usage line for count limits; args: current, limit -->
+    <string name="premium_sheet_usage">You\'ve used %1$d of %2$d on the free plan.</string>
+
+    <string name="premium_places_title">Save more places</string>
+    <string name="premium_places_body">The free plan includes 2 saved places. Premium removes the limit.</string>
+    <string name="premium_circles_title">Create more circles</string>
+    <string name="premium_circles_body">The free plan includes 2 circles. Premium removes the limit.</string>
+    <string name="premium_members_title">Add more members</string>
+    <string name="premium_members_body">Free circles include up to 5 members. Premium raises this to 50.</string>
+    <string name="premium_place_alerts_title">Add more place alerts</string>
+    <string name="premium_place_alerts_body">The free plan includes 2 place alerts. Premium removes the limit.</string>
+    <string name="premium_destinations_title">Add more destinations</string>
+    <string name="premium_destinations_body">The free plan includes 1 active destination at a time. Premium removes the limit.</string>
+
+    <!-- Free tier includes 1 active destination at a time. Shown when a free user
+         who already has one active tries to share another: a graceful
+         cancel-and-replace, not a hard wall. The Premium note is informational
+         only (no purchase CTA / no external checkout route), matching the rest of
+         this block, per Google Play's external-purchase policy. arg 1: the current
+         destination's name. -->
+    <string name="destination_limit_title">One destination at a time</string>
+    <string name="destination_limit_body">Your plan includes one active destination at a time. Cancel your trip to %1$s to share a new one — Premium includes unlimited destinations.</string>
+    <string name="destination_limit_replace">Cancel &amp; share new</string>
+    <string name="destination_limit_keep">Keep current</string>
+    <string name="premium_history_title">Longer location history</string>
+    <string name="premium_history_body">The free plan keeps 2 days of history. Premium keeps 365 days.</string>
+
+    <!-- ===== Settings plan / usage card ===== -->
+    <string name="plan_tier_free">Track — Free</string>
+    <string name="plan_tier_premium">Track — Premium</string>
+    <!-- No history figure here: tvPlanHistory sits directly above this line and
+         states it already, from the server's actual number rather than a
+         hardcoded 365. Two adjacent lines both saying "365" read as a mistake,
+         and the hardcoded one is the copy that goes stale if entitlements move. -->
+    <string name="plan_paid_summary">Unlimited places, circles, alerts &amp; destinations</string>
+    <!-- Premium borrowed from a circle-mate's subscription. Named differently from
+         plan_tier_premium because this user did not buy it and can lose it without
+         doing anything — the distinction is the whole point of showing it. -->
+    <string name="plan_tier_premium_circle">Track — Premium via your circle</string>
+    <!-- Headline entitlement on both tiers. %1$d is the day count. -->
+    <string name="plan_history_days">%1$d days of location history</string>
+    <!-- Grace warning, CIRCLE subject. %1$s = how much history is kept, %2$s = when
+         the rest goes. Two short sentences: what is lost and when, then the remedy.
+         Deliberately does not explain the grace mechanism — the user needs the
+         deadline, not the design.
+
+         Nothing here is described as pending that has already happened: the server
+         sends history_expires_in_days ONLY to a user who is already on the free tier
+         (it is absent while premium is active), so their premium has ended and their
+         visible history has already dropped. What is still counting down is DELETION
+         of the older data, and that is the part re-subscribing can still undo. The
+         same wording as on iOS.
+
+         Paired with plan_history_expiring_personal below — see that string for why
+         the second sentence cannot be shared. -->
+    <string name="plan_history_expiring_circle">Location history older than %1$s is deleted %2$s. Resubscribe, or have a premium member join your circle, to keep it.</string>
+    <!-- Grace warning, PERSONAL subject. Same first sentence, different remedy.
+
+         The countdown has two possible subjects: a circle's premium or the
+         user's own. history_expires_circle_id is null when the clock is the
+         user's OWN personal history. Nobody joining a circle protects that —
+         the server's nightly cull judges personal history on the user's own
+         premium — so the circle half of the sentence above would be advice
+         that does not work, offered at the one moment somebody would act on it. -->
+    <string name="plan_history_expiring_personal">Location history older than %1$s is deleted %2$s. Resubscribe to keep it.</string>
+    <!-- The %1$s above: how much history survives, i.e. the server's history_days.
+         NOT a hardcoded free-tier 2, which would go stale the way a hardcoded 365
+         in the paid summary does. -->
+    <plurals name="plan_history_kept">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <!-- The %2$s above. The server clamps the countdown at zero, so the last day of
+         the window really does arrive as 0 and "in 0 days" reads like a broken
+         template. The "one" case is unreachable (1 becomes "tomorrow") but is stated
+         so the plural set is complete. -->
+    <string name="plan_history_when_today">today</string>
+    <string name="plan_history_when_tomorrow">tomorrow</string>
+    <plurals name="plan_history_when_days">
+        <item quantity="one">in %d day</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <string name="plan_info_content_description">About Track Premium</string>
+
+    <!-- A circle this device cannot open yet: one placeholder name, and a short
+         explanation chosen by what happened. No key talk: say what happens and when.
+         %1$s is the circle's name, or locked_circle_this_circle when it is not
+         readable here. -->
+    <string name="circle_key_unavailable_info_cd">Why is this circle locked?</string>
+    <string name="locked_circle_this_circle">this circle</string>
+    <string name="locked_circle_awaiting_title">Almost ready</string>
+    <string name="locked_circle_awaiting_body">You\'ve joined %1$s. It opens here as soon as another member\'s app is online, usually within a minute.</string>
+    <!-- This account's invitation ran out first; %1$s is whom it asked. -->
+    <string name="late_joiner_waiting_body">Your invitation ran out before anyone\'s phone could hand the circle over. %1$s has been asked to let you in.</string>
+    <!-- The same, when this device has no name for whom it asked: the web's unnamed line. -->
+    <string name="late_joiner_waiting_body_unnamed">Your invitation ran out before anyone\'s phone could hand the circle over. An owner or admin of the circle has been asked to let you in.</string>
+    <!-- A device that is behind, or that refused or cannot open its copy; locations for the
+         circle are kept on the phone meanwhile. -->
+    <string name="locked_circle_sync_title">Waiting to sync</string>
+    <string name="locked_circle_sync_body">Awaiting sync for circle settings from another member. Locations will be queued until synced.</string>
+    <string name="locked_circle_reset_title">Waiting for your circle</string>
+    <!-- "Has been asked": this app asks the members for the circle when it can't open its
+         copy (requestFreshAccess), the server wakes their apps, and each phone posts
+         "{name} reset their password. Check it's really them." as a notification. The
+         same words as on iPhone. -->
+    <string name="locked_circle_reset_body">You reset your password, so another member of %1$s has been asked to confirm it\'s you. It opens here as soon as one of them does. If you still have your recovery key, you can restore your previous setup instead: Account → Settings → Data from before your password reset.</string>
+    <string name="locked_circle_restore">Open account settings</string>
+    <!-- Owners and admins, while the refresh the server asked for after a removal or a
+         departure is still due; any member's app completes it. -->
+    <string name="rekey_warning_member_removed">Finishing removing a member. This completes as soon as a member\'s app is online.</string>
+    <string name="rekey_warning_member_left">Finishing a member\'s departure. This completes as soon as a member\'s app is online.</string>
+    <string name="key_behind_warning">Waiting to sync. Locations will be queued until synced.</string>
+    <!-- Owner/admin devices only: a member invited by someone this phone can't confirm.
+         Nobody is asked about a member invited from an app older than signed
+         invitations. -->
+    <string name="let_in_title">Let %1$s into %2$s?</string>
+    <string name="unconfirmed_invite_body">%1$s was invited by someone this phone can\'t confirm. If you\'re not sure it\'s them, check with %1$s another way first. Their number: %2$s.</string>
+    <string name="unconfirmed_invite_body_with_email">%1$s (%2$s) was invited by someone this phone can\'t confirm. If you\'re not sure it\'s them, check with %1$s another way first. Their number: %3$s.</string>
+    <!-- The late-joiner question's body lines. -->
+    <string name="late_joiner_invitation_ran_out">Their invitation ran out before anyone\'s phone could hand the circle over.</string>
+    <string name="late_joiner_invited_by">%1$s invited them.</string>
+    <string name="let_in_confirm">Let them in</string>
+    <string name="let_in_not_now">Not now</string>
+    <!-- Any member, when a member's app identity changed because they reset their
+         password. -->
+    <string name="member_reset_title">Is this really %1$s?</string>
+    <string name="member_reset_body">%1$s reset their password, so Pingolin can\'t tell on its own that it\'s still them. If you\'re sure, let them back into %2$s.</string>
+    <string name="promote_email_invitee_title">Make %1$s an admin?</string>
+    <string name="promote_email_invitee_body">%1$s joined with an invitation to their email. As an admin they can invite people, and every member\'s app will trust them. If you\'re not sure it\'s them, check with %1$s another way first. Their number: %2$s.</string>
+    <string name="promote_email_invitee_confirm">Make admin</string>
+    <string name="invitee_changed_title">Is this really %1$s?</string>
+    <string name="invitee_changed_body">%1$s reset their password, so Pingolin can\'t tell on its own that it\'s still them. If you\'re not sure, check with them another way first.</string>
+    <!-- The renewal question: what each answer does. -->
+    <string name="invite_renewal_explainer">\"It\'s them\" renews your invitation to %1$s for them. \"No\" withdraws it.</string>
+    <string name="invite_renewal_withdraw">No</string>
+    <string name="their_number">Their number: %1$s</string>
+    <string name="member_reset_check">If you\'re not sure, check with %1$s another way first. Their number: %2$s</string>
+    <string name="member_reset_confirm">It\'s them</string>
+    <string name="member_reset_not_now">Not now</string>
+    <!-- A question only a person can answer, taken to them as a notification. -->
+    <string name="membership_question_channel_name">Circle requests</string>
+    <string name="membership_question_channel_description">Questions about who is in your circles that only you can answer</string>
+    <string name="membership_question_reset">%1$s reset their password. Check it\'s really them.</string>
+    <!-- An invitation this account made does not name its invitee as they are now (a password
+         reset since): "It's them" renews it for them. -->
+    <string name="membership_question_invitee_changed">Is this really %1$s? They reset their password after you invited them.</string>
+    <string name="membership_question_join">%1$s is waiting to join %2$s.</string>
+    <string name="membership_question_join_names_only">%1$s is waiting to join a circle.</string>
+    <string name="membership_question_unnamed_member">A member</string>
+    <string name="membership_question_generic">A circle needs your answer.</string>
+    <!-- Member list: confirmed, not able to open the circle yet. -->
+    <string name="member_name_joining">%1$s · Joining…</string>
+    <!-- Their app is too old for this circle, and the server has told THEM to update:
+         the others see what is happening, and are asked nothing. -->
+    <string name="member_name_asked_to_update">%1$s · Asked to update Pingolin</string>
+    <!-- An invitation that does not name this account as it is now (a password reset
+         since it was sent): the circle has been asked to confirm it's them and renew it,
+         and the app accepts by itself once it has. What is happening, never "ask them". -->
+    <string name="invite_renewing">This invitation is being renewed. It will work as soon as %1$s confirms it\'s you.</string>
+    <string name="invite_renewing_unknown">This invitation is being renewed. It will work as soon as the circle confirms it\'s you.</string>
+    <!-- After the person's "Join and share my location" on such an invitation. The same words
+         as on iPhone. -->
+    <string name="invite_renewing_joins_then">You\'ll join %1$s then, with nothing more to do.</string>
+    <!-- The row of an invitation this phone will join by itself once it is renewed. -->
+    <string name="invite_joining_when_confirmed">Joining as soon as %1$s confirms it\'s you.</string>
+    <string name="invite_joining_when_confirmed_unknown">Joining as soon as the circle confirms it\'s you.</string>
+    <!-- An address invitation (kind 2) to an address that is not this account's: never
+         renewed, so this is all there is to say. -->
+    <string name="invite_different_address">This invitation was sent to a different address.</string>
+    <!-- Its sender is no longer an owner or admin of the circle, so nobody can renew it
+         (the server's invite_not_renewable). Every client says this; a statement, not an
+         instruction. -->
+    <string name="invite_not_renewable">This invitation can\'t be used any more: the person who sent it can no longer invite people to this circle.</string>
+    <!-- Owner/admin devices, when members were kept out. -->
+    <plurals name="members_kept_out">
+        <item quantity="one">Pingolin kept %1$d person out of %2$s who wasn\'t properly invited.</item>
+        <item quantity="other">Pingolin kept %1$d people out of %2$s who weren\'t properly invited.</item>
+    </plurals>
+
+    <!-- Destinations list: it carries every circle member's destinations, so
+         rows need attribution, and the ones you did not create need an action
+         that is actually permitted — hiding, which is local to this device. -->
+    <string name="destination_hide">Hide</string>
+    <string name="destination_show_again">Show again</string>
+    <string name="destination_shared_by">Shared by %1$s</string>
+    <string name="destination_shared_by_member">Shared by a circle member</string>
+    <string name="destination_hidden_toast">Hidden on this device</string>
+    <string name="signouts_unenforced">Sign-outs may not be taking effect. In the last few minutes we have not been able to confirm that sessions have ended, so a device you sign out here may keep receiving locations for a short time \u2014 up to 15 minutes for a phone, or until the session ends for a browser. To stop sharing immediately, leave the circle instead.</string>
+    <!-- Just-in-time location notice, shown BEFORE a circle is created or joined:
+         agreeing is what creates or joins it. The BODY comes from the server
+         (GET /api/v1/consent/location/notice) so that what is rendered is the same text
+         the consent record is digested against; when that fetch fails, the dialog shows
+         res/raw/location_notice_v1_5.md, a byte-for-byte copy of the served text. -->
+    <string name="location_notice_title">Before you share with %1$s</string>
+    <string name="location_notice_this_circle">this circle</string>
+    <!-- The consent row in the circle's privacy dialog (consent = membership).
+         A member is always sharing: there is no in-circle "not sharing" state.
+         Stopping for good is leaving the circle; pausing stays the temporary option. -->
+    <string name="consent_status_sharing">You are sharing your location with this circle</string>
+    <string name="consent_detail_sharing">The settings below apply on top of this.</string>
+    <!-- The circle's settings until they have loaded, and when they couldn't be: no
+         form is shown to change, so nothing can be saved from defaults. -->
+    <string name="privacy_settings_loading">Loading your settings for this circle…</string>
+    <string name="privacy_settings_load_failed">Couldn\'t load your settings for this circle, so they can\'t be changed here right now.</string>
+    <string name="privacy_settings_retry">Try again</string>
+    <!-- How to stop for good (GDPR Article 7(3)): the circle screen has no "Stop sharing
+         my location"; one line for every member. -->
+    <string name="sharing_is_membership">Sharing your location is part of being in this circle. You can pause it any time; to stop sharing for good, you leave the circle. As its owner, you delete it, or transfer ownership and then leave.</string>
+    <!-- A member who keeps their location history from the circle, on their card and in the
+         history view. The same words on web and iPhone. -->
+    <string name="member_history_off_detail">%1$s doesn\'t share their location history in this circle.</string>
+    <!-- Why a member's location isn't updating, for the rest of the circle. The server
+         reports it on the members list. The same words on web and iPhone. %1$s in a
+         "Paused until" line is a time: "5:00 PM" today, "Tue 5:00 PM" another day. -->
+    <string name="member_sharing_off">Location sharing off</string>
+    <string name="member_sharing_paused_until">Paused until %1$s</string>
+    <string name="member_sharing_paused">Paused</string>
+    <string name="member_sharing_off_detail">%1$s turned off location sharing in this circle.</string>
+    <string name="member_sharing_paused_until_detail">%1$s paused location sharing until %2$s.</string>
+    <string name="member_sharing_paused_detail">%1$s paused location sharing.</string>
+    <!-- The same state on the person's own circle screen: the truth, and what the others see. -->
+    <string name="own_sharing_off">Location sharing is off in this circle. Members see your history up to then and may still see the last location you shared, with “Location sharing off” next to your name.</string>
+    <!-- History off with real time on, and both off (shown instead of own_sharing_off). -->
+    <string name="own_history_off">Location history is off in this circle. Members see only where you are now. Track still keeps your history, and they\'ll see all of it if you turn it back on.</string>
+    <string name="own_sharing_and_history_off">Location sharing and location history are off in this circle. Members see “Location sharing off” next to your name, and none of your locations.</string>
+    <string name="own_sharing_paused_until">Paused until %1$s. Members see this next to your name.</string>
+    <string name="own_sharing_paused">Paused. Members see this next to your name.</string>
+    <!-- Once, after the device-wide Pause Tracking switch was moved to each circle's own pause. -->
+    <string name="pause_tracking_moved">Pause Tracking has moved. Your circles are paused; resume each one from its circle. Track records your own location history again; only you can see it.</string>
+    <!-- The same, for an install with no circle to pause. -->
+    <string name="pause_tracking_removed_no_circles">Pause Tracking has been removed. Track records your own location history again; only you can see it.</string>
+    <!--
+        Once, after the database on this phone was made again because the key that opened it was
+        gone, e.g. a lock-bound key from an earlier version that Android deleted when the screen
+        lock was removed. What only this phone held went with it; the account's data comes back from
+        the server. Cause-neutral, no key talk. Each claim holds: the unsent locations and the
+        "Waiting to sync" changes are in the database; other owed actions (accepts, hand-overs, a
+        help request) live outside it and survive; alert settings come back by reloading them from
+        the server.
+    -->
+    <!-- An inactivity alert. %1$s: the member's name; %2$s: when they last shared their location
+         (the clock time, with the date when it isn't today). -->
+    <string name="inactivity_since">%1$s hasn\'t shared their location since %2$s.</string>
+    <!-- The same, when no time came with it. -->
+    <string name="inactivity_no_time">%1$s hasn\'t shared their location for a while.</string>
+    <!-- The alert editor, for a rule about others. The same words on web and iPhone. -->
+    <string name="inactivity_not_while_not_sharing">Doesn\'t go off while they\'ve paused or turned off location sharing in this circle.</string>
+    <string name="database_rebuilt_note">Track couldn\'t open what it had saved on this phone, so it started over. Any locations it hadn\'t sent yet were lost, and so were any changes marked “Waiting to sync”. Some earlier entries may also be missing from Notifications. Your circles, places and alert settings come back from your account.</string>
+    <!-- While the database can't be opened: the screens look again by themselves, so no "try again". -->
+    <string name="database_unavailable_note">Track couldn\'t open what it had saved on this phone. It keeps trying by itself.</string>
+    <!-- Track's start while this phone's session store can't be opened: all four always shown. -->
+    <string name="cant_start_title">Track can\'t start right now</string>
+    <string name="cant_start_help">If you need help now, call or text someone directly, or contact your local emergency services.</string>
+    <string name="cant_start_trying">Track keeps trying by itself. If this doesn\'t clear within a few minutes, restart your phone.</string>
+    <string name="cant_start_reinstall">If it\'s still here after a restart, uninstall and reinstall Track, then sign in. Your circles, places and alert settings come back from your account. What was only on this phone is lost, including anything still waiting to be sent.</string>
+    <!-- In place of the app for an assisted-lane account an admin hasn't approved yet: the web's words. -->
+    <string name="under_review_title">Your account is under review</string>
+    <string name="under_review_body">Your account request is checked by an admin before access is granted. We\'ll email you the moment it\'s approved — then Track unlocks automatically.</string>
+    <string name="under_review_signed_in_as">Signed in as %1$s</string>
+    <!-- An account an admin turned down: the under-review screen's shape. The auth server deletes the
+         account and its application 30 days after the decision, and sends no e-mail about it; nothing
+         about applying again. -->
+    <string name="not_approved_title">Your application wasn\'t approved</string>
+    <string name="not_approved_body">This account can\'t be used with Track. We delete it, and your application, 30 days after the decision.</string>
+    <string name="not_approved_need_help">Need help?</string>
+    <string name="not_approved_contact_support">Contact support</string>
+    <!-- While the location service can't start for a store that can't be opened. Nothing about
+         starting to share again: posted at a boot, it can't know whether the person paused on
+         purpose. -->
+    <string name="not_sharing_title">Your location isn\'t being shared</string>
+    <string name="not_sharing_text">Track can\'t send your location right now. Tap to open Track.</string>
+    <!-- The ongoing location notification: its button opens the circles, where each one is paused or resumed. -->
+    <string name="notification_manage_sharing">Manage sharing</string>
+    <!-- The ongoing location notification while no circle receives the location and at least one is paused. -->
+    <string name="notification_sharing_paused">Location sharing paused</string>
+    <!-- The ongoing notification while Location is off on this phone. -->
+    <string name="notification_location_services_off">Location is off on this phone, so your circles can\'t see where you are</string>
+    <!-- The notice's main button says what it does: joining (or creating) IS agreeing.
+         A long label, but the notice body is capped
+         (LocationConsentDialog.CappedScrollView), so a stacked button bar still fits. -->
+    <string name="location_notice_join">Join and share my location</string>
+    <string name="location_notice_create">Create and share my location</string>
+    <string name="location_notice_decline">Not now</string>
+    <string name="location_notice_invite_not_joined">You didn\'t join %1$s. Your invitation is still in Invitations if you change your mind.</string>
+    <!-- The invitations this account has received: the place location_notice_invite_not_joined
+         names ("still in Invitations"), so it is called that here too (and on iOS). -->
+    <string name="received_invites_title">Invitations</string>
+    <string name="received_invites_none">No invitations</string>
+    <plurals name="received_invites_count">
+        <item quantity="one">You have %d invitation</item>
+        <item quantity="other">You have %d invitations</item>
+    </plurals>
+    <!-- The circle key chain carries forward, so somebody added now can
+         decrypt what the circle recorded before they arrived. The Terms
+         already say this and add that "nothing announces it in advance" — this
+         is the announcing, shown to the person doing the adding, at the moment
+         they do it. Both periods are named because the client does not know
+         which tier this circle is on, and a confident wrong number would be
+         worse than an honest pair. -->
+    <string name="invite_history_warning">They will be able to see this circle\'s existing location history, not only what happens from now on — two days of it on a free circle, up to a year on a premium one.</string>
+    <!-- Shown on the map when a guardian set this account up and holds its
+         password. States the CONSEQUENCE rather than the arrangement —
+         "managed by a guardian" reads as an administrative fact about who
+         pays — and names history, because a guardian sees not just where you
+         are but everywhere you have been. -->
+    <string name="guardian_map_line">Location and history visible to guardian</string>
+    <!-- The key store needs a sign-in (KeyStoreRecovery). -->
+    <string name="sync_error_sign_in_again">Sync error. Please sign in again.</string>
+    <string name="guardian_detail_title">This account was set up by a guardian</string>
+    <!-- Shown once the day the guardian named as the handover has passed.
+         Deliberately says the account is YOURS rather than that something is
+         wrong - the message is a transfer, not an alarm. -->
+    <string name="guardian_handover_line">This account should now be yours</string>
+    <string name="guardian_handover_title">This account is yours now</string>
+    <string name="guardian_handover_detail">The day your guardian named as the handover has passed, so this account is yours now. They cannot hand it over themselves and we will not do it silently - write to help@support.pingolin.com and we will walk you through taking it over, including the recovery key and any passkey that would otherwise keep working.</string>
+    <string name="guardian_detail_body">Whoever set this account up knows its password, and the password is what decrypts your data — so they can see where you are now, everywhere you have been for as long as this circle keeps history, and they can set alerts telling them when you arrive somewhere or leave.\n\nNothing tells you when they look. There is no notification, no record you can read, and no way for us to show you one — checking a map leaves no trace.\n\nWhen you turn 18 the account becomes yours and their responsibility for it ends. Changing the password alone does not remove their access, because a recovery key or a passkey they registered keeps working. Section 6 of the Terms has the steps.\n\nIf asking them is not safe, do not ask. You can write to abuse@mail.pingolin.com instead — a minor may report an account held by a guardian, and so may an adult about one a guardian set up for them.</string>
+    <!-- Place-alert consent -->
+    <string name="place_alert_button">Create alert</string>
+    <string name="place_alert_suppressed_by_target">Alert paused: this person has turned off alerts about themselves in this circle</string>
+    <!-- A circle's battery switch: no screen shows a member's battery level; it only feeds the
+         low-battery alert, whose notice gives it ("…'s phone is at 12%"). The same title and line
+         on all three apps, as the web and the iPhone say them. -->
+    <!-- The two sharing switches, the same words on web, Android and iOS. -->
+    <string name="privacy_share_realtime_title">Share real-time location</string>
+    <string name="privacy_share_realtime_body">When it\'s off, Track stops sending this circle your location. Members may still see the last location you shared, unless location history is off too.</string>
+    <string name="privacy_share_history_title">Share location history</string>
+    <string name="privacy_share_history_body">When it\'s off, members see only where you are now. Track still keeps your history, and turning it back on shows them all of it, including the time it was off.</string>
+    <string name="privacy_low_battery_alerts_title">Allow low-battery alerts about me</string>
+    <string name="privacy_low_battery_alerts_body">Sends your battery level to this circle so members can be alerted when it\'s low</string>
+    <!-- The level goes only while "Allow alerts on me" is on too; the switch says so while it's off. -->
+    <string name="privacy_low_battery_needs_alerts">Turn on “Allow alerts on me” to use this</string>
+    <!-- The account deletion's warning. Owners can transfer a circle from its settings
+         (Transfer Ownership). -->
+    <string name="delete_account_owned_circles">Circles you own are deleted for everyone in them, along with all the location history they hold. To keep a circle going, transfer its ownership first.</string>
+    <!-- A circle gone from the server's list of ours: removed, left on another device or deleted,
+         which the app can't tell apart; a deletion has the server's own notice. -->
+    <string name="circle_gone">You\'re no longer in %1$s</string>
+
+    <!-- The Places screens -->
+    <string name="places_mine">My places</string>
+    <string name="places_empty_title">No saved places yet</string>
+    <string name="places_empty_hint">Add places like Home, Work or School to get arrival and departure alerts.</string>
+    <string name="places_add_cd">Add place</string>
+    <string name="places_shared_badge">Shared</string>
+    <string name="places_create_alert_cd">Create place alert</string>
+    <string name="places_share_cd">Share with circles</string>
+    <string name="places_create_title">New place</string>
+    <string name="places_create">Create</string>
+    <string name="places_search_hint">Search address or city</string>
+    <string name="places_set_search_area">Set search area</string>
+    <string name="places_search_none_scoped">No matches. Try changing the search area, or pick a spot on the map.</string>
+    <string name="places_search_setting_up">Setting up address search…</string>
+    <string name="places_address">Address</string>
+    <string name="places_label">Label</string>
+    <string name="places_label_helper">Give this place a name, like Home, Work or Gym</string>
+    <string name="places_notes">Notes</string>
+    <string name="places_icon">Icon</string>
+    <string name="places_icon_home">Home</string>
+    <string name="places_icon_work">Work</string>
+    <string name="places_icon_school">School</string>
+    <string name="places_icon_gym">Gym</string>
+    <string name="places_icon_restaurant">Restaurant</string>
+    <string name="places_icon_coffee">Coffee</string>
+    <string name="places_icon_shopping">Shopping</string>
+    <string name="places_icon_medical">Medical</string>
+    <string name="places_icon_park">Park</string>
+    <string name="places_icon_bar">Bar</string>
+    <string name="places_icon_gas">Gas station</string>
+    <string name="places_icon_airport">Airport</string>
+    <string name="places_icon_hotel">Hotel</string>
+    <string name="places_icon_parking">Parking</string>
+    <string name="places_icon_church">Church</string>
+    <string name="places_icon_library">Library</string>
+    <string name="places_icon_star">Favorite</string>
+    <string name="places_icon_heart">Heart</string>
+    <string name="places_color">Color</string>
+    <string name="places_color_red">Red</string>
+    <string name="places_color_pink">Pink</string>
+    <string name="places_color_purple">Purple</string>
+    <string name="places_color_blue">Blue</string>
+    <string name="places_color_teal">Teal</string>
+    <string name="places_color_green">Green</string>
+    <string name="places_color_orange">Orange</string>
+    <string name="places_visibility_title">Place visibility</string>
+    <string name="places_visibility_hint">Choose which circles can see this place on their map</string>
+    <string name="places_visibility_none">Not shared with any circle</string>
+    <string name="place_alert_circle">Circle</string>
+    <string name="place_alert_notify_when">Notify me when someone:</string>
+    <string name="place_alert_arrives">Arrives</string>
+    <string name="place_alert_leaves">Leaves</string>
+    <string name="place_alert_area">Alert area</string>
+    <string name="place_alert_area_note">One area per place, shared by every alert here.</string>
+    <string name="place_alert_about">Alert about</string>
+    <string name="place_alert_everyone">Everyone in the circle</string>
+    <string name="place_alert_specific">Specific people</string>
+    <string name="place_alert_use_schedule">Use a schedule</string>
+    <string name="place_alert_schedule_hint">Only get alerts at certain times</string>
+    <string name="place_alert_active_days">Active days</string>
+    <string name="place_alert_time_window">Active hours</string>
+    <string name="place_alert_time_to">to</string>
+    <string name="place_alert_notifications">Notifications</string>
+    <string name="place_alert_push">Push notification</string>
+    <string name="place_alert_email">Email</string>
+    <string name="places_share_warning">Every member of the circles you choose will see this place and can set up alerts on it.</string>
+    <string name="places_share_no_circles">No other circles to share with</string>
+    <string name="places_manage_sharing_title">Manage sharing for “%1$s”</string>
+    <string name="places_manage_sharing_title_unnamed">Manage sharing for this place</string>
+    <string name="done">Done</string>
+    <string name="places_searching">Searching…</string>
+    <string name="places_search_loading">Loading addresses for %1$s…</string>
+    <string name="places_search_in">In %1$s</string>
+    <string name="places_search_no_match_in">Couldn\'t find that address in %1$s. Try a different street, or pick a spot on the map.</string>
+    <string name="places_search_no_match">No matches. Try a different name, or pick a spot on the map.</string>
+    <string name="place_updated">Place updated</string>
+    <plurals name="places_shared_to_circles">
+        <item quantity="one">Place shared with %d circle</item>
+        <item quantity="other">Place shared with %d circles</item>
+    </plurals>
+    <plurals name="places_shared_partial">
+        <item quantity="one">Shared with %1$d of %2$d circle</item>
+        <item quantity="other">Shared with %1$d of %2$d circles</item>
+    </plurals>
+    <string name="places_alerts_on">Alerts turned on</string>
+    <string name="places_alerts_off">Alerts turned off</string>
+    <string name="places_share_failed">Couldn\'t share this place: %1$s</string>
+    <string name="places_share_failed_no_reason">Couldn\'t share this place just now.</string>
+    <string name="places_unshare_failed">Couldn\'t stop sharing this place: %1$s</string>
+    <string name="places_unshare_failed_no_reason">Couldn\'t stop sharing this place just now.</string>
+    <string name="places_load_failed">Couldn\'t load your places just now.</string>
+    <string name="place_update_failed">Couldn\'t save your changes to this place just now.</string>
+    <string name="place_alert_save_failed">Couldn\'t save this alert just now.</string>
+    <string name="place_alert_remove_failed">Couldn\'t remove this alert just now.</string>
+    <string name="places_share_none_selected">Choose at least one circle</string>
+    <string name="place_alert_no_circle">Join or create a circle to set place alerts</string>
+    <string name="place_alert_spinner_no_circle">No circle: place alerts need one</string>
+    <string name="place_alert_spinner_unavailable">This place\'s circle isn\'t on this phone yet</string>
+    <string name="place_alert_no_members">No other members in this circle yet</string>
+    <string name="place_alert_loading_members">Loading members…</string>
+    <string name="place_alert_pick_start">Select start time</string>
+    <string name="place_alert_pick_end">Select end time</string>
+    <string name="place_alert_title_edit">Edit alert · %1$s</string>
+    <string name="place_alert_title_edit_unnamed">Edit alert</string>
+    <string name="place_alert_title_new">New alert · %1$s</string>
+    <string name="place_alert_title_new_unnamed">New alert</string>
+    <string name="place_alert_pick_trigger">Choose Arrives, Leaves or both</string>
+    <string name="place_alert_pick_circle">Choose a circle for this alert</string>
+    <string name="place_alert_pick_people">Choose at least one person, or Everyone in the circle</string>
+    <string name="remove">Remove</string>
+    <string name="place_alert_circle_not_here">This place\'s circle isn\'t on this phone yet.</string>
+    <string name="places_circle_owner">Owner</string>
+
+    <!-- Destinations, the map's address search, the search-area picker -->
+    <string name="destinations_header_hint">Let your circle know where you\'re heading</string>
+    <string name="destinations_empty_title">No destinations</string>
+    <string name="destinations_empty_hint">Share where you\'re going so your circle knows when to expect you.</string>
+    <string name="destinations_arrived_button">I\'ve arrived</string>
+    <string name="destinations_share_with_circle">Share with circle</string>
+    <string name="destinations_name_hint">Destination name (optional)</string>
+    <string name="search_field_hint">Address, place or city</string>
+    <string name="destinations_selected_location">Selected location</string>
+    <string name="destinations_notify_on_arrival">Notify the circle when I arrive</string>
+    <string name="map_search_title">Search address or place</string>
+    <string name="map_search_hint_view">Type to search this part of the map.</string>
+    <string name="map_search_hint">Type to search.</string>
+    <string name="map_search_whole_city">Search the whole city →</string>
+    <string name="map_search_searching_whole_city">Searching the whole city…</string>
+    <string name="map_search_no_match_here">No matches for “%1$s” on this part of the map. To search somewhere else, add the town after a comma.</string>
+    <string name="destinations_search_no_match_in">Couldn\'t find that address in %1$s. Try a different street.</string>
+    <string name="destinations_search_no_match">No matches. Try a different name.</string>
+    <string name="destinations_cancelled">Destination cancelled</string>
+    <string name="destinations_arrival_reported">Arrival reported</string>
+    <plurals name="destinations_arrival_reported_sent">
+        <item quantity="one">Arrival reported: %d notification sent</item>
+        <item quantity="other">Arrival reported: %d notifications sent</item>
+    </plurals>
+    <string name="destinations_deleted">Destination deleted</string>
+    <string name="destinations_loading_circles">Loading circles…</string>
+    <string name="destinations_pick_result_first">Search for an address and choose a result before sharing.</string>
+    <string name="destinations_report_arrival_title">Report arrival</string>
+    <string name="destinations_report_arrival_body">Report that you\'ve arrived at “%1$s”?</string>
+    <string name="destinations_report_arrival_body_unnamed">Report that you\'ve arrived at this destination?</string>
+    <string name="destinations_cancel_title">Cancel destination</string>
+    <string name="destinations_cancel_body">Cancel your trip to “%1$s”?</string>
+    <string name="destinations_cancel_body_unnamed">Cancel your current trip?</string>
+    <string name="destinations_cancel_trip">Cancel trip</string>
+    <string name="destinations_keep">Keep</string>
+    <string name="destinations_delete_title">Delete destination</string>
+    <string name="destinations_delete_body">Remove “%1$s” from your list?</string>
+    <string name="destinations_delete_body_unnamed">Remove this destination from your list?</string>
+    <string name="destinations_status_en_route">On the way</string>
+    <string name="destinations_status_arrived">Arrived</string>
+    <string name="destinations_status_cancelled">Cancelled</string>
+    <string name="destinations_status_expired">Expired</string>
+    <string name="destinations_eta">ETA: %1$s</string>
+    <string name="destinations_load_failed">Couldn\'t load your destinations just now.</string>
+    <string name="destinations_report_arrival_failed">Couldn\'t report your arrival just now.</string>
+    <string name="destinations_delete_failed">Couldn\'t delete the destination just now.</string>
+    <string name="city_scope_title">Choose search area</string>
+    <string name="city_scope_body">Choose a city or region. Only its addresses and places are downloaded.</string>
+    <string name="city_scope_query_hint">Type a city or region…</string>
+    <string name="city_scope_use_gps">Use my current location</string>
+    <string name="city_scope_current_location">Current location</string>
+    <string name="city_scope_start_hint">Start typing to search cities worldwide.</string>
+    <string name="city_scope_no_match">No matches for “%1$s”.</string>
+    <string name="search_section_cached">Cached areas</string>
+    <string name="search_section_other">Other locations</string>
+    <string name="search_population">%1$s people</string>
+</resources>

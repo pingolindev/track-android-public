@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    GMS FLAVOUR MANIFEST — merged into src/main/AndroidManifest.xml for
+    gms variants only.
+
+    Everything here names a class or a Google API that a libre APK does not
+    contain, and a component declaration naming a class that is not in the APK is
+    a crash waiting for the first intent that matches it.
+
+    There is deliberately no src/libre/AndroidManifest.xml — the libre variant
+    needs nothing added, only these left out.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <application>
+
+        <!-- Firebase Cloud Messaging (tickle-based push — no content in payload) -->
+        <service
+            android:name=".service.TrackFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

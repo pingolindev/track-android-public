@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    WIDE-SCREEN VARIANT of layout/activity_main.xml — identical except that the
+    bottom navigation bar becomes a navigation rail. Keep the rest in step with
+    the base file; only the navigation container differs.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:visibility="gone">
+
+        <!-- NAVIGATION RAIL, not a bottom bar. Only at w840dp and above: a
+             10-inch tablet in landscape is 1280dp wide, where a full-width bar
+             pinned to the bottom edge puts the primary navigation as far from
+             the hands as the layout allows, and wastes the dimension the screen
+             actually has. A 7-inch tablet in PORTRAIT is 600dp and deliberately
+             stays on the bottom bar — at that width the phone layout is still
+             the right one.
+
+             The id stays `bottom_nav`, so both variants fill the same binding
+             field. ViewBinding does NOT then type it as the nearest common
+             ancestor: with different classes on one id across variants it falls
+             back to plain `View` — the generated ActivityMainBinding for
+             devGmsDebug reads `public final View bottomNav`. MainActivity casts
+             it once, in `navBar`, to NavigationBarView, which both classes
+             extend and which carries every API the activity uses on it.
+             Renaming the id here would give the two layouts separate fields and
+             break whichever one the code does not name. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.google.android.material.navigationrail.NavigationRailView
+                android:id="@+id/bottom_nav"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:menu="@menu/bottom_nav_menu"
+                app:labelVisibilityMode="labeled" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_host_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- Label for the floating bell. Sibling rather than a child of
+             notificationBellContainer so the bell's FrameLayout positioning
+             stays untouched. Hidden by default; MapFragment fades it in
+             when the dot menu is expanded so the icon-only bell gets the
+             same labelling treatment as the other on-screen controls. -->
+        <TextView
+            android:id="@+id/labelNotifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="56dp"
+            android:text="@string/map_fab_label_notifications"
+            android:textSize="12sp"
+            android:textColor="@color/fab_label_text"
+            android:background="@drawable/bg_fab_label"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:elevation="4dp"
+            android:visibility="gone" />
+
+        <!-- Floating notification bell -->
+        <FrameLayout
+            android:id="@+id/notificationBellContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabNotifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/notifications"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_notifications"
+                app:tint="@android:color/white"
+                app:backgroundTint="?attr/colorPrimary" />
+
+            <!-- Badge for unread count — sits above the FAB at top-right corner -->
+            <TextView
+                android:id="@+id/notificationBadge"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="-2dp"
+                android:layout_marginEnd="-2dp"
+                android:elevation="8dp"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <!-- Lock screen overlay - shown when app lock is active -->
+    <FrameLayout
+        android:id="@+id/lockOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_lock"
+                android:contentDescription="@string/app_lock_overlay_cd"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/app_lock_overlay_title"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLockMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/app_lock_overlay_message"
+                android:textSize="14sp"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUnlock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/app_lock_unlock" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

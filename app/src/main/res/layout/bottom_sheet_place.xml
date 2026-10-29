@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_drag_handle" />
+
+    <!-- Place header: icon + name -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvPlaceIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:contentDescription="@string/map_place_icon_cd" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPlaceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPlaceType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Address -->
+    <TextView
+        android:id="@+id/tvPlaceAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Share attribution: "Shared with <circle> by <member>". Visible
+         only when the place arrived via a place_shares row (envelope
+         encryption — wrap_via_circle is set). Sits directly below the
+         address so the user reads address → who shared it. -->
+    <TextView
+        android:id="@+id/tvPlaceShared"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:textColor="?colorPrimary"
+        android:visibility="gone" />
+
+    <!-- Coordinates -->
+    <TextView
+        android:id="@+id/tvPlaceCoords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <!-- Notes (optional), as in the web app's place editor. -->
+    <TextView
+        android:id="@+id/tvPlaceNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:visibility="gone" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Action: Alerts.
+         FIRST in the list, and shown for received shares as well as own places:
+         Edit and Delete are both hidden for a share, so without it the map would
+         give a recipient no way to set an alert on the place they had just been
+         shown. The Places list has a bell for the same purpose. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPlaceAlert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map_place_alerts"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_alert"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    <!-- Action: Edit Place -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPlaceEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/places_edit"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_edit"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    <!-- Action: Share as Destination -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPlaceShareDest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map_share_as_destination"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_destination"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    <!-- Action: Copy Address -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPlaceCopyCoords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map_tapped_copy_address"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_copy"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    <!-- Action: Delete Place (danger) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPlaceDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/places_delete"
+        android:textColor="?attr/colorError"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_delete"
+        app:iconTint="?attr/colorError"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+</LinearLayout>

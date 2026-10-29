@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- See values/dimens_content.xml for why these numbers. -->
+    <dimen name="content_side_padding">300dp</dimen>
+</resources>

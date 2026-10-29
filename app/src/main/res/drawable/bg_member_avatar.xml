@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Circle-member avatar bubble, matching the map marker.
+
+  Solid white here only so the tint applied in CircleMembersAdapter shows the
+  palette colour unaltered — the adapter sets the real fill per member, the same
+  way MapViewModel.getMemberColor picks it for the dot on the map.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@android:color/white" />
+</shape>

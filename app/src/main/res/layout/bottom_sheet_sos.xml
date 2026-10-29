@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Callout for an SOS marker on the map.
+
+  Carries what a responder needs before they act: who raised it, WHEN they
+  pressed the button, and WHERE that was as a street address. Both of those come
+  from the client — the server holds the timestamp and location encrypted and
+  cannot supply either — so the time is decrypted from the alert and the address
+  is reverse-geocoded on device.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/bg_circle_indicator"
+            android:backgroundTint="@color/error"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:id="@+id/tvSosTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/error"
+            tools:text="SOS from Alex" />
+    </LinearLayout>
+
+    <!-- When the button was pressed. Decrypted from the alert's encrypted
+         timestamp; the day bucket is the fallback if that won't open. -->
+    <TextView
+        android:id="@+id/tvSosTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="15sp"
+        tools:text="Triggered 14:32 · 4 minutes ago" />
+
+    <!-- Reverse-geocoded on device from the decrypted coordinates. -->
+    <TextView
+        android:id="@+id/tvSosAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textSize="15sp"
+        android:visibility="gone"
+        tools:text="221B Baker Street, London"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tvSosCoords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textSize="13sp"
+        android:alpha="0.7"
+        tools:text="51.52380, -0.15850" />
+
+    <!-- Where the position stands: when it was recorded, or that it is a last
+         known one, an update, or an area (MapFragment.showSosBottomSheet).
+         Without this a responder can read a stale pin as a live position. -->
+    <TextView
+        android:id="@+id/tvSosSnapshotNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:alpha="0.7"
+        android:text="@string/sos_location_snapshot" />
+
+    <TextView
+        android:id="@+id/tvSosAcknowledged"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="13sp"
+        android:visibility="gone"
+        tools:text="2 member(s) acknowledged"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSosDismiss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/sos_dismiss"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+    <!-- Dismissal is private and closes nothing: say so, so nobody dismisses
+         expecting it to stand the emergency down for the circle. -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:alpha="0.7"
+        android:text="@string/sos_dismiss_explainer" />
+
+</LinearLayout>

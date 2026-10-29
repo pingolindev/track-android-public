@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The dialog scrolls: AlertDialog gives its custom view only the height left between
+    the title and the buttons, and a plain layout is cut off there — on a small phone or
+    with a large font, the passphrase field and its help text would be cut off the
+    bottom, where nothing could reach them.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select data to export"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <CheckBox
+            android:id="@+id/checkboxDevices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Devices"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/checkboxCircles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Circles"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/checkboxPlaces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Places"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/checkboxCheckIns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Check-ins"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/checkboxLocations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Location History"
+            android:checked="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date Range"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupDateRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip7Days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7 days"
+                style="@style/Widget.Material3.Chip.Filter" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip30Days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 days"
+                android:checked="true"
+                style="@style/Widget.Material3.Chip.Filter" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip90Days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90 days"
+                style="@style/Widget.Material3.Chip.Filter" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip6Months"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6 months"
+                style="@style/Widget.Material3.Chip.Filter" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip1Year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 year"
+                style="@style/Widget.Material3.Chip.Filter" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!--
+            What the file is, said plainly, because it is the one property of it that
+            can hurt someone: it is decrypted (the iOS sentence, word for word).
+            Above the passphrase, so "seal it below" points at it. No lock icon: the
+            file is not locked unless a passphrase seals it.
+        -->
+        <TextView
+            android:id="@+id/exportReadableNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/export_readable_notice"
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <!--
+            Sealing is OPT-IN. A plaintext export is what makes portability work —
+            another tool can read it — and a passphrase is what turns that into a
+            backup worth keeping. Blank keeps the readable file.
+
+            The label always sits on the outline (expandedHintEnabled false). Inside
+            the box, beside the eye icon, it is cut to "Seal with a passphrase
+            (opti…" at the default font size on a 411 dp phone, and "optional" is
+            the word that matters. On the outline it fits, and the placeholder
+            shows before the field is tapped.
+        -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/exportPassphraseLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/export_passphrase_hint"
+            app:expandedHintEnabled="false"
+            app:placeholderText="@string/export_passphrase_placeholder"
+            app:endIconMode="password_toggle"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/exportPassphrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/export_passphrase_help"
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

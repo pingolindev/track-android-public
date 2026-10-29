@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_drag_handle" />
+
+    <!-- Member name with color indicator -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/viewMemberColor"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/bg_circle_indicator" />
+
+        <TextView
+            android:id="@+id/tvMemberName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Last seen -->
+    <TextView
+        android:id="@+id/tvMemberLastSeen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="13sp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <!-- Sharing status (e.g. "You paused sharing until 3:00 PM") — self-only -->
+    <TextView
+        android:id="@+id/tvMemberStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@color/warning_container"
+        android:visibility="gone" />
+
+    <!-- Address -->
+    <TextView
+        android:id="@+id/tvMemberAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Coordinates -->
+    <TextView
+        android:id="@+id/tvMemberCoords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <!-- "At <Place>", tappable through to that place's own sheet.
+         This is the guaranteed route to a place whose pin the member's avatar
+         is standing on: a pin is only ever hidden for a member who is inside
+         it, and that member's sheet always carries this row. Shown whenever the
+         member is inside a saved place, not only when a pin was hidden — being
+         a superset is what makes the guarantee hold. -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMemberAtPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="start|center_vertical"
+        android:visibility="gone"
+        app:icon="@drawable/ic_place"
+        app:iconGravity="start"
+        tools:text="At Home"
+        tools:visibility="visible"
+        style="@style/Widget.Material3.Button.TonalButton.Icon" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Action: View History -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMemberViewHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map_view_history"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_history"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    <!-- Action: Share as Destination -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMemberShareDest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map_share_as_destination"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_destination"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    <!-- Action: Copy Address -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMemberCopyCoords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/map_tapped_copy_address"
+        android:gravity="start|center_vertical"
+        app:icon="@drawable/ic_copy"
+        style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+</LinearLayout>

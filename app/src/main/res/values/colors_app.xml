@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App-specific color aliases — legacy names referenced from drawables -->
+<!-- or layouts that cannot resolve theme attrs. Values mirror generated -->
+<!-- surface tokens; when adding new colors, prefer ?attr/colorX in layouts. -->
+<resources>
+    <color name="fab_label_background">@color/surface_container_high</color>
+    <color name="fab_label_text">@color/on_surface</color>
+    <color name="consent_pending">@color/warning_container</color>
+    <color name="consent_denied">@color/error_container</color>
+    <color name="accent">@color/secondary</color>
+
+    <!-- The notify button's green. Deliberately NOT @color/secondary (#10b981):
+         white on that is 2.54:1, below AA. Material Green 800 carries white at
+         5.13:1 — better than the 3.55:1 of the colorError red — so the most
+         important button in the app stays easy to read. Matches
+         SOSView.notifyGreen in the iOS app. -->
+    <color name="sos_notify_green">#2E7D32</color>
+
+    <!-- The same green where it sits ON the card rather than behind white text:
+         the card stroke and the countdown digit. Needs a night variant for the
+         reason @color/error already has one (#e53935 -> #f87171): the card is
+         #ffffff in light and #1e1e32 in dark, and #2E7D32 on the dark surface
+         is 3.18:1 against 5.13:1 on the light one. The night value is 9.36:1.
+         Kept separate from sos_notify_green, which is a BACKGROUND carrying
+         white text and so must stay dark in both modes. -->
+    <color name="sos_notify_green_on_surface">#2E7D32</color>
+</resources>

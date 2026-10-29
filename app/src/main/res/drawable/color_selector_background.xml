@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state: white ring around the color -->
+    <item android:state_selected="true">
+        <layer-list>
+            <!-- Outer white ring -->
+            <item>
+                <shape android:shape="oval">
+                    <stroke android:width="3dp" android:color="?attr/colorOnSurface" />
+                    <solid android:color="@android:color/transparent" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <!-- Default state: solid filled circle -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+</selector>

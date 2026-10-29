@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open source licenses</title>
+<style>
+:root{--bg:#ffffff;--fg:#1b1b1b;--muted:#5f6368;--rule:#e0e0e0;--link:#0b57d0}
+@media(prefers-color-scheme:dark){:root{--bg:#121212;--fg:#e3e3e3;--muted:#9aa0a6;--rule:#2f2f2f;--link:#a8c7fa}}
+body{background:var(--bg);color:var(--fg);margin:0;padding:16px;font-family:sans-serif;font-size:15px;line-height:1.5;word-wrap:break-word;overflow-wrap:anywhere}
+h1{font-size:20px;margin:0 0 12px}
+h2{font-size:17px;margin:28px 0 8px;padding-top:12px;border-top:1px solid var(--rule)}
+h3{font-size:15px;margin:18px 0 6px}
+p{margin:0 0 12px}
+a{color:var(--link)}
+ul{padding-left:20px;margin:0 0 12px}
+li{margin:0 0 10px}
+.muted{color:var(--muted);font-size:13px}
+.coord{font-family:monospace;font-size:13px;color:var(--muted)}
+.election{border:1px solid var(--rule);border-radius:8px;padding:12px;margin:0 0 16px}
+</style>
+</head><body>
+<h1>Open source licenses</h1>
+<p>Pingolin Track for Android bundles the open-source components listed below. Their copyright notices and licence terms are reproduced here in satisfaction of those licences, including section 4(d) of the Apache License, Version 2.0.</p>
+<p>This inventory is generated — do not edit it by hand. Regenerate it with `./gradlew :app:generateThirdPartyLicenses` after any dependency change and commit the result. It is derived from the POM metadata of the resolved `prodGmsRelease` dependency graph, supplemented by `app/licenses/manual-licenses.json` for the artifacts whose POMs are incomplete, and by `app/licenses/native-rust-licenses.json` for the native library (refresh that one with `tools/generate-native-licenses.py`).</p>
+<p>Pingolin Track itself is free software, licensed under the GNU General Public License, version 3 or later. The source code of every release is at https://github.com/pingolindev/track-android-public.</p>
+<p class="muted">160 components, under 7 distinct licences.</p>
+<h2>Licence elections</h2>
+<div class="election">
+<h3>Java Native Access (JNA)</h3>
+<p class="coord">net.java.dev.jna:jna</p>
+<p>Declared: LGPL-2.1-or-later OR Apache-2.0<br><strong>Elected: Apache License 2.0</strong> <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">https://www.apache.org/licenses/LICENSE-2.0.txt</a></p>
+<p>JNA is dual-licensed. Its POM declares both LGPL-2.1-or-later and Apache-2.0, with the comment: &quot;Java Native Access (JNA) is licensed under the LGPL, version 2.1 or later, or the Apache License, version 2.0. You can freely decide which license you want to apply to the project.&quot;</p>
+<p>Pingolin elects the Apache License, Version 2.0 for JNA and distributes it under those terms only. The LGPL option is not exercised. JNA is therefore listed under Apache License 2.0 in the inventory below rather than under both licences.</p>
+<p>JNA is used solely as the FFI bridge for the UniFFI-generated bindings to the Pingolin mobile SDK. It is consumed unmodified, as a published binary artifact, and is not statically linked into or otherwise combined with Pingolin code.</p>
+</div>
+<h2>Apache License 2.0</h2>
+<p class="muted">Licence text: <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">http://www.apache.org/licenses/LICENSE-2.0.txt</a></p>
+<ul>
+<li><strong>Activity Kotlin Extensions</strong>
+<br><span class="coord">androidx.activity:activity-ktx:1.11.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/activity#1.11.0">https://developer.android.com/jetpack/androidx/releases/activity#1.11.0</a>
+</li>
+<li><strong>Activity</strong>
+<br><span class="coord">androidx.activity:activity:1.11.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/activity#1.11.0">https://developer.android.com/jetpack/androidx/releases/activity#1.11.0</a>
+</li>
+<li><strong>Experimental annotation</strong>
+<br><span class="coord">androidx.annotation:annotation-experimental:1.5.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/annotation#1.5.0">https://developer.android.com/jetpack/androidx/releases/annotation#1.5.0</a>
+</li>
+<li><strong>Annotation</strong>
+<br><span class="coord">androidx.annotation:annotation:1.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/annotation#1.10.0">https://developer.android.com/jetpack/androidx/releases/annotation#1.10.0</a>
+</li>
+<li><strong>AppCompat Resources</strong>
+<br><span class="coord">androidx.appcompat:appcompat-resources:1.7.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1">https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1</a>
+</li>
+<li><strong>AppCompat</strong>
+<br><span class="coord">androidx.appcompat:appcompat:1.7.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1">https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1</a>
+</li>
+<li><strong>Android Arch-Common</strong>
+<br><span class="coord">androidx.arch.core:core-common:2.2.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/arch-core#2.2.0">https://developer.android.com/jetpack/androidx/releases/arch-core#2.2.0</a>
+</li>
+<li><strong>Android Arch-Runtime</strong>
+<br><span class="coord">androidx.arch.core:core-runtime:2.2.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/arch-core#2.2.0">https://developer.android.com/jetpack/androidx/releases/arch-core#2.2.0</a>
+</li>
+<li><strong>Biometric</strong>
+<br><span class="coord">androidx.biometric:biometric:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/biometric#1.1.0">https://developer.android.com/jetpack/androidx/releases/biometric#1.1.0</a>
+</li>
+<li><strong>Android Support CardView v7</strong>
+<br><span class="coord">androidx.cardview:cardview:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Collections Kotlin Extensions</strong>
+<br><span class="coord">androidx.collection:collection-ktx:1.5.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/collection#1.5.0">https://developer.android.com/jetpack/androidx/releases/collection#1.5.0</a>
+</li>
+<li><strong>collections</strong>
+<br><span class="coord">androidx.collection:collection:1.5.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/collection#1.5.0">https://developer.android.com/jetpack/androidx/releases/collection#1.5.0</a>
+</li>
+<li><strong>AndroidX Futures Kotlin Extensions</strong>
+<br><span class="coord">androidx.concurrent:concurrent-futures-ktx:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/topic/libraries/architecture/index.html">https://developer.android.com/topic/libraries/architecture/index.html</a>
+</li>
+<li><strong>AndroidX Futures</strong>
+<br><span class="coord">androidx.concurrent:concurrent-futures:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/topic/libraries/architecture/index.html">https://developer.android.com/topic/libraries/architecture/index.html</a>
+</li>
+<li><strong>ConstraintLayout Core</strong>
+<br><span class="coord">androidx.constraintlayout:constraintlayout-core:1.1.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/constraintlayout#1.1.1">https://developer.android.com/jetpack/androidx/releases/constraintlayout#1.1.1</a>
+</li>
+<li><strong>ConstraintLayout</strong>
+<br><span class="coord">androidx.constraintlayout:constraintlayout:2.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/constraintlayout#2.2.1">https://developer.android.com/jetpack/androidx/releases/constraintlayout#2.2.1</a>
+</li>
+<li><strong>Android Support Library Coordinator Layout</strong>
+<br><span class="coord">androidx.coordinatorlayout:coordinatorlayout:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>Core Kotlin Extensions</strong>
+<br><span class="coord">androidx.core:core-ktx:1.17.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/core#1.17.0">https://developer.android.com/jetpack/androidx/releases/core#1.17.0</a>
+</li>
+<li><strong>SplashScreen</strong>
+<br><span class="coord">androidx.core:core-splashscreen:1.0.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/core#1.0.1">https://developer.android.com/jetpack/androidx/releases/core#1.0.1</a>
+</li>
+<li><strong>androidx.core:core-viewtree</strong>
+<br><span class="coord">androidx.core:core-viewtree:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/core#1.0.0">https://developer.android.com/jetpack/androidx/releases/core#1.0.0</a>
+</li>
+<li><strong>Core</strong>
+<br><span class="coord">androidx.core:core:1.17.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/core#1.17.0">https://developer.android.com/jetpack/androidx/releases/core#1.17.0</a>
+</li>
+<li><strong>Android Support Library Cursor Adapter</strong>
+<br><span class="coord">androidx.cursoradapter:cursoradapter:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>androidx.customview:poolingcontainer</strong>
+<br><span class="coord">androidx.customview:customview-poolingcontainer:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/customview#1.0.0">https://developer.android.com/jetpack/androidx/releases/customview#1.0.0</a>
+</li>
+<li><strong>Android Support Library Custom View</strong>
+<br><span class="coord">androidx.customview:customview:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>viewbinding</strong>
+<br><span class="coord">androidx.databinding:viewbinding:9.3.1</span>
+</li>
+<li><strong>DataStore Core Okio</strong>
+<br><span class="coord">androidx.datastore:datastore-core-okio:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>DataStore Core</strong>
+<br><span class="coord">androidx.datastore:datastore-core:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>Preferences DataStore Core</strong>
+<br><span class="coord">androidx.datastore:datastore-preferences-core:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>Preferences DataStore Proto</strong>
+<br><span class="coord">androidx.datastore:datastore-preferences-proto:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>Preferences DataStore</strong>
+<br><span class="coord">androidx.datastore:datastore-preferences:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>DataStore</strong>
+<br><span class="coord">androidx.datastore:datastore:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>Android Support Library Document File</strong>
+<br><span class="coord">androidx.documentfile:documentfile:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Android Support Library Drawer Layout</strong>
+<br><span class="coord">androidx.drawerlayout:drawerlayout:1.1.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>DynamicAnimation</strong>
+<br><span class="coord">androidx.dynamicanimation:dynamicanimation:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/dynamicanimation#1.1.0">https://developer.android.com/jetpack/androidx/releases/dynamicanimation#1.1.0</a>
+</li>
+<li><strong>Android Emoji2 Compat view helpers</strong>
+<br><span class="coord">androidx.emoji2:emoji2-views-helper:1.3.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/emoji2#1.3.0">https://developer.android.com/jetpack/androidx/releases/emoji2#1.3.0</a>
+</li>
+<li><strong>Android Emoji2 Compat</strong>
+<br><span class="coord">androidx.emoji2:emoji2:1.3.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/emoji2#1.3.0">https://developer.android.com/jetpack/androidx/releases/emoji2#1.3.0</a>
+</li>
+<li><strong>ExifInterface</strong>
+<br><span class="coord">androidx.exifinterface:exifinterface:1.4.2</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/exifinterface#1.4.2">https://developer.android.com/jetpack/androidx/releases/exifinterface#1.4.2</a>
+</li>
+<li><strong>Fragment Kotlin Extensions</strong>
+<br><span class="coord">androidx.fragment:fragment-ktx:1.8.9</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/fragment#1.8.9">https://developer.android.com/jetpack/androidx/releases/fragment#1.8.9</a>
+</li>
+<li><strong>fragment</strong>
+<br><span class="coord">androidx.fragment:fragment:1.8.9</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/fragment#1.8.9">https://developer.android.com/jetpack/androidx/releases/fragment#1.8.9</a>
+</li>
+<li><strong>Graphics Shapes</strong>
+<br><span class="coord">androidx.graphics:graphics-shapes:1.0.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/graphics#1.0.1">https://developer.android.com/jetpack/androidx/releases/graphics#1.0.1</a>
+</li>
+<li><strong>Hilt Common</strong>
+<br><span class="coord">androidx.hilt:hilt-common:1.3.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/hilt#1.3.0">https://developer.android.com/jetpack/androidx/releases/hilt#1.3.0</a>
+</li>
+<li><strong>WorkManager Hilt Extension</strong>
+<br><span class="coord">androidx.hilt:hilt-work:1.3.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/hilt#1.3.0">https://developer.android.com/jetpack/androidx/releases/hilt#1.3.0</a>
+</li>
+<li><strong>Android Support Library Interpolators</strong>
+<br><span class="coord">androidx.interpolator:interpolator:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Android Support Library core utils</strong>
+<br><span class="coord">androidx.legacy:legacy-support-core-utils:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Lifecycle-Common</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-common:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>LiveData Core Kotlin Extensions</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-livedata-core-ktx:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle LiveData Core</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-livedata-core:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>LiveData Kotlin Extensions</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-livedata-ktx:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle LiveData</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-livedata:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle Process</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-process:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle Kotlin Extensions</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-runtime-ktx:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle Runtime</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-runtime:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle Service</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-service:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle ViewModel Kotlin Extensions</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle ViewModel with SavedState</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-viewmodel-savedstate:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Lifecycle ViewModel</strong>
+<br><span class="coord">androidx.lifecycle:lifecycle-viewmodel:2.10.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0">https://developer.android.com/jetpack/androidx/releases/lifecycle#2.10.0</a>
+</li>
+<li><strong>Android Support Library loader</strong>
+<br><span class="coord">androidx.loader:loader:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Android Support Library Local Broadcast Manager</strong>
+<br><span class="coord">androidx.localbroadcastmanager:localbroadcastmanager:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Navigation Common</strong>
+<br><span class="coord">androidx.navigation:navigation-common:2.9.7</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7">https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7</a>
+</li>
+<li><strong>Navigation Fragment Kotlin Extensions</strong>
+<br><span class="coord">androidx.navigation:navigation-fragment-ktx:2.9.7</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7">https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7</a>
+</li>
+<li><strong>Navigation Fragment</strong>
+<br><span class="coord">androidx.navigation:navigation-fragment:2.9.7</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7">https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7</a>
+</li>
+<li><strong>Navigation Runtime</strong>
+<br><span class="coord">androidx.navigation:navigation-runtime:2.9.7</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7">https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7</a>
+</li>
+<li><strong>Navigation UI Kotlin Extensions</strong>
+<br><span class="coord">androidx.navigation:navigation-ui-ktx:2.9.7</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7">https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7</a>
+</li>
+<li><strong>Navigation UI</strong>
+<br><span class="coord">androidx.navigation:navigation-ui:2.9.7</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7">https://developer.android.com/jetpack/androidx/releases/navigation#2.9.7</a>
+</li>
+<li><strong>Android Support Library Print</strong>
+<br><span class="coord">androidx.print:print:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Profile Installer</strong>
+<br><span class="coord">androidx.profileinstaller:profileinstaller:1.4.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/profileinstaller#1.4.1">https://developer.android.com/jetpack/androidx/releases/profileinstaller#1.4.1</a>
+</li>
+<li><strong>RecyclerView</strong>
+<br><span class="coord">androidx.recyclerview:recyclerview:1.4.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/recyclerview#1.4.0">https://developer.android.com/jetpack/androidx/releases/recyclerview#1.4.0</a>
+</li>
+<li><strong>Android Resource Inspection - Annotations</strong>
+<br><span class="coord">androidx.resourceinspection:resourceinspection-annotation:1.0.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/resourceinspection#1.0.1">https://developer.android.com/jetpack/androidx/releases/resourceinspection#1.0.1</a>
+</li>
+<li><strong>Room-Common</strong>
+<br><span class="coord">androidx.room:room-common:2.8.4</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/room#2.8.4">https://developer.android.com/jetpack/androidx/releases/room#2.8.4</a>
+</li>
+<li><strong>Room Kotlin Extensions</strong>
+<br><span class="coord">androidx.room:room-ktx:2.8.4</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/room#2.8.4">https://developer.android.com/jetpack/androidx/releases/room#2.8.4</a>
+</li>
+<li><strong>Room-Runtime</strong>
+<br><span class="coord">androidx.room:room-runtime:2.8.4</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/room#2.8.4">https://developer.android.com/jetpack/androidx/releases/room#2.8.4</a>
+</li>
+<li><strong>SavedState Kotlin Extensions</strong>
+<br><span class="coord">androidx.savedstate:savedstate-ktx:1.4.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/savedstate#1.4.0">https://developer.android.com/jetpack/androidx/releases/savedstate#1.4.0</a>
+</li>
+<li><strong>Saved State</strong>
+<br><span class="coord">androidx.savedstate:savedstate:1.4.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/savedstate#1.4.0">https://developer.android.com/jetpack/androidx/releases/savedstate#1.4.0</a>
+</li>
+<li><strong>Security</strong>
+<br><span class="coord">androidx.security:security-crypto:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/security#1.1.0">https://developer.android.com/jetpack/androidx/releases/security#1.1.0</a>
+</li>
+<li><strong>Android Support Library Sliding Pane Layout</strong>
+<br><span class="coord">androidx.slidingpanelayout:slidingpanelayout:1.2.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/slidingpanelayout#1.2.0">https://developer.android.com/jetpack/androidx/releases/slidingpanelayout#1.2.0</a>
+</li>
+<li><strong>SQLite Framework Integration</strong>
+<br><span class="coord">androidx.sqlite:sqlite-framework:2.6.2</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2">https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2</a>
+</li>
+<li><strong>SQLite Kotlin Extensions</strong>
+<br><span class="coord">androidx.sqlite:sqlite-ktx:2.6.2</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2">https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2</a>
+</li>
+<li><strong>SQLite</strong>
+<br><span class="coord">androidx.sqlite:sqlite:2.6.2</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2">https://developer.android.com/jetpack/androidx/releases/sqlite#2.6.2</a>
+</li>
+<li><strong>Android App Startup Runtime</strong>
+<br><span class="coord">androidx.startup:startup-runtime:1.1.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/startup#1.1.1">https://developer.android.com/jetpack/androidx/releases/startup#1.1.1</a>
+</li>
+<li><strong>Startup Runtime</strong>
+<br><span class="coord">androidx.startup:startup-runtime:1.2.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/startup#1.2.0">https://developer.android.com/jetpack/androidx/releases/startup#1.2.0</a>
+</li>
+<li><strong>Android Support Library Custom View</strong>
+<br><span class="coord">androidx.swiperefreshlayout:swiperefreshlayout:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>Android Tracing Runtime Kotlin Extensions</strong>
+<br><span class="coord">androidx.tracing:tracing-ktx:1.2.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/tracing#1.2.0">https://developer.android.com/jetpack/androidx/releases/tracing#1.2.0</a>
+</li>
+<li><strong>Android Tracing</strong>
+<br><span class="coord">androidx.tracing:tracing:1.2.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/tracing#1.2.0">https://developer.android.com/jetpack/androidx/releases/tracing#1.2.0</a>
+</li>
+<li><strong>Transition</strong>
+<br><span class="coord">androidx.transition:transition:1.5.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/transition#1.5.0">https://developer.android.com/jetpack/androidx/releases/transition#1.5.0</a>
+</li>
+<li><strong>Android Support AnimatedVectorDrawable</strong>
+<br><span class="coord">androidx.vectordrawable:vectordrawable-animated:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>Android Support VectorDrawable</strong>
+<br><span class="coord">androidx.vectordrawable:vectordrawable:1.1.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>VersionedParcelable</strong>
+<br><span class="coord">androidx.versionedparcelable:versionedparcelable:1.1.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>AndroidX Widget ViewPager2</strong>
+<br><span class="coord">androidx.viewpager2:viewpager2:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx">https://developer.android.com/jetpack/androidx</a>
+</li>
+<li><strong>ViewPager2</strong>
+<br><span class="coord">androidx.viewpager2:viewpager2:1.1.0-beta02</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/viewpager2#1.1.0-beta02">https://developer.android.com/jetpack/androidx/releases/viewpager2#1.1.0-beta02</a>
+</li>
+<li><strong>Android Support Library View Pager</strong>
+<br><span class="coord">androidx.viewpager:viewpager:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="http://developer.android.com/tools/extras/support-library.html">http://developer.android.com/tools/extras/support-library.html</a>
+</li>
+<li><strong>Webkit</strong>
+<br><span class="coord">androidx.webkit:webkit:1.16.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/webkit#1.16.0">https://developer.android.com/jetpack/androidx/releases/webkit#1.16.0</a>
+</li>
+<li><strong>Jetpack WindowManager Library</strong>
+<br><span class="coord">androidx.window:window:1.0.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/window#1.0.0">https://developer.android.com/jetpack/androidx/releases/window#1.0.0</a>
+</li>
+<li><strong>WorkManager Kotlin Extensions</strong>
+<br><span class="coord">androidx.work:work-runtime-ktx:2.11.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/work#2.11.1">https://developer.android.com/jetpack/androidx/releases/work#2.11.1</a>
+</li>
+<li><strong>WorkManager Runtime</strong>
+<br><span class="coord">androidx.work:work-runtime:2.11.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/work#2.11.1">https://developer.android.com/jetpack/androidx/releases/work#2.11.1</a>
+</li>
+<li><strong>transport-api</strong>
+<br><span class="coord">com.google.android.datatransport:transport-api:3.1.0</span>
+</li>
+<li><strong>transport-backend-cct</strong>
+<br><span class="coord">com.google.android.datatransport:transport-backend-cct:3.1.9</span>
+</li>
+<li><strong>transport-runtime</strong>
+<br><span class="coord">com.google.android.datatransport:transport-runtime:3.1.9</span>
+</li>
+<li><strong>Material Components for Android</strong>
+<br><span class="coord">com.google.android.material:material:1.13.0</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://github.com/material-components/material-components-android">https://github.com/material-components/material-components-android</a>
+</li>
+<li><strong>FindBugs-jsr305</strong>
+<br><span class="coord">com.google.code.findbugs:jsr305:3.0.2</span>
+<br><a href="http://findbugs.sourceforge.net/">http://findbugs.sourceforge.net/</a>
+</li>
+<li><strong>Gson</strong>
+<br><span class="coord">com.google.code.gson:gson:2.13.2</span>
+</li>
+<li><strong>Tink Cryptography API for Message Encryption for Web Push (RFC 8291)</strong>
+<br><span class="coord">com.google.crypto.tink:apps-webpush:1.11.0</span>
+<br><a href="http://github.com/tink-crypto/tink-java-apps">http://github.com/tink-crypto/tink-java-apps</a>
+</li>
+<li><strong>Tink Cryptography API for Android</strong>
+<br><span class="coord">com.google.crypto.tink:tink-android:1.8.0</span>
+<br><a href="http://github.com/tink-crypto/tink-java">http://github.com/tink-crypto/tink-java</a>
+</li>
+<li><strong>Dagger Lint Rules AAR Distribution</strong>
+<br><span class="coord">com.google.dagger:dagger-lint-aar:2.60.1</span>
+<br><a href="https://github.com/google/dagger">https://github.com/google/dagger</a>
+</li>
+<li><strong>Dagger</strong>
+<br><span class="coord">com.google.dagger:dagger:2.60.1</span>
+<br><a href="https://github.com/google/dagger">https://github.com/google/dagger</a>
+</li>
+<li><strong>Hilt Android</strong>
+<br><span class="coord">com.google.dagger:hilt-android:2.60.1</span>
+<br><a href="https://github.com/google/dagger">https://github.com/google/dagger</a>
+</li>
+<li><strong>Hilt Core</strong>
+<br><span class="coord">com.google.dagger:hilt-core:2.60.1</span>
+<br><a href="https://github.com/google/dagger">https://github.com/google/dagger</a>
+</li>
+<li><strong>error-prone annotations</strong>
+<br><span class="coord">com.google.errorprone:error_prone_annotations:2.41.0</span>
+</li>
+<li><strong>firebase-annotations</strong>
+<br><span class="coord">com.google.firebase:firebase-annotations:17.0.0</span>
+</li>
+<li><strong>firebase-bom</strong>
+<br><span class="coord">com.google.firebase:firebase-bom:34.14.1</span>
+</li>
+<li><strong>firebase-common</strong>
+<br><span class="coord">com.google.firebase:firebase-common:22.0.1</span>
+</li>
+<li><strong>firebase-components</strong>
+<br><span class="coord">com.google.firebase:firebase-components:19.0.0</span>
+</li>
+<li><strong>firebase-datatransport</strong>
+<br><span class="coord">com.google.firebase:firebase-datatransport:18.2.0</span>
+</li>
+<li><strong>firebase-encoders-json</strong>
+<br><span class="coord">com.google.firebase:firebase-encoders-json:18.0.0</span>
+</li>
+<li><strong>firebase-encoders-proto</strong>
+<br><span class="coord">com.google.firebase:firebase-encoders-proto:16.0.0</span>
+</li>
+<li><strong>firebase-encoders</strong>
+<br><span class="coord">com.google.firebase:firebase-encoders:17.0.0</span>
+</li>
+<li><strong>firebase-installations-interop</strong>
+<br><span class="coord">com.google.firebase:firebase-installations-interop:17.3.0</span>
+</li>
+<li><strong>firebase-installations</strong>
+<br><span class="coord">com.google.firebase:firebase-installations:19.1.0</span>
+</li>
+<li><strong>firebase-messaging</strong>
+<br><span class="coord">com.google.firebase:firebase-messaging:25.0.2</span>
+</li>
+<li><strong>Guava ListenableFuture only</strong>
+<br><span class="coord">com.google.guava:listenablefuture:1.0</span>
+</li>
+<li><strong>Timber</strong>
+<br><span class="coord">com.jakewharton.timber:timber:5.0.1</span>
+<br><span class="muted">Copyright Jake Wharton</span>
+<br><a href="https://github.com/JakeWharton/timber">https://github.com/JakeWharton/timber</a>
+</li>
+<li><strong>logging-interceptor</strong>
+<br><span class="coord">com.squareup.okhttp3:logging-interceptor:5.4.0</span>
+<br><span class="muted">Copyright Square, Inc.</span>
+<br><a href="https://square.github.io/okhttp/">https://square.github.io/okhttp/</a>
+</li>
+<li><strong>okhttp</strong>
+<br><span class="coord">com.squareup.okhttp3:okhttp:5.4.0</span>
+<br><span class="muted">Copyright Square, Inc.</span>
+<br><a href="https://square.github.io/okhttp/">https://square.github.io/okhttp/</a>
+</li>
+<li><strong>okio</strong>
+<br><span class="coord">com.squareup.okio:okio:3.17.0</span>
+<br><span class="muted">Copyright Square, Inc.</span>
+<br><a href="https://github.com/square/okio/">https://github.com/square/okio/</a>
+</li>
+<li><strong>Converter: Gson</strong>
+<br><span class="coord">com.squareup.retrofit2:converter-gson:3.0.0</span>
+<br><span class="muted">Copyright Square, Inc.</span>
+<br><a href="https://github.com/square/retrofit">https://github.com/square/retrofit</a>
+</li>
+<li><strong>Retrofit</strong>
+<br><span class="coord">com.squareup.retrofit2:retrofit:3.0.0</span>
+<br><span class="muted">Copyright Square, Inc.</span>
+<br><a href="https://github.com/square/retrofit">https://github.com/square/retrofit</a>
+</li>
+<li><strong>coil-core</strong>
+<br><span class="coord">io.coil-kt.coil3:coil-core:3.4.0</span>
+<br><span class="muted">Copyright Coil Contributors</span>
+<br><a href="https://github.com/coil-kt/coil">https://github.com/coil-kt/coil</a>
+</li>
+<li><strong>coil</strong>
+<br><span class="coord">io.coil-kt.coil3:coil:3.4.0</span>
+<br><span class="muted">Copyright Coil Contributors</span>
+<br><a href="https://github.com/coil-kt/coil">https://github.com/coil-kt/coil</a>
+</li>
+<li><strong>Jakarta Dependency Injection</strong>
+<br><span class="coord">jakarta.inject:jakarta.inject-api:2.0.1</span>
+<br><span class="muted">Copyright Antoine Sabot-Durand, Martin Kouba, Tomas Remes, Matej Novotny</span>
+<br><a href="https://github.com/eclipse-ee4j/injection-api">https://github.com/eclipse-ee4j/injection-api</a>
+</li>
+<li><strong>javax.inject</strong>
+<br><span class="coord">javax.inject:javax.inject:1</span>
+<br><a href="http://code.google.com/p/atinject/">http://code.google.com/p/atinject/</a>
+</li>
+<li><strong>Java Native Access</strong>
+<br><span class="coord">net.java.dev.jna:jna:5.18.1</span>
+<br><span class="muted">Copyright Timothy Wall, Matthias Bläsing</span>
+<br><a href="https://github.com/java-native-access/jna">https://github.com/java-native-access/jna</a>
+<br><span class="muted">Dual-licensed; Apache License 2.0 elected by Pingolin — see &quot;Licence elections&quot; above.</span>
+</li>
+<li><strong>Kotlin Libraries bill-of-materials</strong>
+<br><span class="coord">org.jetbrains.kotlin:kotlin-bom:1.8.22</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://kotlinlang.org/">https://kotlinlang.org/</a>
+</li>
+<li><strong>Parcelize Runtime</strong>
+<br><span class="coord">org.jetbrains.kotlin:kotlin-parcelize-runtime:2.3.10</span>
+<br><span class="muted">Copyright Kotlin Team</span>
+<br><a href="https://kotlinlang.org/">https://kotlinlang.org/</a>
+</li>
+<li><strong>Kotlin Stdlib</strong>
+<br><span class="coord">org.jetbrains.kotlin:kotlin-stdlib:2.3.21</span>
+<br><span class="muted">Copyright Kotlin Team</span>
+<br><a href="https://kotlinlang.org/">https://kotlinlang.org/</a>
+</li>
+<li><strong>kotlinx-coroutines-android</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.coroutines">https://github.com/Kotlin/kotlinx.coroutines</a>
+</li>
+<li><strong>kotlinx-coroutines-bom</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.coroutines">https://github.com/Kotlin/kotlinx.coroutines</a>
+</li>
+<li><strong>kotlinx-coroutines-core</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.coroutines">https://github.com/Kotlin/kotlinx.coroutines</a>
+</li>
+<li><strong>kotlinx-coroutines-play-services</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.coroutines">https://github.com/Kotlin/kotlinx.coroutines</a>
+</li>
+<li><strong>kotlinx-serialization-bom</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-serialization-bom:1.7.3</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.serialization">https://github.com/Kotlin/kotlinx.serialization</a>
+</li>
+<li><strong>kotlinx-serialization-core</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.serialization">https://github.com/Kotlin/kotlinx.serialization</a>
+</li>
+<li><strong>kotlinx-serialization-json</strong>
+<br><span class="coord">org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/Kotlin/kotlinx.serialization">https://github.com/Kotlin/kotlinx.serialization</a>
+</li>
+<li><strong>JetBrains Java Annotations</strong>
+<br><span class="coord">org.jetbrains:annotations:23.0.0</span>
+<br><span class="muted">Copyright JetBrains Team</span>
+<br><a href="https://github.com/JetBrains/java-annotations">https://github.com/JetBrains/java-annotations</a>
+</li>
+<li><strong>JSpecify annotations</strong>
+<br><span class="coord">org.jspecify:jspecify:1.0.0</span>
+<br><span class="muted">Copyright Kevin Bourrillion</span>
+<br><a href="http://jspecify.org/">http://jspecify.org/</a>
+</li>
+<li><strong>MapLibre Android Java Utilities</strong>
+<br><span class="coord">org.maplibre.gl:android-sdk-geojson:6.0.1</span>
+<br><span class="muted">Copyright MapLibre</span>
+<br><a href="https://github.com/maplibre/maplibre-java">https://github.com/maplibre/maplibre-java</a>
+</li>
+<li><strong>MapLibre Android Java Utilities</strong>
+<br><span class="coord">org.maplibre.gl:android-sdk-turf:6.0.1</span>
+<br><span class="muted">Copyright MapLibre</span>
+<br><a href="https://github.com/maplibre/maplibre-java">https://github.com/maplibre/maplibre-java</a>
+</li>
+<li><strong>org.unifiedpush.android:connector</strong>
+<br><span class="coord">org.unifiedpush.android:connector:3.0.3</span>
+<br><span class="muted">Copyright S1m</span>
+<br><a href="https://unifiedpush.org/developers/android/">https://unifiedpush.org/developers/android/</a>
+</li>
+</ul>
+<h2>Android Software Development Kit License</h2>
+<p class="muted">Licence text: <a href="https://developer.android.com/studio/terms.html">https://developer.android.com/studio/terms.html</a></p>
+<ul>
+<li><strong>play-services-base</strong>
+<br><span class="coord">com.google.android.gms:play-services-base:18.9.0</span>
+</li>
+<li><strong>play-services-basement</strong>
+<br><span class="coord">com.google.android.gms:play-services-basement:18.9.0</span>
+</li>
+<li><strong>play-services-cloud-messaging</strong>
+<br><span class="coord">com.google.android.gms:play-services-cloud-messaging:17.2.0</span>
+</li>
+<li><strong>play-services-location</strong>
+<br><span class="coord">com.google.android.gms:play-services-location:21.3.0</span>
+</li>
+<li><strong>play-services-stats</strong>
+<br><span class="coord">com.google.android.gms:play-services-stats:17.0.2</span>
+</li>
+<li><strong>play-services-tasks</strong>
+<br><span class="coord">com.google.android.gms:play-services-tasks:18.4.0</span>
+</li>
+<li><strong>firebase-iid-interop</strong>
+<br><span class="coord">com.google.firebase:firebase-iid-interop:17.1.0</span>
+</li>
+<li><strong>firebase-measurement-connector</strong>
+<br><span class="coord">com.google.firebase:firebase-measurement-connector:19.0.0</span>
+</li>
+</ul>
+<h2>BSD 2-Clause License</h2>
+<p class="muted">Licence text: <a href="https://opensource.org/licenses/BSD-2-Clause">https://opensource.org/licenses/BSD-2-Clause</a></p>
+<ul>
+<li><strong>MapLibre Android</strong>
+<br><span class="coord">org.maplibre.gl:android-sdk:11.11.0</span>
+<br><span class="muted">Copyright MapLibre</span>
+<br><a href="https://github.com/maplibre/maplibre-native">https://github.com/maplibre/maplibre-native</a>
+<br><span class="muted">The POM records the licence name as the bare string 'BSD' with the URL https://opensource.org/licenses/BSD-2-Clause; it is reported here under the two-clause name the URL identifies.</span>
+</li>
+<li><strong>MapLibre Android Gestures Library</strong>
+<br><span class="coord">org.maplibre.gl:maplibre-android-gestures:0.0.4</span>
+<br><span class="muted">Copyright MapLibre</span>
+<br><a href="https://github.com/maplibre/maplibre-gestures-android">https://github.com/maplibre/maplibre-gestures-android</a>
+</li>
+</ul>
+<h2>BSD 3-Clause License</h2>
+<p class="muted">Licence text: <a href="https://github.com/sqlcipher/sqlcipher-android/blob/master/LICENSE">https://github.com/sqlcipher/sqlcipher-android/blob/master/LICENSE</a></p>
+<ul>
+<li><strong>Preferences External Protobuf</strong>
+<br><span class="coord">androidx.datastore:datastore-preferences-external-protobuf:1.2.1</span>
+<br><span class="muted">Copyright The Android Open Source Project</span>
+<br><a href="https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1">https://developer.android.com/jetpack/androidx/releases/datastore#1.2.1</a>
+</li>
+<li><strong>sqlcipher-android</strong>
+<br><span class="coord">net.zetetic:sqlcipher-android:4.9.0</span>
+<br><span class="muted">Copyright Zetetic Support</span>
+<br><a href="https://www.zetetic.net/sqlcipher">https://www.zetetic.net/sqlcipher</a>
+<br><span class="muted">Licence added by hand: The published POM declares a &lt;license&gt; element with a &lt;url&gt; but no &lt;name&gt;, so the POM scan yields a blank licence. Filled in from the project's own LICENSE file, which is a three-clause BSD licence: 'Copyright (c) 2008-2023, ZETETIC LLC' with the redistribution, binary-reproduction and non-endorsement clauses. SQLCipher Community Edition. Zetetic's licence overview is at https://www.zetetic.net/sqlcipher/license/ — the URL the POM points at. Consumed unmodified as a published binary artifact.</span>
+</li>
+</ul>
+<h2>ISC License</h2>
+<p class="muted">Licence text: <a href="https://opensource.org/licenses/isc-license">https://opensource.org/licenses/isc-license</a></p>
+<ul>
+<li><strong>jBCrypt</strong>
+<br><span class="coord">org.mindrot:jbcrypt:0.4</span>
+<br><span class="muted">Copyright Damien Miller</span>
+<br><a href="https://github.com/djmdjm/jBCrypt">https://github.com/djmdjm/jBCrypt</a>
+</li>
+</ul>
+<h2>Play Core Software Development Kit Terms of Service</h2>
+<p class="muted">Licence text: <a href="https://developer.android.com/guide/playcore/license">https://developer.android.com/guide/playcore/license</a></p>
+<ul>
+<li><strong>core-common</strong>
+<br><span class="coord">com.google.android.play:core-common:2.0.4</span>
+</li>
+</ul>
+<h2>Play Integrity API Terms of Service</h2>
+<p class="muted">Licence text: <a href="https://developer.android.com/google/play/integrity/overview#tos">https://developer.android.com/google/play/integrity/overview#tos</a></p>
+<ul>
+<li><strong>integrity</strong>
+<br><span class="coord">com.google.android.play:integrity:1.4.0</span>
+</li>
+</ul>
+<h2>Native (Rust) components</h2>
+<p>Statically linked into <span class="coord">libpingolin_mobile.so</span>, built from <span class="coord">crates/mobile-sdk</span> in the mobile-sdk repository.</p>
+<p>The components above are the Java and Android dependencies, taken from POM metadata. They are not the whole picture: libpingolin_mobile.so is a prebuilt native library with third-party Rust crates statically linked into it, and no POM describes those. They are inventoried separately, from the Rust dependency graph, and listed here.</p>
+<p>ABIs covered: arm64-v8a (aarch64-linux-android), armeabi-v7a (armv7-linux-androideabi), x86_64 (x86_64-linux-android).</p>
+<p>Normal dependency closure of crates/mobile-sdk, unioned across the ABIs above. Dev-dependencies, build-dependencies and proc-macro crates are excluded: they run at build time and leave no code in the shared library. Pingolin's own crates are excluded; they are covered by LICENSE.</p>
+<p>Licences are reproduced as each crate publishes them, as SPDX expressions. &quot;OR&quot; marks a choice of terms offered by the author; every such choice here is between permissive licences whose conditions Pingolin satisfies alike, by reproducing this notice. &quot;AND&quot; means both sets of terms apply.</p>
+<p class="muted">244 crates, under 25 distinct licence expressions.</p>
+<h3>MIT OR Apache-2.0</h3>
+<ul>
+<li><strong>aead</strong> <span class="coord">0.5.2</span>
+<br>Traits for Authenticated Encryption with Associated Data (AEAD) algorithms,
+such as AES-GCM as ChaCha20Poly1305, which provide a high-level API
+<br><a href="https://github.com/RustCrypto/traits">https://github.com/RustCrypto/traits</a>
+</li>
+<li><strong>ahash</strong> <span class="coord">0.8.12</span>
+<br>A non-cryptographic hash function using AES-NI for high performance
+<br><a href="https://github.com/tkaitchuck/ahash">https://github.com/tkaitchuck/ahash</a>
+</li>
+<li><strong>android_log-sys</strong> <span class="coord">0.2.0</span>
+<br>FFI bindings to Android log Library.
+<br><a href="https://github.com/nercury/android_log-sys-rs">https://github.com/nercury/android_log-sys-rs</a>
+</li>
+<li><strong>android_log-sys</strong> <span class="coord">0.3.2</span>
+<br>FFI bindings to Android log Library.
+<br><a href="https://github.com/rust-mobile/android_log-sys-rs">https://github.com/rust-mobile/android_log-sys-rs</a>
+</li>
+<li><strong>android_logger</strong> <span class="coord">0.14.1</span>
+<br>A logging implementation for `log` which hooks to android log output.
+<br><a href="https://github.com/rust-mobile/android_logger-rs">https://github.com/rust-mobile/android_logger-rs</a>
+</li>
+<li><strong>anyhow</strong> <span class="coord">1.0.103</span>
+<br>Flexible concrete Error type built on std::error::Error
+<br><a href="https://github.com/dtolnay/anyhow">https://github.com/dtolnay/anyhow</a>
+</li>
+<li><strong>argon2</strong> <span class="coord">0.5.3</span>
+<br>Pure Rust implementation of the Argon2 password hashing function with support
+for the Argon2d, Argon2i, and Argon2id algorithmic variants
+<br><a href="https://github.com/RustCrypto/password-hashes/tree/master/argon2">https://github.com/RustCrypto/password-hashes/tree/master/argon2</a>
+</li>
+<li><strong>arrayvec</strong> <span class="coord">0.7.7</span>
+<br>A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
+<br><a href="https://github.com/bluss/arrayvec">https://github.com/bluss/arrayvec</a>
+</li>
+<li><strong>askama</strong> <span class="coord">0.13.1</span>
+<br>Type-safe, compiled Jinja-like templates for Rust
+<br><a href="https://github.com/askama-rs/askama">https://github.com/askama-rs/askama</a>
+</li>
+<li><strong>async-compression</strong> <span class="coord">0.4.42</span>
+<br>Adaptors between compression crates and Rust's modern asynchronous IO types.
+<br><a href="https://github.com/Nullus157/async-compression">https://github.com/Nullus157/async-compression</a>
+</li>
+<li><strong>base64</strong> <span class="coord">0.22.1</span>
+<br>encodes and decodes base64 as bytes or utf8
+<br><a href="https://github.com/marshallpierce/rust-base64">https://github.com/marshallpierce/rust-base64</a>
+</li>
+<li><strong>bitflags</strong> <span class="coord">2.13.0</span>
+<br>A macro to generate structures which behave like bitflags.
+<br><a href="https://github.com/bitflags/bitflags">https://github.com/bitflags/bitflags</a>
+</li>
+<li><strong>blake2</strong> <span class="coord">0.10.6</span>
+<br>BLAKE2 hash functions
+<br><a href="https://github.com/RustCrypto/hashes">https://github.com/RustCrypto/hashes</a>
+</li>
+<li><strong>block-buffer</strong> <span class="coord">0.10.4</span>
+<br>Buffer type for block processing of data
+<br><a href="https://github.com/RustCrypto/utils">https://github.com/RustCrypto/utils</a>
+</li>
+<li><strong>blowfish</strong> <span class="coord">0.9.1</span>
+<br>Blowfish block cipher
+<br><a href="https://github.com/RustCrypto/block-ciphers">https://github.com/RustCrypto/block-ciphers</a>
+</li>
+<li><strong>camino</strong> <span class="coord">1.2.3</span>
+<br>UTF-8 paths
+<br><a href="https://github.com/camino-rs/camino">https://github.com/camino-rs/camino</a>
+</li>
+<li><strong>cargo-platform</strong> <span class="coord">0.1.9</span>
+<br>Cargo's representation of a target platform.
+<br><a href="https://github.com/rust-lang/cargo">https://github.com/rust-lang/cargo</a>
+</li>
+<li><strong>cfg-if</strong> <span class="coord">1.0.4</span>
+<br>A macro to ergonomically define an item depending on a large number of #[cfg]
+parameters. Structured like an if-else chain, the first matching branch is the
+item that gets emitted.
+<br><a href="https://github.com/rust-lang/cfg-if">https://github.com/rust-lang/cfg-if</a>
+</li>
+<li><strong>chrono</strong> <span class="coord">0.4.45</span>
+<br>Date and time library for Rust
+<br><a href="https://github.com/chronotope/chrono">https://github.com/chronotope/chrono</a>
+</li>
+<li><strong>cipher</strong> <span class="coord">0.4.4</span>
+<br>Traits for describing block ciphers and stream ciphers
+<br><a href="https://github.com/RustCrypto/traits">https://github.com/RustCrypto/traits</a>
+</li>
+<li><strong>compression-codecs</strong> <span class="coord">0.4.38</span>
+<br>Adaptors for various compression algorithms.
+<br><a href="https://github.com/Nullus157/async-compression">https://github.com/Nullus157/async-compression</a>
+</li>
+<li><strong>compression-core</strong> <span class="coord">0.4.32</span>
+<br>Abstractions for compression algorithms.
+<br><a href="https://github.com/Nullus157/async-compression">https://github.com/Nullus157/async-compression</a>
+</li>
+<li><strong>cpufeatures</strong> <span class="coord">0.2.17</span>
+<br>Lightweight runtime CPU feature detection for aarch64, loongarch64, and x86/x86_64 targets, 
+with no_std support and support for mobile targets including Android and iOS
+<br><a href="https://github.com/RustCrypto/utils">https://github.com/RustCrypto/utils</a>
+<br><span class="muted">Only in: arm64-v8a, x86_64</span>
+</li>
+<li><strong>cpufeatures</strong> <span class="coord">0.3.0</span>
+<br>Lightweight runtime CPU feature detection for aarch64, loongarch64, and x86/x86_64 targets,
+with no_std support and support for mobile targets including Android and iOS
+<br><a href="https://github.com/RustCrypto/utils">https://github.com/RustCrypto/utils</a>
+<br><span class="muted">Only in: x86_64</span>
+</li>
+<li><strong>crc32fast</strong> <span class="coord">1.5.0</span>
+<br>Fast, SIMD-accelerated CRC32 (IEEE) checksum computation
+<br><a href="https://github.com/srijs/rust-crc32fast">https://github.com/srijs/rust-crc32fast</a>
+</li>
+<li><strong>crypto-common</strong> <span class="coord">0.1.7</span>
+<br>Common cryptographic traits
+<br><a href="https://github.com/RustCrypto/traits">https://github.com/RustCrypto/traits</a>
+</li>
+<li><strong>digest</strong> <span class="coord">0.10.7</span>
+<br>Traits for cryptographic hash functions and message authentication codes
+<br><a href="https://github.com/RustCrypto/traits">https://github.com/RustCrypto/traits</a>
+</li>
+<li><strong>env_filter</strong> <span class="coord">0.1.4</span>
+<br>Filter log events using environment variables
+<br><a href="https://github.com/rust-cli/env_logger">https://github.com/rust-cli/env_logger</a>
+</li>
+<li><strong>errno</strong> <span class="coord">0.3.14</span>
+<br>Cross-platform interface to the `errno` variable.
+<br><a href="https://github.com/lambda-fairy/rust-errno">https://github.com/lambda-fairy/rust-errno</a>
+</li>
+<li><strong>flate2</strong> <span class="coord">1.1.9</span>
+<br>DEFLATE compression and decompression exposed as Read/BufRead/Write streams.
+Supports miniz_oxide and multiple zlib implementations. Supports zlib, gzip,
+and raw deflate streams.
+<br><a href="https://github.com/rust-lang/flate2-rs">https://github.com/rust-lang/flate2-rs</a>
+</li>
+<li><strong>form_urlencoded</strong> <span class="coord">1.2.2</span>
+<br>Parser and serializer for the application/x-www-form-urlencoded syntax, as used by HTML forms.
+<br><a href="https://github.com/servo/rust-url">https://github.com/servo/rust-url</a>
+</li>
+<li><strong>futures</strong> <span class="coord">0.3.32</span>
+<br>An implementation of futures and streams featuring zero allocations,
+composability, and iterator-like interfaces.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-channel</strong> <span class="coord">0.3.32</span>
+<br>Channels for asynchronous communication using futures-rs.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-core</strong> <span class="coord">0.3.32</span>
+<br>The core traits and types in for the `futures` library.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-executor</strong> <span class="coord">0.3.32</span>
+<br>Executors for asynchronous tasks based on the futures-rs library.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-io</strong> <span class="coord">0.3.32</span>
+<br>The `AsyncRead`, `AsyncWrite`, `AsyncSeek`, and `AsyncBufRead` traits for the futures-rs library.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-sink</strong> <span class="coord">0.3.32</span>
+<br>The asynchronous `Sink` trait for the futures-rs library.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-task</strong> <span class="coord">0.3.32</span>
+<br>Tools for working with tasks.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>futures-util</strong> <span class="coord">0.3.32</span>
+<br>Common utilities and extension traits for the futures-rs library.
+<br><a href="https://github.com/rust-lang/futures-rs">https://github.com/rust-lang/futures-rs</a>
+</li>
+<li><strong>getrandom</strong> <span class="coord">0.2.17</span>
+<br>A small cross-platform library for retrieving random data from system source
+<br><a href="https://github.com/rust-random/getrandom">https://github.com/rust-random/getrandom</a>
+</li>
+<li><strong>getrandom</strong> <span class="coord">0.3.4</span>
+<br>A small cross-platform library for retrieving random data from system source
+<br><a href="https://github.com/rust-random/getrandom">https://github.com/rust-random/getrandom</a>
+</li>
+<li><strong>getrandom</strong> <span class="coord">0.4.3</span>
+<br>A small cross-platform library for retrieving random data from system source
+<br><a href="https://github.com/rust-random/getrandom">https://github.com/rust-random/getrandom</a>
+</li>
+<li><strong>glob</strong> <span class="coord">0.3.3</span>
+<br>Support for matching file paths against Unix shell style patterns.
+<br><a href="https://github.com/rust-lang/glob">https://github.com/rust-lang/glob</a>
+</li>
+<li><strong>hashbrown</strong> <span class="coord">0.14.5</span>
+<br>A Rust port of Google's SwissTable hash map
+<br><a href="https://github.com/rust-lang/hashbrown">https://github.com/rust-lang/hashbrown</a>
+</li>
+<li><strong>hashbrown</strong> <span class="coord">0.17.1</span>
+<br>A Rust port of Google's SwissTable hash map
+<br><a href="https://github.com/rust-lang/hashbrown">https://github.com/rust-lang/hashbrown</a>
+</li>
+<li><strong>hashlink</strong> <span class="coord">0.9.1</span>
+<br>HashMap-like containers that hold their key-value pairs in a user controllable order
+<br><a href="https://github.com/kyren/hashlink">https://github.com/kyren/hashlink</a>
+</li>
+<li><strong>heck</strong> <span class="coord">0.5.0</span>
+<br>heck is a case conversion library.
+<br><a href="https://github.com/withoutboats/heck">https://github.com/withoutboats/heck</a>
+</li>
+<li><strong>hex</strong> <span class="coord">0.4.3</span>
+<br>Encoding and decoding data into/from hexadecimal representation.
+<br><a href="https://github.com/KokaKiwi/rust-hex">https://github.com/KokaKiwi/rust-hex</a>
+</li>
+<li><strong>http</strong> <span class="coord">1.4.2</span>
+<br>A set of types for representing HTTP requests and responses.
+<br><a href="https://github.com/hyperium/http">https://github.com/hyperium/http</a>
+</li>
+<li><strong>httparse</strong> <span class="coord">1.10.1</span>
+<br>A tiny, safe, speedy, zero-copy HTTP/1.x parser.
+<br><a href="https://github.com/seanmonstar/httparse">https://github.com/seanmonstar/httparse</a>
+</li>
+<li><strong>httpdate</strong> <span class="coord">1.0.3</span>
+<br>HTTP date parsing and formatting
+<br><a href="https://github.com/pyfisch/httpdate">https://github.com/pyfisch/httpdate</a>
+</li>
+<li><strong>hyper-timeout</strong> <span class="coord">0.5.2</span>
+<br>A connect, read and write timeout aware connector to be used with hyper Client.
+<br><a href="https://github.com/hjr3/hyper-timeout">https://github.com/hjr3/hyper-timeout</a>
+</li>
+<li><strong>iana-time-zone</strong> <span class="coord">0.1.65</span>
+<br>get the IANA time zone for the current system
+<br><a href="https://github.com/strawlab/iana-time-zone">https://github.com/strawlab/iana-time-zone</a>
+</li>
+<li><strong>idna</strong> <span class="coord">1.1.0</span>
+<br>IDNA (Internationalizing Domain Names in Applications) and Punycode.
+<br><a href="https://github.com/servo/rust-url/">https://github.com/servo/rust-url/</a>
+</li>
+<li><strong>inout</strong> <span class="coord">0.1.4</span>
+<br>Custom reference types for code generic over in-place and buffer-to-buffer modes of operation.
+<br><a href="https://github.com/RustCrypto/utils">https://github.com/RustCrypto/utils</a>
+</li>
+<li><strong>ipnet</strong> <span class="coord">2.12.0</span>
+<br>Provides types and useful methods for working with IPv4 and IPv6 network addresses, commonly called IP prefixes. The new `IpNet`, `Ipv4Net`, and `Ipv6Net` types build on the existing `IpAddr`, `Ipv4Addr`, and `Ipv6Addr` types already provided in Rust's standard library and align to their design to stay consistent. The module also provides useful traits that extend `Ipv4Addr` and `Ipv6Addr` with methods for `Add`, `Sub`, `BitAnd`, and `BitOr` operations. The module only uses stable feature so it is guaranteed to compile using the stable toolchain.
+<br><a href="https://github.com/krisprice/ipnet">https://github.com/krisprice/ipnet</a>
+</li>
+<li><strong>itoa</strong> <span class="coord">1.0.18</span>
+<br>Fast integer primitive to string conversion
+<br><a href="https://github.com/dtolnay/itoa">https://github.com/dtolnay/itoa</a>
+</li>
+<li><strong>lazy_static</strong> <span class="coord">1.5.0</span>
+<br>A macro for declaring lazily evaluated statics in Rust.
+<br><a href="https://github.com/rust-lang-nursery/lazy-static.rs">https://github.com/rust-lang-nursery/lazy-static.rs</a>
+</li>
+<li><strong>libc</strong> <span class="coord">0.2.186</span>
+<br>Raw FFI bindings to platform libraries like libc.
+<br><a href="https://github.com/rust-lang/libc">https://github.com/rust-lang/libc</a>
+</li>
+<li><strong>log</strong> <span class="coord">0.4.33</span>
+<br>A lightweight logging facade for Rust
+<br><a href="https://github.com/rust-lang/log">https://github.com/rust-lang/log</a>
+</li>
+<li><strong>mime</strong> <span class="coord">0.3.17</span>
+<br>Strongly Typed Mimes
+<br><a href="https://github.com/hyperium/mime">https://github.com/hyperium/mime</a>
+</li>
+<li><strong>num-bigint</strong> <span class="coord">0.4.6</span>
+<br>Big integer implementation for Rust
+<br><a href="https://github.com/rust-num/num-bigint">https://github.com/rust-num/num-bigint</a>
+</li>
+<li><strong>num-integer</strong> <span class="coord">0.1.46</span>
+<br>Integer traits and functions
+<br><a href="https://github.com/rust-num/num-integer">https://github.com/rust-num/num-integer</a>
+</li>
+<li><strong>num-traits</strong> <span class="coord">0.2.19</span>
+<br>Numeric traits for generic mathematics
+<br><a href="https://github.com/rust-num/num-traits">https://github.com/rust-num/num-traits</a>
+</li>
+<li><strong>num_cpus</strong> <span class="coord">1.17.0</span>
+<br>Get the number of CPUs on a machine.
+<br><a href="https://github.com/seanmonstar/num_cpus">https://github.com/seanmonstar/num_cpus</a>
+</li>
+<li><strong>once_cell</strong> <span class="coord">1.21.4</span>
+<br>Single assignment cells and lazy values.
+<br><a href="https://github.com/matklad/once_cell">https://github.com/matklad/once_cell</a>
+</li>
+<li><strong>opaque-debug</strong> <span class="coord">0.3.1</span>
+<br>Macro for opaque Debug trait implementation
+<br><a href="https://github.com/RustCrypto/utils">https://github.com/RustCrypto/utils</a>
+</li>
+<li><strong>openssl-probe</strong> <span class="coord">0.2.1</span>
+<br>A library for helping to find system-wide trust anchor (&quot;root&quot;) certificate
+locations based on paths typically used by `openssl`.
+<br><a href="https://github.com/rustls/openssl-probe">https://github.com/rustls/openssl-probe</a>
+</li>
+<li><strong>password-hash</strong> <span class="coord">0.5.0</span>
+<br>Traits which describe the functionality of password hashing algorithms,
+as well as a `no_std`-friendly implementation of the PHC string format
+(a well-defined subset of the Modular Crypt Format a.k.a. MCF)
+<br><a href="https://github.com/RustCrypto/traits/tree/master/password-hash">https://github.com/RustCrypto/traits/tree/master/password-hash</a>
+</li>
+<li><strong>percent-encoding</strong> <span class="coord">2.3.2</span>
+<br>Percent encoding and decoding
+<br><a href="https://github.com/servo/rust-url/">https://github.com/servo/rust-url/</a>
+</li>
+<li><strong>ppv-lite86</strong> <span class="coord">0.2.21</span>
+<br>Cross-platform cryptography-oriented low-level SIMD library.
+<br><a href="https://github.com/cryptocorrosion/cryptocorrosion">https://github.com/cryptocorrosion/cryptocorrosion</a>
+</li>
+<li><strong>quinn</strong> <span class="coord">0.11.11</span>
+<br>Versatile QUIC transport protocol implementation
+<br><a href="https://github.com/quinn-rs/quinn">https://github.com/quinn-rs/quinn</a>
+</li>
+<li><strong>quinn-proto</strong> <span class="coord">0.11.15</span>
+<br>State machine for the QUIC transport protocol
+<br><a href="https://github.com/quinn-rs/quinn">https://github.com/quinn-rs/quinn</a>
+</li>
+<li><strong>quinn-udp</strong> <span class="coord">0.5.14</span>
+<br>UDP sockets with ECN information for the QUIC transport protocol
+<br><a href="https://github.com/quinn-rs/quinn">https://github.com/quinn-rs/quinn</a>
+</li>
+<li><strong>rand</strong> <span class="coord">0.8.6</span>
+<br>Random number generators and other randomness functionality.
+<br><a href="https://github.com/rust-random/rand">https://github.com/rust-random/rand</a>
+</li>
+<li><strong>rand</strong> <span class="coord">0.9.4</span>
+<br>Random number generators and other randomness functionality.
+<br><a href="https://github.com/rust-random/rand">https://github.com/rust-random/rand</a>
+</li>
+<li><strong>rand_chacha</strong> <span class="coord">0.3.1</span>
+<br>ChaCha random number generator
+<br><a href="https://github.com/rust-random/rand">https://github.com/rust-random/rand</a>
+</li>
+<li><strong>rand_chacha</strong> <span class="coord">0.9.0</span>
+<br>ChaCha random number generator
+<br><a href="https://github.com/rust-random/rand">https://github.com/rust-random/rand</a>
+</li>
+<li><strong>rand_core</strong> <span class="coord">0.6.4</span>
+<br>Core random number generator traits and tools for implementation.
+<br><a href="https://github.com/rust-random/rand">https://github.com/rust-random/rand</a>
+</li>
+<li><strong>rand_core</strong> <span class="coord">0.9.5</span>
+<br>Core random number generator traits and tools for implementation.
+<br><a href="https://github.com/rust-random/rand">https://github.com/rust-random/rand</a>
+</li>
+<li><strong>regex</strong> <span class="coord">1.12.4</span>
+<br>An implementation of regular expressions for Rust. This implementation uses
+finite automata and guarantees linear time matching on all inputs.
+<br><a href="https://github.com/rust-lang/regex">https://github.com/rust-lang/regex</a>
+</li>
+<li><strong>regex-automata</strong> <span class="coord">0.4.14</span>
+<br>Automata construction and matching using regular expressions.
+<br><a href="https://github.com/rust-lang/regex">https://github.com/rust-lang/regex</a>
+</li>
+<li><strong>regex-syntax</strong> <span class="coord">0.8.11</span>
+<br>A regular expression parser.
+<br><a href="https://github.com/rust-lang/regex">https://github.com/rust-lang/regex</a>
+</li>
+<li><strong>reqwest</strong> <span class="coord">0.12.28</span>
+<br>higher level HTTP client library
+<br><a href="https://github.com/seanmonstar/reqwest">https://github.com/seanmonstar/reqwest</a>
+</li>
+<li><strong>rustls-pki-types</strong> <span class="coord">1.14.1</span>
+<br>Shared types for the rustls PKI ecosystem
+<br><a href="https://github.com/rustls/pki-types">https://github.com/rustls/pki-types</a>
+</li>
+<li><strong>salsa20</strong> <span class="coord">0.10.2</span>
+<br>Salsa20 Stream Cipher
+<br><a href="https://github.com/RustCrypto/stream-ciphers">https://github.com/RustCrypto/stream-ciphers</a>
+</li>
+<li><strong>semver</strong> <span class="coord">1.0.28</span>
+<br>Parser and evaluator for Cargo's flavor of Semantic Versioning
+<br><a href="https://github.com/dtolnay/semver">https://github.com/dtolnay/semver</a>
+</li>
+<li><strong>serde</strong> <span class="coord">1.0.228</span>
+<br>A generic serialization/deserialization framework
+<br><a href="https://github.com/serde-rs/serde">https://github.com/serde-rs/serde</a>
+</li>
+<li><strong>serde_core</strong> <span class="coord">1.0.228</span>
+<br>Serde traits only, with no support for derive -- use the `serde` crate instead
+<br><a href="https://github.com/serde-rs/serde">https://github.com/serde-rs/serde</a>
+</li>
+<li><strong>serde_json</strong> <span class="coord">1.0.150</span>
+<br>A JSON serialization file format
+<br><a href="https://github.com/serde-rs/json">https://github.com/serde-rs/json</a>
+</li>
+<li><strong>serde_spanned</strong> <span class="coord">1.1.1</span>
+<br>Serde-compatible spanned Value
+<br><a href="https://github.com/toml-rs/toml">https://github.com/toml-rs/toml</a>
+</li>
+<li><strong>sha2</strong> <span class="coord">0.10.9</span>
+<br>Pure Rust implementation of the SHA-2 hash function family
+including SHA-224, SHA-256, SHA-384, and SHA-512.
+<br><a href="https://github.com/RustCrypto/hashes">https://github.com/RustCrypto/hashes</a>
+</li>
+<li><strong>smallvec</strong> <span class="coord">1.15.2</span>
+<br>'Small vector' optimization: store up to a small number of items on the stack
+<br><a href="https://github.com/servo/rust-smallvec">https://github.com/servo/rust-smallvec</a>
+</li>
+<li><strong>socket2</strong> <span class="coord">0.6.4</span>
+<br>Utilities for handling networking sockets with a maximal amount of configuration
+possible intended.
+<br><a href="https://github.com/rust-lang/socket2">https://github.com/rust-lang/socket2</a>
+</li>
+<li><strong>srp</strong> <span class="coord">0.6.0</span>
+<br>Secure Remote Password (SRP) protocol implementation
+<br><a href="https://github.com/RustCrypto/PAKEs">https://github.com/RustCrypto/PAKEs</a>
+</li>
+<li><strong>stable_deref_trait</strong> <span class="coord">1.2.1</span>
+<br>An unsafe marker trait for types like Box and Rc that dereference to a stable address even when moved, and hence can be used with libraries such as owning_ref and rental.
+<br><a href="https://github.com/storyyeller/stable_deref_trait">https://github.com/storyyeller/stable_deref_trait</a>
+</li>
+<li><strong>static_assertions</strong> <span class="coord">1.1.0</span>
+<br>Compile-time assertions to ensure that invariants are met.
+<br><a href="https://github.com/nvzqz/static-assertions-rs">https://github.com/nvzqz/static-assertions-rs</a>
+</li>
+<li><strong>tempfile</strong> <span class="coord">3.27.0</span>
+<br>A library for managing temporary files and directories.
+<br><a href="https://github.com/Stebalien/tempfile">https://github.com/Stebalien/tempfile</a>
+</li>
+<li><strong>thiserror</strong> <span class="coord">2.0.18</span>
+<br>derive(Error)
+<br><a href="https://github.com/dtolnay/thiserror">https://github.com/dtolnay/thiserror</a>
+</li>
+<li><strong>thread_local</strong> <span class="coord">1.1.9</span>
+<br>Per-object thread-local storage
+<br><a href="https://github.com/Amanieu/thread_local-rs">https://github.com/Amanieu/thread_local-rs</a>
+</li>
+<li><strong>tokio-rustls</strong> <span class="coord">0.26.4</span>
+<br>Asynchronous TLS/SSL streams for Tokio using Rustls.
+<br><a href="https://github.com/rustls/tokio-rustls">https://github.com/rustls/tokio-rustls</a>
+</li>
+<li><strong>toml</strong> <span class="coord">0.9.12+spec-1.1.0</span>
+<br>A native Rust encoder and decoder of TOML-formatted files and streams. Provides
+implementations of the standard Serialize/Deserialize traits for TOML data to
+facilitate deserializing and serializing Rust structures.
+<br><a href="https://github.com/toml-rs/toml">https://github.com/toml-rs/toml</a>
+</li>
+<li><strong>toml_datetime</strong> <span class="coord">0.7.5+spec-1.1.0</span>
+<br>A TOML-compatible datetime type
+<br><a href="https://github.com/toml-rs/toml">https://github.com/toml-rs/toml</a>
+</li>
+<li><strong>toml_parser</strong> <span class="coord">1.1.2+spec-1.1.0</span>
+<br>Yet another format-preserving TOML parser.
+<br><a href="https://github.com/toml-rs/toml">https://github.com/toml-rs/toml</a>
+</li>
+<li><strong>toml_writer</strong> <span class="coord">1.1.1+spec-1.1.0</span>
+<br>A low-level interface for writing out TOML
+<br><a href="https://github.com/toml-rs/toml">https://github.com/toml-rs/toml</a>
+</li>
+<li><strong>tracing-android</strong> <span class="coord">0.2.0</span>
+<br>Tracing layer to log to Android's logcat
+<br><a href="https://github.com/Actyx/tracing-android">https://github.com/Actyx/tracing-android</a>
+</li>
+<li><strong>typenum</strong> <span class="coord">1.20.1</span>
+<br>Typenum is a Rust library for type-level numbers evaluated at
+    compile time. It currently supports bits, unsigned integers, and signed
+    integers. It also provides a type-level array of type-level numbers, but its
+    implementation is incomplete.
+<br><a href="https://github.com/paholg/typenum">https://github.com/paholg/typenum</a>
+</li>
+<li><strong>universal-hash</strong> <span class="coord">0.5.1</span>
+<br>Traits which describe the functionality of universal hash functions (UHFs)
+<br><a href="https://github.com/RustCrypto/traits">https://github.com/RustCrypto/traits</a>
+</li>
+<li><strong>url</strong> <span class="coord">2.5.8</span>
+<br>URL library for Rust, based on the WHATWG URL Standard
+<br><a href="https://github.com/servo/rust-url">https://github.com/servo/rust-url</a>
+</li>
+<li><strong>zstd-safe</strong> <span class="coord">7.2.4</span>
+<br>Safe low-level bindings for the zstd compression library.
+<br><a href="https://github.com/gyscos/zstd-rs">https://github.com/gyscos/zstd-rs</a>
+</li>
+</ul>
+<h3>MIT</h3>
+<ul>
+<li><strong>async-stream</strong> <span class="coord">0.3.6</span>
+<br>Asynchronous streams using async &amp; await notation
+<br><a href="https://github.com/tokio-rs/async-stream">https://github.com/tokio-rs/async-stream</a>
+</li>
+<li><strong>axum</strong> <span class="coord">0.8.9</span>
+<br>HTTP routing and request handling library that focuses on ergonomics and modularity
+<br><a href="https://github.com/tokio-rs/axum">https://github.com/tokio-rs/axum</a>
+</li>
+<li><strong>axum-core</strong> <span class="coord">0.5.6</span>
+<br>Core types and traits for axum
+<br><a href="https://github.com/tokio-rs/axum">https://github.com/tokio-rs/axum</a>
+</li>
+<li><strong>bcrypt</strong> <span class="coord">0.16.0</span>
+<br>Easily hash and verify passwords using bcrypt
+<br><a href="https://github.com/Keats/rust-bcrypt">https://github.com/Keats/rust-bcrypt</a>
+</li>
+<li><strong>bytes</strong> <span class="coord">1.12.0</span>
+<br>Types and traits for working with bytes
+<br><a href="https://github.com/tokio-rs/bytes">https://github.com/tokio-rs/bytes</a>
+</li>
+<li><strong>cargo_metadata</strong> <span class="coord">0.19.2</span>
+<br>structured access to the output of `cargo metadata`
+<br><a href="https://github.com/oli-obk/cargo_metadata">https://github.com/oli-obk/cargo_metadata</a>
+</li>
+<li><strong>generic-array</strong> <span class="coord">0.14.7</span>
+<br>Generic types implementing functionality of arrays
+<br><a href="https://github.com/fizyk20/generic-array.git">https://github.com/fizyk20/generic-array.git</a>
+</li>
+<li><strong>goblin</strong> <span class="coord">0.8.2</span>
+<br>An impish, cross-platform, ELF, Mach-o, and PE binary parsing and loading crate
+<br><a href="https://github.com/m4b/goblin">https://github.com/m4b/goblin</a>
+</li>
+<li><strong>h2</strong> <span class="coord">0.4.15</span>
+<br>An HTTP/2 client and server
+<br><a href="https://github.com/hyperium/h2">https://github.com/hyperium/h2</a>
+</li>
+<li><strong>http-body</strong> <span class="coord">1.0.1</span>
+<br>Trait representing an asynchronous, streaming, HTTP request or response body.
+<br><a href="https://github.com/hyperium/http-body">https://github.com/hyperium/http-body</a>
+</li>
+<li><strong>http-body-util</strong> <span class="coord">0.1.3</span>
+<br>Combinators and adapters for HTTP request or response bodies.
+<br><a href="https://github.com/hyperium/http-body">https://github.com/hyperium/http-body</a>
+</li>
+<li><strong>hyper</strong> <span class="coord">1.10.1</span>
+<br>A protective and efficient HTTP library for all.
+<br><a href="https://github.com/hyperium/hyper">https://github.com/hyperium/hyper</a>
+</li>
+<li><strong>hyper-util</strong> <span class="coord">0.1.20</span>
+<br>hyper utilities
+<br><a href="https://github.com/hyperium/hyper-util">https://github.com/hyperium/hyper-util</a>
+</li>
+<li><strong>libsqlite3-sys</strong> <span class="coord">0.28.0</span>
+<br>Native bindings to the libsqlite3 library
+<br><a href="https://github.com/rusqlite/rusqlite">https://github.com/rusqlite/rusqlite</a>
+<br><span class="muted">Built with the `bundled` feature, so this crate compiles the SQLite C amalgamation into libpingolin_mobile.so. The crate's own MIT licence covers the Rust binding; the bundled SQLite source is separately dedicated to the public domain by its authors (https://sqlite.org/copyright.html), which imposes no attribution condition. Note that `bundled` is plain SQLite — NOT `bundled-sqlcipher`; the SQLCipher terms listed elsewhere in these notices apply to the Android net.zetetic:sqlcipher-android artifact, not to this library.</span>
+</li>
+<li><strong>mio</strong> <span class="coord">1.2.1</span>
+<br>Lightweight non-blocking I/O.
+<br><a href="https://github.com/tokio-rs/mio">https://github.com/tokio-rs/mio</a>
+</li>
+<li><strong>nom</strong> <span class="coord">7.1.3</span>
+<br>A byte-oriented, zero-copy, parser combinators library
+<br><a href="https://github.com/Geal/nom">https://github.com/Geal/nom</a>
+</li>
+<li><strong>nu-ansi-term</strong> <span class="coord">0.50.3</span>
+<br>Library for ANSI terminal colors and styles (bold, underline)
+<br><a href="https://github.com/nushell/nu-ansi-term">https://github.com/nushell/nu-ansi-term</a>
+</li>
+<li><strong>rusqlite</strong> <span class="coord">0.31.0</span>
+<br>Ergonomic wrapper for SQLite
+<br><a href="https://github.com/rusqlite/rusqlite">https://github.com/rusqlite/rusqlite</a>
+</li>
+<li><strong>scroll</strong> <span class="coord">0.12.0</span>
+<br>A suite of powerful, extensible, generic, endian-aware Read/Write traits for byte buffers
+<br><a href="https://github.com/m4b/scroll">https://github.com/m4b/scroll</a>
+</li>
+<li><strong>sharded-slab</strong> <span class="coord">0.1.7</span>
+<br>A lock-free concurrent slab.
+<br><a href="https://github.com/hawkw/sharded-slab">https://github.com/hawkw/sharded-slab</a>
+</li>
+<li><strong>simd-adler32</strong> <span class="coord">0.3.9</span>
+<br>A SIMD-accelerated Adler-32 hash algorithm implementation.
+<br><a href="https://github.com/mcountryman/simd-adler32">https://github.com/mcountryman/simd-adler32</a>
+</li>
+<li><strong>slab</strong> <span class="coord">0.4.12</span>
+<br>Pre-allocated storage for a uniform data type
+<br><a href="https://github.com/tokio-rs/slab">https://github.com/tokio-rs/slab</a>
+</li>
+<li><strong>smawk</strong> <span class="coord">0.3.3</span>
+<br>Functions for finding row-minima in a totally monotone matrix.
+<br><a href="https://github.com/mgeisler/smawk">https://github.com/mgeisler/smawk</a>
+</li>
+<li><strong>textwrap</strong> <span class="coord">0.16.2</span>
+<br>Library for word wrapping, indenting, and dedenting strings. Has optional support for Unicode and emojis as well as machine hyphenation.
+<br><a href="https://github.com/mgeisler/textwrap">https://github.com/mgeisler/textwrap</a>
+</li>
+<li><strong>tokio</strong> <span class="coord">1.52.3</span>
+<br>An event-driven, non-blocking I/O platform for writing asynchronous I/O
+backed applications.
+<br><a href="https://github.com/tokio-rs/tokio">https://github.com/tokio-rs/tokio</a>
+</li>
+<li><strong>tokio-stream</strong> <span class="coord">0.1.18</span>
+<br>Utilities to work with `Stream` and `tokio`.
+<br><a href="https://github.com/tokio-rs/tokio">https://github.com/tokio-rs/tokio</a>
+</li>
+<li><strong>tokio-util</strong> <span class="coord">0.7.18</span>
+<br>Additional utilities for working with Tokio.
+<br><a href="https://github.com/tokio-rs/tokio">https://github.com/tokio-rs/tokio</a>
+</li>
+<li><strong>tonic</strong> <span class="coord">0.14.6</span>
+<br>A gRPC over HTTP/2 implementation focused on high performance, interoperability, and flexibility.
+<br><a href="https://github.com/hyperium/tonic">https://github.com/hyperium/tonic</a>
+</li>
+<li><strong>tonic-prost</strong> <span class="coord">0.14.6</span>
+<br>Prost codec implementation for tonic
+<br><a href="https://github.com/hyperium/tonic">https://github.com/hyperium/tonic</a>
+</li>
+<li><strong>tower</strong> <span class="coord">0.5.3</span>
+<br>Tower is a library of modular and reusable components for building robust
+clients and servers.
+<br><a href="https://github.com/tower-rs/tower">https://github.com/tower-rs/tower</a>
+</li>
+<li><strong>tower-http</strong> <span class="coord">0.6.11</span>
+<br>Tower middleware and utilities for HTTP clients and servers
+<br><a href="https://github.com/tower-rs/tower-http">https://github.com/tower-rs/tower-http</a>
+</li>
+<li><strong>tower-layer</strong> <span class="coord">0.3.3</span>
+<br>Decorates a `Service` to allow easy composition between `Service`s.
+<br><a href="https://github.com/tower-rs/tower">https://github.com/tower-rs/tower</a>
+</li>
+<li><strong>tower-service</strong> <span class="coord">0.3.3</span>
+<br>Trait representing an asynchronous, request / response based, client or server.
+<br><a href="https://github.com/tower-rs/tower">https://github.com/tower-rs/tower</a>
+</li>
+<li><strong>tracing</strong> <span class="coord">0.1.44</span>
+<br>Application-level tracing for Rust.
+<br><a href="https://github.com/tokio-rs/tracing">https://github.com/tokio-rs/tracing</a>
+</li>
+<li><strong>tracing-core</strong> <span class="coord">0.1.36</span>
+<br>Core primitives for application-level tracing.
+<br><a href="https://github.com/tokio-rs/tracing">https://github.com/tokio-rs/tracing</a>
+</li>
+<li><strong>tracing-log</strong> <span class="coord">0.2.0</span>
+<br>Provides compatibility between `tracing` and the `log` crate.
+<br><a href="https://github.com/tokio-rs/tracing">https://github.com/tokio-rs/tracing</a>
+</li>
+<li><strong>tracing-subscriber</strong> <span class="coord">0.3.23</span>
+<br>Utilities for implementing and composing `tracing` subscribers.
+<br><a href="https://github.com/tokio-rs/tracing">https://github.com/tokio-rs/tracing</a>
+</li>
+<li><strong>try-lock</strong> <span class="coord">0.2.5</span>
+<br>A lightweight atomic lock.
+<br><a href="https://github.com/seanmonstar/try-lock">https://github.com/seanmonstar/try-lock</a>
+</li>
+<li><strong>voprf</strong> <span class="coord">0.5.0</span>
+<br>An implementation of a verifiable oblivious pseudorandom function (VOPRF)
+<br><a href="https://github.com/facebook/voprf/">https://github.com/facebook/voprf/</a>
+</li>
+<li><strong>want</strong> <span class="coord">0.3.1</span>
+<br>Detect when another Future wants a result.
+<br><a href="https://github.com/seanmonstar/want">https://github.com/seanmonstar/want</a>
+</li>
+<li><strong>weedle2</strong> <span class="coord">5.0.0</span>
+<br>A WebIDL Parser
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>winnow</strong> <span class="coord">0.7.15</span>
+<br>A byte-oriented, zero-copy, parser combinators library
+<br><a href="https://github.com/winnow-rs/winnow">https://github.com/winnow-rs/winnow</a>
+</li>
+<li><strong>winnow</strong> <span class="coord">1.0.3</span>
+<br>A byte-oriented, zero-copy, parser combinators library
+<br><a href="https://github.com/winnow-rs/winnow">https://github.com/winnow-rs/winnow</a>
+</li>
+<li><strong>zmij</strong> <span class="coord">1.0.21</span>
+<br>A double-to-string conversion algorithm based on Schubfach and yy
+<br><a href="https://github.com/dtolnay/zmij">https://github.com/dtolnay/zmij</a>
+</li>
+<li><strong>zstd</strong> <span class="coord">0.13.3</span>
+<br>Binding for the zstd compression library.
+<br><a href="https://github.com/gyscos/zstd-rs">https://github.com/gyscos/zstd-rs</a>
+</li>
+</ul>
+<h3>Apache-2.0 OR MIT</h3>
+<ul>
+<li><strong>atomic-waker</strong> <span class="coord">1.1.2</span>
+<br>A synchronization primitive for task wakeup
+<br><a href="https://github.com/smol-rs/atomic-waker">https://github.com/smol-rs/atomic-waker</a>
+</li>
+<li><strong>base16ct</strong> <span class="coord">0.2.0</span>
+<br>Pure Rust implementation of Base16 a.k.a hexadecimal (RFC 4648) which avoids
+any usages of data-dependent branches/LUTs and thereby provides portable
+&quot;best effort&quot; constant-time operation and embedded-friendly no_std support
+<br><a href="https://github.com/RustCrypto/formats/tree/master/base16ct">https://github.com/RustCrypto/formats/tree/master/base16ct</a>
+</li>
+<li><strong>base64ct</strong> <span class="coord">1.8.3</span>
+<br>Pure Rust implementation of Base64 (RFC 4648) which avoids any usages of
+data-dependent branches/LUTs and thereby provides portable &quot;best effort&quot;
+constant-time operation and embedded-friendly no_std support
+<br><a href="https://github.com/RustCrypto/formats">https://github.com/RustCrypto/formats</a>
+</li>
+<li><strong>chacha20</strong> <span class="coord">0.9.1</span>
+<br>The ChaCha20 stream cipher (RFC 8439) implemented in pure Rust using traits
+from the RustCrypto `cipher` crate, with optional architecture-specific
+hardware acceleration (AVX2, SSE2). Additionally provides the ChaCha8, ChaCha12,
+XChaCha20, XChaCha12 and XChaCha8 stream ciphers, and also optional
+rand_core-compatible RNGs based on those ciphers.
+<br><a href="https://github.com/RustCrypto/stream-ciphers">https://github.com/RustCrypto/stream-ciphers</a>
+</li>
+<li><strong>chacha20poly1305</strong> <span class="coord">0.10.1</span>
+<br>Pure Rust implementation of the ChaCha20Poly1305 Authenticated Encryption
+with Additional Data Cipher (RFC 8439) with optional architecture-specific
+hardware acceleration. Also contains implementations of the XChaCha20Poly1305
+extended nonce variant of ChaCha20Poly1305, and the reduced-round
+ChaCha8Poly1305 and ChaCha12Poly1305 lightweight variants.
+<br><a href="https://github.com/RustCrypto/AEADs/tree/master/chacha20poly1305">https://github.com/RustCrypto/AEADs/tree/master/chacha20poly1305</a>
+</li>
+<li><strong>const-oid</strong> <span class="coord">0.9.6</span>
+<br>Const-friendly implementation of the ISO/IEC Object Identifier (OID) standard
+as defined in ITU X.660, with support for BER/DER encoding/decoding as well as
+heapless no_std (i.e. embedded) support
+<br><a href="https://github.com/RustCrypto/formats/tree/master/const-oid">https://github.com/RustCrypto/formats/tree/master/const-oid</a>
+</li>
+<li><strong>crypto-bigint</strong> <span class="coord">0.5.5</span>
+<br>Pure Rust implementation of a big integer library which has been designed from
+the ground-up for use in cryptographic applications. Provides constant-time,
+no_std-friendly implementations of modern formulas using const generics.
+<br><a href="https://github.com/RustCrypto/crypto-bigint">https://github.com/RustCrypto/crypto-bigint</a>
+</li>
+<li><strong>crypto_secretbox</strong> <span class="coord">0.1.1</span>
+<br>Pure Rust implementation of the XSalsa20Poly1305 (a.k.a. NaCl crypto_secretbox)
+authenticated encryption cipher as well as the libsodium variant of
+XChaCha20Poly1305
+<br><a href="https://github.com/RustCrypto/nacl-compat/tree/master/crypto_secretbox">https://github.com/RustCrypto/nacl-compat/tree/master/crypto_secretbox</a>
+</li>
+<li><strong>der</strong> <span class="coord">0.7.10</span>
+<br>Pure Rust embedded-friendly implementation of the Distinguished Encoding Rules
+(DER) for Abstract Syntax Notation One (ASN.1) as described in ITU X.690 with
+full support for heapless no_std targets
+<br><a href="https://github.com/RustCrypto/formats/tree/master/der">https://github.com/RustCrypto/formats/tree/master/der</a>
+</li>
+<li><strong>ed25519</strong> <span class="coord">2.2.3</span>
+<br>Edwards Digital Signature Algorithm (EdDSA) over Curve25519 (as specified in RFC 8032)
+support library providing signature type definitions and PKCS#8 private key
+decoding/encoding support
+<br><a href="https://github.com/RustCrypto/signatures/tree/master/ed25519">https://github.com/RustCrypto/signatures/tree/master/ed25519</a>
+</li>
+<li><strong>elliptic-curve</strong> <span class="coord">0.13.8</span>
+<br>General purpose Elliptic Curve Cryptography (ECC) support, including types
+and traits for representing various elliptic curve forms, scalars, points,
+and public/secret keys composed thereof.
+<br><a href="https://github.com/RustCrypto/traits/tree/master/elliptic-curve">https://github.com/RustCrypto/traits/tree/master/elliptic-curve</a>
+</li>
+<li><strong>equivalent</strong> <span class="coord">1.0.2</span>
+<br>Traits for key comparison in maps.
+<br><a href="https://github.com/indexmap-rs/equivalent">https://github.com/indexmap-rs/equivalent</a>
+</li>
+<li><strong>fastrand</strong> <span class="coord">2.4.1</span>
+<br>A simple and fast random number generator
+<br><a href="https://github.com/smol-rs/fastrand">https://github.com/smol-rs/fastrand</a>
+</li>
+<li><strong>idna_adapter</strong> <span class="coord">1.2.2</span>
+<br>Back end adapter for idna
+<br><a href="https://github.com/hsivonen/idna_adapter">https://github.com/hsivonen/idna_adapter</a>
+</li>
+<li><strong>indexmap</strong> <span class="coord">2.14.0</span>
+<br>A hash table with consistent order and fast iteration.
+<br><a href="https://github.com/indexmap-rs/indexmap">https://github.com/indexmap-rs/indexmap</a>
+</li>
+<li><strong>pin-project</strong> <span class="coord">1.1.13</span>
+<br>A crate for safe and ergonomic pin-projection.
+<br><a href="https://github.com/taiki-e/pin-project">https://github.com/taiki-e/pin-project</a>
+</li>
+<li><strong>pin-project-lite</strong> <span class="coord">0.2.17</span>
+<br>A lightweight version of pin-project written with declarative macros.
+<br><a href="https://github.com/taiki-e/pin-project-lite">https://github.com/taiki-e/pin-project-lite</a>
+</li>
+<li><strong>pkcs8</strong> <span class="coord">0.10.2</span>
+<br>Pure Rust implementation of Public-Key Cryptography Standards (PKCS) #8:
+Private-Key Information Syntax Specification (RFC 5208), with additional
+support for PKCS#8v2 asymmetric key packages (RFC 5958)
+<br><a href="https://github.com/RustCrypto/formats/tree/master/pkcs8">https://github.com/RustCrypto/formats/tree/master/pkcs8</a>
+</li>
+<li><strong>poly1305</strong> <span class="coord">0.8.0</span>
+<br>The Poly1305 universal hash function and message authentication code
+<br><a href="https://github.com/RustCrypto/universal-hashes">https://github.com/RustCrypto/universal-hashes</a>
+</li>
+<li><strong>rustc-hash</strong> <span class="coord">2.1.2</span>
+<br>A speedy, non-cryptographic hashing algorithm used by rustc
+<br><a href="https://github.com/rust-lang/rustc-hash">https://github.com/rust-lang/rustc-hash</a>
+</li>
+<li><strong>sec1</strong> <span class="coord">0.7.3</span>
+<br>Pure Rust implementation of SEC1: Elliptic Curve Cryptography encoding formats
+including ASN.1 DER-serialized private keys as well as the
+Elliptic-Curve-Point-to-Octet-String encoding
+<br><a href="https://github.com/RustCrypto/formats/tree/master/sec1">https://github.com/RustCrypto/formats/tree/master/sec1</a>
+</li>
+<li><strong>signature</strong> <span class="coord">2.2.0</span>
+<br>Traits for cryptographic signature algorithms (e.g. ECDSA, Ed25519)
+<br><a href="https://github.com/RustCrypto/traits/tree/master/signature">https://github.com/RustCrypto/traits/tree/master/signature</a>
+</li>
+<li><strong>spki</strong> <span class="coord">0.7.3</span>
+<br>X.509 Subject Public Key Info (RFC5280) describing public keys as well as their
+associated AlgorithmIdentifiers (i.e. OIDs)
+<br><a href="https://github.com/RustCrypto/formats/tree/master/spki">https://github.com/RustCrypto/formats/tree/master/spki</a>
+</li>
+<li><strong>utf8_iter</strong> <span class="coord">1.0.4</span>
+<br>Iterator by char over potentially-invalid UTF-8 in &amp;[u8]
+<br><a href="https://github.com/hsivonen/utf8_iter">https://github.com/hsivonen/utf8_iter</a>
+</li>
+<li><strong>uuid</strong> <span class="coord">1.23.4</span>
+<br>A library to generate and parse UUIDs.
+<br><a href="https://github.com/uuid-rs/uuid">https://github.com/uuid-rs/uuid</a>
+</li>
+<li><strong>zeroize</strong> <span class="coord">1.9.0</span>
+<br>Securely clear secrets from memory with a simple trait built on
+stable Rust primitives which guarantee memory is zeroed using an
+operation will not be 'optimized away' by the compiler.
+Uses a portable pure Rust implementation that works everywhere,
+even WASM!
+<br><a href="https://github.com/RustCrypto/utils">https://github.com/RustCrypto/utils</a>
+</li>
+</ul>
+<h3>Unicode-3.0</h3>
+<ul>
+<li><strong>icu_collections</strong> <span class="coord">2.2.0</span>
+<br>Collection of API for use in ICU libraries.
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>icu_locale_core</strong> <span class="coord">2.2.0</span>
+<br>API for managing Unicode Language and Locale Identifiers
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>icu_normalizer</strong> <span class="coord">2.2.0</span>
+<br>API for normalizing text into Unicode Normalization Forms
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>icu_normalizer_data</strong> <span class="coord">2.2.0</span>
+<br>Data for the icu_normalizer crate
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>icu_properties</strong> <span class="coord">2.2.0</span>
+<br>Definitions for Unicode properties
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>icu_properties_data</strong> <span class="coord">2.2.0</span>
+<br>Data for the icu_properties crate
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>icu_provider</strong> <span class="coord">2.2.0</span>
+<br>Trait and struct definitions for the ICU data provider
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>litemap</strong> <span class="coord">0.8.2</span>
+<br>A key-value Map implementation based on a flat, sorted Vec.
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>potential_utf</strong> <span class="coord">0.1.5</span>
+<br>Unvalidated string and character types
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>tinystr</strong> <span class="coord">0.8.3</span>
+<br>A small ASCII-only bounded length string representation.
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>writeable</strong> <span class="coord">0.6.3</span>
+<br>A more efficient alternative to fmt::Display
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>yoke</strong> <span class="coord">0.8.3</span>
+<br>Abstraction allowing borrowed data to be carried along with the backing data it borrows from
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>zerofrom</strong> <span class="coord">0.1.8</span>
+<br>ZeroFrom trait for constructing
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>zerotrie</strong> <span class="coord">0.2.4</span>
+<br>A data structure that efficiently maps strings to integers
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+<li><strong>zerovec</strong> <span class="coord">0.11.6</span>
+<br>Zero-copy vector backed by a byte array
+<br><a href="https://github.com/unicode-org/icu4x">https://github.com/unicode-org/icu4x</a>
+</li>
+</ul>
+<h3>MIT/Apache-2.0</h3>
+<ul>
+<li><strong>android_system_properties</strong> <span class="coord">0.1.5</span>
+<br>Minimal Android system properties wrapper
+<br><a href="https://github.com/nical/android_system_properties">https://github.com/nical/android_system_properties</a>
+</li>
+<li><strong>fallible-iterator</strong> <span class="coord">0.3.0</span>
+<br>Fallible iterator traits
+<br><a href="https://github.com/sfackler/rust-fallible-iterator">https://github.com/sfackler/rust-fallible-iterator</a>
+</li>
+<li><strong>fallible-streaming-iterator</strong> <span class="coord">0.1.9</span>
+<br>Fallible streaming iteration
+<br><a href="https://github.com/sfackler/fallible-streaming-iterator">https://github.com/sfackler/fallible-streaming-iterator</a>
+</li>
+<li><strong>ff</strong> <span class="coord">0.13.1</span>
+<br>Library for building and interfacing with finite fields
+<br><a href="https://github.com/zkcrypto/ff">https://github.com/zkcrypto/ff</a>
+</li>
+<li><strong>fs-err</strong> <span class="coord">2.11.0</span>
+<br>A drop-in replacement for std::fs with more helpful error messages.
+<br><a href="https://github.com/andrewhickman/fs-err">https://github.com/andrewhickman/fs-err</a>
+</li>
+<li><strong>group</strong> <span class="coord">0.13.0</span>
+<br>Elliptic curve group traits and utilities
+<br><a href="https://github.com/zkcrypto/group">https://github.com/zkcrypto/group</a>
+</li>
+<li><strong>minimal-lexical</strong> <span class="coord">0.2.1</span>
+<br>Fast float parsing conversion routines.
+<br><a href="https://github.com/Alexhuszagh/minimal-lexical">https://github.com/Alexhuszagh/minimal-lexical</a>
+</li>
+<li><strong>plain</strong> <span class="coord">0.2.3</span>
+<br>A small Rust library that allows users to reinterpret data of certain types safely.
+<br><a href="https://github.com/randomites/plain">https://github.com/randomites/plain</a>
+</li>
+<li><strong>serde_urlencoded</strong> <span class="coord">0.7.1</span>
+<br>`x-www-form-urlencoded` meets Serde
+<br><a href="https://github.com/nox/serde_urlencoded">https://github.com/nox/serde_urlencoded</a>
+</li>
+<li><strong>siphasher</strong> <span class="coord">0.3.11</span>
+<br>SipHash-2-4, SipHash-1-3 and 128-bit variants in pure Rust
+<br><a href="https://github.com/jedisct1/rust-siphash">https://github.com/jedisct1/rust-siphash</a>
+</li>
+<li><strong>zstd-sys</strong> <span class="coord">2.0.16+zstd.1.5.7</span>
+<br>Low-level bindings for the zstd compression library.
+<br><a href="https://github.com/gyscos/zstd-rs">https://github.com/gyscos/zstd-rs</a>
+</li>
+</ul>
+<h3>MPL-2.0</h3>
+<ul>
+<li><strong>uniffi</strong> <span class="coord">0.30.0</span>
+<br>a multi-language bindings generator for rust
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>uniffi_bindgen</strong> <span class="coord">0.30.0</span>
+<br>a multi-language bindings generator for rust (codegen and cli tooling)
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>uniffi_build</strong> <span class="coord">0.30.0</span>
+<br>a multi-language bindings generator for rust (build script helpers)
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>uniffi_core</strong> <span class="coord">0.30.0</span>
+<br>a multi-language bindings generator for rust (runtime support code)
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>uniffi_meta</strong> <span class="coord">0.30.0</span>
+<br>uniffi_meta
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>uniffi_pipeline</strong> <span class="coord">0.30.0</span>
+<br>a multi-language bindings generator for rust (codegen and cli tooling)
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+<li><strong>uniffi_udl</strong> <span class="coord">0.30.0</span>
+<br>udl parsing for the uniffi project
+<br><a href="https://github.com/mozilla/uniffi-rs">https://github.com/mozilla/uniffi-rs</a>
+</li>
+</ul>
+<h3>BSD-3-Clause</h3>
+<ul>
+<li><strong>curve25519-dalek</strong> <span class="coord">4.1.3</span>
+<br>A pure-Rust implementation of group operations on ristretto255 and Curve25519
+<br><a href="https://github.com/dalek-cryptography/curve25519-dalek/tree/main/curve25519-dalek">https://github.com/dalek-cryptography/curve25519-dalek/tree/main/curve25519-dalek</a>
+</li>
+<li><strong>ed25519-dalek</strong> <span class="coord">2.2.0</span>
+<br>Fast and efficient ed25519 EdDSA key generations, signing, and verification in pure Rust.
+<br><a href="https://github.com/dalek-cryptography/curve25519-dalek/tree/main/ed25519-dalek">https://github.com/dalek-cryptography/curve25519-dalek/tree/main/ed25519-dalek</a>
+</li>
+<li><strong>subtle</strong> <span class="coord">2.6.1</span>
+<br>Pure-Rust traits and utilities for constant-time cryptographic implementations.
+<br><a href="https://github.com/dalek-cryptography/subtle">https://github.com/dalek-cryptography/subtle</a>
+</li>
+<li><strong>x25519-dalek</strong> <span class="coord">2.0.1</span>
+<br>X25519 elliptic curve Diffie-Hellman key exchange in pure-Rust, using curve25519-dalek.
+<br><a href="https://github.com/dalek-cryptography/curve25519-dalek/tree/main/x25519-dalek">https://github.com/dalek-cryptography/curve25519-dalek/tree/main/x25519-dalek</a>
+</li>
+</ul>
+<h3>Apache-2.0 OR ISC OR MIT</h3>
+<ul>
+<li><strong>hyper-rustls</strong> <span class="coord">0.27.9</span>
+<br>Rustls+hyper integration for pure rust HTTPS
+<br><a href="https://github.com/rustls/hyper-rustls">https://github.com/rustls/hyper-rustls</a>
+</li>
+<li><strong>rustls</strong> <span class="coord">0.23.41</span>
+<br>Rustls is a modern TLS library written in Rust.
+<br><a href="https://github.com/rustls/rustls">https://github.com/rustls/rustls</a>
+</li>
+<li><strong>rustls-native-certs</strong> <span class="coord">0.8.4</span>
+<br>rustls-native-certs allows rustls to use the platform native certificate store
+<br><a href="https://github.com/rustls/rustls-native-certs">https://github.com/rustls/rustls-native-certs</a>
+</li>
+</ul>
+<h3>Unlicense OR MIT</h3>
+<ul>
+<li><strong>aho-corasick</strong> <span class="coord">1.1.4</span>
+<br>Fast multiple substring searching.
+<br><a href="https://github.com/BurntSushi/aho-corasick">https://github.com/BurntSushi/aho-corasick</a>
+</li>
+<li><strong>byteorder</strong> <span class="coord">1.5.0</span>
+<br>Library for reading/writing numbers in big-endian and little-endian.
+<br><a href="https://github.com/BurntSushi/byteorder">https://github.com/BurntSushi/byteorder</a>
+</li>
+<li><strong>memchr</strong> <span class="coord">2.8.2</span>
+<br>Provides extremely fast (uses SIMD on x86_64, aarch64 and wasm32) routines for
+1, 2 or 3 byte search and single substring search.
+<br><a href="https://github.com/BurntSushi/memchr">https://github.com/BurntSushi/memchr</a>
+</li>
+</ul>
+<h3>Apache-2.0</h3>
+<ul>
+<li><strong>prost</strong> <span class="coord">0.14.4</span>
+<br>A Protocol Buffers implementation for the Rust Language.
+<br><a href="https://github.com/tokio-rs/prost">https://github.com/tokio-rs/prost</a>
+</li>
+<li><strong>sync_wrapper</strong> <span class="coord">1.0.2</span>
+<br>A tool for enlisting the compiler's help in proving the absence of concurrency
+<br><a href="https://github.com/Actyx/sync_wrapper">https://github.com/Actyx/sync_wrapper</a>
+</li>
+</ul>
+<h3>Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT</h3>
+<ul>
+<li><strong>linux-raw-sys</strong> <span class="coord">0.12.1</span>
+<br>Generated bindings for Linux's userspace API
+<br><a href="https://github.com/sunfishcode/linux-raw-sys">https://github.com/sunfishcode/linux-raw-sys</a>
+</li>
+<li><strong>rustix</strong> <span class="coord">1.1.4</span>
+<br>Safe Rust bindings to POSIX/Unix/Linux/Winsock-like syscalls
+<br><a href="https://github.com/bytecodealliance/rustix">https://github.com/bytecodealliance/rustix</a>
+</li>
+</ul>
+<h3>ISC</h3>
+<ul>
+<li><strong>rustls-webpki</strong> <span class="coord">0.103.13</span>
+<br>Web PKI X.509 Certificate Verification.
+<br><a href="https://github.com/rustls/webpki">https://github.com/rustls/webpki</a>
+</li>
+<li><strong>untrusted</strong> <span class="coord">0.9.0</span>
+<br>Safe, fast, zero-panic, zero-crashing, zero-allocation parsing of untrusted inputs in Rust.
+<br><a href="https://github.com/briansmith/untrusted">https://github.com/briansmith/untrusted</a>
+</li>
+</ul>
+<h3>MIT OR Apache-2.0 OR Zlib</h3>
+<ul>
+<li><strong>lru-slab</strong> <span class="coord">0.1.2</span>
+<br>Pre-allocated storage with constant-time LRU tracking
+<br><a href="https://github.com/Ralith/lru-slab">https://github.com/Ralith/lru-slab</a>
+</li>
+<li><strong>tinyvec_macros</strong> <span class="coord">0.1.1</span>
+<br>Some macros for tiny containers
+<br><a href="https://github.com/Soveu/tinyvec_macros">https://github.com/Soveu/tinyvec_macros</a>
+</li>
+</ul>
+<h3>0BSD OR MIT OR Apache-2.0</h3>
+<ul>
+<li><strong>adler2</strong> <span class="coord">2.0.1</span>
+<br>A simple clean-room implementation of the Adler-32 checksum
+<br><a href="https://github.com/oyvindln/adler2">https://github.com/oyvindln/adler2</a>
+</li>
+</ul>
+<h3>Apache-2.0 / MIT</h3>
+<ul>
+<li><strong>fnv</strong> <span class="coord">1.0.7</span>
+<br>Fowler–Noll–Vo hash function
+<br><a href="https://github.com/servo/rust-fnv">https://github.com/servo/rust-fnv</a>
+</li>
+</ul>
+<h3>Apache-2.0 AND ISC</h3>
+<ul>
+<li><strong>ring</strong> <span class="coord">0.17.14</span>
+<br>An experiment.
+<br><a href="https://github.com/briansmith/ring">https://github.com/briansmith/ring</a>
+<br><span class="muted">Licensed `Apache-2.0 AND ISC` — a conjunction, not a choice: both sets of terms apply.</span>
+</li>
+</ul>
+<h3>Apache-2.0 OR BSL-1.0</h3>
+<ul>
+<li><strong>ryu</strong> <span class="coord">1.0.23</span>
+<br>Fast floating point to string conversion
+<br><a href="https://github.com/dtolnay/ryu">https://github.com/dtolnay/ryu</a>
+</li>
+</ul>
+<h3>BSD-2-Clause</h3>
+<ul>
+<li><strong>arrayref</strong> <span class="coord">0.3.9</span>
+<br>Macros to take array references of slices
+<br><a href="https://github.com/droundy/arrayref">https://github.com/droundy/arrayref</a>
+</li>
+</ul>
+<h3>BSD-2-Clause OR Apache-2.0 OR MIT</h3>
+<ul>
+<li><strong>zerocopy</strong> <span class="coord">0.8.52</span>
+<br>Zerocopy makes zero-cost memory manipulation effortless. We write &quot;unsafe&quot; so you don't have to.
+<br><a href="https://github.com/google/zerocopy">https://github.com/google/zerocopy</a>
+</li>
+</ul>
+<h3>CC0-1.0 OR Apache-2.0 OR Apache-2.0 WITH LLVM-exception</h3>
+<ul>
+<li><strong>blake3</strong> <span class="coord">1.8.5</span>
+<br>the BLAKE3 hash function
+<br><a href="https://github.com/BLAKE3-team/BLAKE3">https://github.com/BLAKE3-team/BLAKE3</a>
+</li>
+</ul>
+<h3>CC0-1.0 OR MIT-0 OR Apache-2.0</h3>
+<ul>
+<li><strong>constant_time_eq</strong> <span class="coord">0.4.2</span>
+<br>Compares two equal-sized byte strings in constant time.
+<br><a href="https://github.com/cesarb/constant_time_eq">https://github.com/cesarb/constant_time_eq</a>
+</li>
+</ul>
+<h3>CDLA-Permissive-2.0</h3>
+<ul>
+<li><strong>webpki-roots</strong> <span class="coord">1.0.8</span>
+<br>Mozilla's CA root certificates for use with webpki
+<br><a href="https://github.com/rustls/webpki-roots">https://github.com/rustls/webpki-roots</a>
+</li>
+</ul>
+<h3>MIT AND BSD-3-Clause</h3>
+<ul>
+<li><strong>matchit</strong> <span class="coord">0.8.4</span>
+<br>A high performance, zero-copy URL router.
+<br><a href="https://github.com/ibraheemdev/matchit">https://github.com/ibraheemdev/matchit</a>
+</li>
+</ul>
+<h3>MIT OR Zlib OR Apache-2.0</h3>
+<ul>
+<li><strong>miniz_oxide</strong> <span class="coord">0.8.9</span>
+<br>DEFLATE compression and decompression library rewritten in Rust based on miniz
+<br><a href="https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide">https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide</a>
+</li>
+</ul>
+<h3>Zlib OR Apache-2.0 OR MIT</h3>
+<ul>
+<li><strong>tinyvec</strong> <span class="coord">1.11.0</span>
+<br>`tinyvec` provides 100% safe vec-like data structures.
+<br><a href="https://github.com/Lokathor/tinyvec">https://github.com/Lokathor/tinyvec</a>
+</li>
+</ul>
+</body></html>

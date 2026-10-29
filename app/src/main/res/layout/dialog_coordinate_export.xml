@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Member filter -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilMemberFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/coord_export_filter"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <!-- tools:ignore="LabelFor" is a TOOL LIMITATION, not accepted debt: the
+             hint lives on the enclosing TextInputLayout (android:hint="@string/coord_export_filter"),
+             which Material forwards onto this view's accessibility
+             node, so TalkBack does announce it. Lint only looks at this element
+             and cannot see the parent's hint. Putting android:hint here as well
+             would double it and fight the floating label. -->
+        <AutoCompleteTextView
+            android:id="@+id/actvMemberFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Point count -->
+    <TextView
+        android:id="@+id/tvPointCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="13sp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <!-- JSON preview -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fillViewport="false">
+
+        <TextView
+            android:id="@+id/tvJsonPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textSize="11sp"
+            android:padding="8dp"
+            android:background="?attr/colorSurfaceVariant"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textIsSelectable="true" />
+
+    </ScrollView>
+
+    <!-- Empty state -->
+    <TextView
+        android:id="@+id/tvEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/coord_export_none_in_range"
+        android:textAlignment="center"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone" />
+
+</LinearLayout>

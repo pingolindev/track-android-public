@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Bottom-sheet content for the map-screen address search. Same shape as
+  dialog_city_scope_picker but the results are full address/POI hits
+  (not city centroids), and there is no GPS shortcut row — the map
+  already exposes a Center-on-Me FAB for that.
+
+  Picking a result dismisses the sheet, flies the map to the location,
+  and drops a tapped marker so the location-card actions (Add to Places,
+  Share Destination, Copy Coords) become available — exactly the same
+  state as if the user had tapped that spot on the map.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/map_search_title"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/search_field_hint"
+        app:startIconDrawable="@android:drawable/ic_menu_search"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etMapSearchQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvMapSearchHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="13sp"
+        android:text="@string/map_search_hint_view" />
+
+    <TextView
+        android:id="@+id/tvMapSearchLoading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="?colorPrimary"
+        android:textSize="13sp"
+        android:text="@string/places_searching"
+        android:visibility="gone"
+        tools:ignore="MissingDefaultResource" />
+
+    <!-- Expand-to-city control. A default search is confined to the visible map
+         bounds, so this tappable row is the one-tap way out: it broadens to the
+         whole focused city (loads its full tile set). The other way out is
+         naming a city in the query itself. Shown after a local search when a
+         map focus is known; hidden once expanded. -->
+    <TextView
+        android:id="@+id/tvMapSearchExpand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="?colorPrimary"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:text="@string/map_search_whole_city"
+        android:visibility="gone"
+        tools:ignore="MissingDefaultResource" />
+
+    <!-- Fills the remaining vertical space below the input + hints so
+         the search bar above stays pinned at a constant position
+         regardless of how many results are loaded. Without weight=1
+         here the RecyclerView would use wrap_content and the bottom sheet
+         would grow upward as results arrived, dragging the input with it. -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMapSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

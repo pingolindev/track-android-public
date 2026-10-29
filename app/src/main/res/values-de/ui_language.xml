@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The language this folder's words are in, as a language tag. The formats that carry words (a distance's unit, a
+     weekday's name, a compact number) follow it (util/UiLocale.kt), so a line never mixes two languages. A tag, not a
+     translation: kept out of strings.xml and its tools; UiLocaleTest holds each folder's to its name. -->
+<resources>
+    <string name="ui_language">de</string>
+</resources>

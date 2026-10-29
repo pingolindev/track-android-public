@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Location Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- ACTIVITY_RECOGNITION is deliberately NOT requested, by either flavour.
+         Motion detection reads TYPE_SIGNIFICANT_MOTION and the accelerometer,
+         neither of which is permission-guarded, and it exists only to choose a
+         GPS poll interval (see LocationTrackingService.POLL_*_MS) — never to
+         count steps or infer activity for its own sake.
+
+         Declaring the permission would make Play class the app as using a
+         sensitive permission and ask it to declare health features, on top of
+         the ACCESS_BACKGROUND_LOCATION declaration this app already carries,
+         and would add a "Physical activity" prompt to a location-sharing app.
+         Do not add it without a reason that outweighs both. -->
+
+    <!-- Sensors used by motion detection. Not required — the
+         app degrades to MotionState.UNKNOWN without them — so `required="false"`
+         keeps it installable on hardware that has neither. -->
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
+
+    <!-- Foreground Service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <!-- Network -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Wake lock for reliable background updates -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Boot receiver for restarting service -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Android's one-tap "let it run in the background" question, asked once on phones
+         whose battery manager stops background apps (BatteryOptimizationHelper.isAggressiveOem),
+         and from Settings. Play reviews this permission: it is declared as core to a
+         location-sharing app, whose sharing stops when the phone puts it to sleep. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- No exact-alarm permission, deliberately. The watchdog that verifies the
+         foreground LocationTrackingService is still alive runs on
+         setAndAllowWhileIdle: inexact, but still doze-aware, so it fires in a
+         window around the 20-minute mark instead of exactly on it. A liveness
+         check does not need precision, and WorkManager remains the redundant
+         first path.
+         Play restricts USE_EXACT_ALARM to alarm, timer and calendar apps and
+         refuses publication to everything else
+         (support.google.com/googleplay/android-developer/answer/13161072);
+         SCHEDULE_EXACT_ALARM is not auto-granted on API 33+ and carries its
+         own declaration. A location watchdog qualifies as neither, so we ask for
+         neither. -->
+
+    <application
+        android:name=".TrackApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Track"
+        android:networkSecurityConfig="@xml/network_security_config">
+
+        <!-- Main Activity with Navigation -->
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Track">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- In place of either while the session store can't be opened -->
+        <activity
+            android:name=".ui.start.CantStartActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Track" />
+
+        <!-- In place of the app for an assisted-lane account an admin hasn't approved yet -->
+        <activity
+            android:name=".ui.start.UnderReviewActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Track" />
+
+        <!-- Authentication Activity -->
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="true"
+            android:label="@string/auth_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Track">
+            <!-- Deep link for email verification.
+
+                 api-auth.<domain>, NOT auth.<domain>. The verify-email link is
+                 served by the auth API host, which is the published host and
+                 the one the assetlinks.json behind /.well-known/assetlinks.json
+                 is served from; autoVerify against a host that serves no
+                 assetlinks.json silently fails and the link opens in the browser
+                 instead of the app.
+
+                 The host comes from the per-flavour ${authDeepLinkHost}
+                 placeholder (app/build.gradle.kts) so it always matches that
+                 flavour's AUTH_BASE_URL. This file is app/src/main, shared by
+                 BOTH environment flavours, so listing the two hosts here as two
+                 hard-coded filters would ship an autoVerify App Link for
+                 api-auth.pingolindev.com inside the PROD APK. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="${authDeepLinkHost}"
+                    android:pathPrefix="/verify-email" />
+            </intent-filter>
+            <!-- Custom scheme for app links -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="track"
+                    android:host="verify-email" />
+            </intent-filter>
+        </activity>
+
+        <!-- Location Tracking Service -->
+        <service
+            android:name=".service.LocationTrackingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <!-- Firebase Cloud Messaging Service is declared in
+             src/gms/AndroidManifest.xml — TrackFirebaseMessagingService is
+             compiled into src/gms only. -->
+
+        <!-- UnifiedPush Receiver for self-hosted/privacy-focused push notifications -->
+        <!-- Security: The UnifiedPush connector library validates incoming intents internally.
+             Additional validation is performed in the receiver code to verify message structure
+             and prevent processing of malformed or malicious payloads. -->
+        <receiver
+            android:name=".service.TrackUnifiedPushReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.MESSAGE" />
+                <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
+                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT" />
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- Boot Receiver to restart location service -->
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Watchdog alarm receiver — fires every ~20 min via AlarmManager
+             to verify LocationTrackingService is still running and re-start
+             it if not. Backstop for WorkManager's LocationHeartbeatWorker
+             which can be deferred multi-hour under aggressive OEM Doze. -->
+        <receiver
+            android:name=".receiver.WatchdogAlarmReceiver"
+            android:exported="false" />
+
+        <!-- The keep-alive's location deliveries (LocationKeepAlive): the location service starts again
+             inside the platform's allowlist for them. Only this app's own PendingIntent reaches it. -->
+        <receiver
+            android:name=".receiver.KeepAliveReceiver"
+            android:exported="false" />
+
+        <!-- Disable default WorkManager initialization to use Hilt's HiltWorkerFactory -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
+    </application>
+
+</manifest>

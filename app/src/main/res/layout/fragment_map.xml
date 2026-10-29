@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.maplibre.android.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Edge arrows for active SOS alerts outside the viewport. Directly
+             above the map and below every control card, so it never covers a
+             button; it only consumes touches that land on an arrow. -->
+        <!-- invisible, NOT gone: a gone view is never laid out, so its width and
+             height stay 0 — and the update pass needs those to work out where the
+             viewport edge is. It would bail every time and the view could never
+             become visible. -->
+        <com.pingolin.track.ui.map.SosEdgeIndicatorView
+            android:id="@+id/sosEdgeIndicators"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
+
+        <!-- Circle selector - clickable to switch circles. It names the circle the dot menu's sends go
+             to, so it ends 8dp short of the notification bell's column (MainActivity: a 56dp container
+             16dp from the edge) rather than running under the bell: a long name, or a large font, is
+             cut at its end there. The picker shows it whole, and TalkBack reads it whole. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardCircleSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="80dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:rippleColor="?attr/colorControlHighlight">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
+
+                <!-- Its own width, and a weight: a name too long for the card gives up what the arrow
+                     needs, and is cut there. Not 0dp: a new name in a 0dp TextView is laid out in the old
+                     one's width, without measuring the card again. -->
+                <TextView
+                    android:id="@+id/tvCircleName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_arrow_drop_down"
+                    android:contentDescription="@string/map_switch_circle_cd"
+                    app:tint="?android:attr/textColorSecondary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Standing disclosure for an account somebody else set up and still
+             holds the password to. Sits with the map chrome rather than in
+             settings, because the person who needs it is the one who does not
+             already suspect, and they will never open a settings screen to find
+             out.
+
+             NOT a dismissible banner. It states a permanent condition, and
+             anything with a close button teaches people to close it. Neutral
+             colours on purpose: a guardian is usually not a threat and this is
+             a supported arrangement, so it states the consequence and lets the
+             reader draw the conclusion. Tappable — the line is the hook and the
+             consequences need more room than a line.
+
+             Placed by TopLeftStack, under the circle selector and above the
+             controls: nothing in the column ever draws over it. 48dp tall, so a
+             tap anywhere on it opens the explanation: its pill is drawn at the
+             top, as tall as the lines below it, and the 22dp under the pill are
+             the gap above the controls (bg_guardian_pill_touch). -->
+        <TextView
+            android:id="@+id/tvGuardianManaged"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginTop="72dp"
+            android:layout_marginHorizontal="16dp"
+            android:minHeight="48dp"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="27dp"
+            android:background="@drawable/bg_guardian_pill_touch"
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:text="@string/guardian_map_line" />
+
+        <!-- The stored keys need a sign-in (KeyStoreRecovery: a signing seed or entries that
+             didn't read). The app goes on working; the line stays until the sign-in, and a tap
+             opens Settings, where Logout is. Not dismissible, as the guardian line. -->
+        <TextView
+            android:id="@+id/tvSyncError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginTop="104dp"
+            android:layout_marginHorizontal="16dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:background="@drawable/bg_guardian_pill"
+            android:textSize="12sp"
+            android:textColor="?attr/colorError"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:text="@string/sync_error_sign_in_again" />
+
+        <!-- Location is off for Track, or on this phone: it stays until location is on, and a
+             tap asks for it (MainActivity.askForLocation). Not dismissible, as the lines above,
+             so "Not now" at the first question never leaves nothing that says so. Below them,
+             and right of the map's control column (16dp + its 40dp buttons), which would
+             otherwise draw over its start. -->
+        <TextView
+            android:id="@+id/tvLocationOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginTop="136dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="16dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:background="@drawable/bg_guardian_pill"
+            android:textSize="12sp"
+            android:textColor="?attr/colorError"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:text="@string/map_location_not_allowed" />
+
+        <!-- Refresh-state pill. Hidden in steady state. While a poll is
+             in flight: small spinner + "Updating…". After a failed poll:
+             warning tint + "Couldn't reach server — showing last known".
+             Visibility/text driven from MapFragment binding the
+             isRefreshingLocations + lastRefreshFailedAt flows. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardRefreshStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="72dp"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="9999dp"
+            app:cardElevation="3dp">
+
+            <LinearLayout
+                android:id="@+id/layoutRefreshStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp">
+
+                <ProgressBar
+                    android:id="@+id/progressRefreshStatus"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="8dp"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iconRefreshStatus"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_warning"
+                    android:contentDescription="@null"
+                    android:visibility="gone"
+                    app:tint="?attr/colorError" />
+
+                <TextView
+                    android:id="@+id/tvRefreshStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Map Layers chip popover (top-right). The toggle that shows/hides
+             this lives in the left view-control stack (btnLayers); this card is
+             the chip list it reveals. Hidden until btnLayers is tapped — as on
+             iOS (Layers button left, chips top-right). -->
+        <!-- Width hugs the widest filter chip. The chips are a vertical
+             LinearLayout (not a FlowLayout), so wrap_content sizes the card to
+             the widest chip instead of greedily filling the screen — keeping it
+             a compact right-anchored popover that still clears the left control
+             stack (recenter / layers / compass). The close (×) is overlaid at
+             the top-right corner via the FrameLayout; doing it that way (rather
+             than a match_parent header row) avoids re-inflating the card to full
+             width, which is what a weighted/match_parent header would do inside
+             a wrap_content card. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMapLayers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="8dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Title. marginEnd reserves room so a long localized title
+                         can't slide under the × overlaid at the top-right. -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="36dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/map_fab_label_layers"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorSecondary" />
+
+                    <!-- One filter per line: a plain vertical LinearLayout of
+                         chips rather than a ChipGroup, which is a FlowLayout and
+                         packs several chips per row. The chips are independently
+                         checkable (each owns its listener in
+                         MapFragment.setupLayerToggles), so ChipGroup's selection
+                         management isn't needed. -->
+                    <LinearLayout
+                        android:id="@+id/chipGroupLayers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLayerMembers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/map_layer_members"
+                            android:checkable="true"
+                            android:checked="true"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLayerPlaces"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/map_layer_places"
+                            android:checkable="true"
+                            android:checked="true"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <!-- Independent toggle for received shares (places
+                             another circle member shared with this user).
+                             Mirrors the "Shared Places" filter on web. -->
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLayerSharedPlaces"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/map_layer_shared_places"
+                            android:checkable="true"
+                            android:checked="true"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLayerDestinations"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/map_layer_destinations"
+                            android:checkable="true"
+                            android:checked="true"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLayerBoundaries"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_layer_alert_areas"
+                            android:checkable="true"
+                            android:checked="true"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btnCloseLayers"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="top|end"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_close"
+                    android:contentDescription="@string/map_close_filters_cd"
+                    app:tint="?android:attr/textColorSecondary" />
+
+            </FrameLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Left-side map controls: center on all + compass -->
+        <LinearLayout
+            android:id="@+id/mapControlsLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="72dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Center on all members. Wrapped in a horizontal row so a
+                 label TextView can sit to the right of the icon-only card
+                 when the dot menu is open (toggled from
+                 expandFabs/collapseFabs in MapFragment). -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnCenterOnAll"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:rippleColor="?attr/colorControlHighlight">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_center_all"
+                        android:contentDescription="@string/map_center_on_all_members_cd"
+                        app:tint="?attr/colorPrimary" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/labelCenterOnAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/map_fab_label_center_on_all"
+                    android:textSize="12sp"
+                    android:textColor="@color/fab_label_text"
+                    android:background="@drawable/bg_fab_label"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:elevation="4dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Recenter on me. Lives in this left-side view-control group
+                 so the single most common map action ("where am I") is one
+                 tap, not two — as in the iOS app's left control stack
+                 (center-all / recenter-me / layers grouped together). -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnRecenterOnMe"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:rippleColor="?attr/colorControlHighlight">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_my_location"
+                        android:contentDescription="@string/map_recenter_on_me_cd"
+                        app:tint="?attr/colorPrimary" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/labelRecenterOnMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/map_fab_label_recenter_on_me"
+                    android:textSize="12sp"
+                    android:textColor="@color/fab_label_text"
+                    android:background="@drawable/bg_fab_label"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:elevation="4dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Layers toggle. All view-controls (what you SEE) live in this
+                 left group, and the right FAB stack is actions only, as in
+                 the iOS app. Tapping this shows/hides the chip card
+                 (cardMapLayers, top-right). -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnLayers"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:rippleColor="?attr/colorControlHighlight">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_layers"
+                        android:contentDescription="@string/map_toggle_layers_cd"
+                        app:tint="?attr/colorPrimary" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/labelLayers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/map_fab_label_layers"
+                    android:textSize="12sp"
+                    android:textColor="@color/fab_label_text"
+                    android:background="@drawable/bg_fab_label"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:elevation="4dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Compass / Reset North -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnCompass"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:rippleColor="?attr/colorControlHighlight">
+
+                    <ImageView
+                        android:id="@+id/ivCompassArrow"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_compass"
+                        android:contentDescription="@string/map_fab_label_compass"
+                        app:tint="?android:attr/textColorSecondary" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/labelCompass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/map_fab_label_compass"
+                    android:textSize="12sp"
+                    android:textColor="@color/fab_label_text"
+                    android:background="@drawable/bg_fab_label"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:elevation="4dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Time Range Selector - hidden by default, shown via toggle -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTimeRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_view_history"
+                            android:textSize="12sp"
+                            android:textColor="?android:attr/textColorSecondary" />
+
+                        <TextView
+                            android:id="@+id/tvHistoryMemberFilter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorPrimary"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btnExportCoordinates"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_download"
+                        android:contentDescription="@string/coord_export_title"
+                        android:visibility="gone"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/btnCloseHistory"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_close"
+                        android:contentDescription="@string/map_close_history_cd"
+                        app:tint="?android:attr/textColorSecondary" />
+
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupTimeRange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_range_live"
+                            android:checked="true"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip1Hour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_range_1h"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip24Hours"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_range_24h"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipToday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_range_today"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip7Days"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_range_7d"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipCustomRange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/map_custom_range"
+                            style="@style/Widget.Material3.Chip.Filter" />
+
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+
+                <!-- Loading indicator for history fetch -->
+                <ProgressBar
+                    android:id="@+id/progressHistory"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    style="?android:attr/progressBarStyleSmall" />
+
+                <!-- History point count. There is no "Load more" button: the
+                     server answers the whole selected range in one downsampled
+                     response, so the remedy for a range too big to show in full
+                     is a shorter range, which the count line says when the
+                     server reports it dropped the oldest points. -->
+                <LinearLayout
+                    android:id="@+id/layoutHistoryFooter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvHistoryCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="11sp"
+                        android:textColor="?android:attr/textColorSecondary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+    <!-- FAB speed dial - positioned above bottom nav via fragment container margin -->
+    <LinearLayout
+        android:id="@+id/fabStack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:gravity="end"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <!-- === Expandable items (hidden by default) === -->
+
+        <!-- Destinations -->
+        <LinearLayout
+            android:id="@+id/fabRowDestinations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/labelDestinations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_destinations"
+                android:textSize="12sp"
+                android:textColor="@color/fab_label_text"
+                android:background="@drawable/bg_fab_label"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:elevation="4dp" />
+            <!--
+                TWO TIERS ONLY: neutral for every action in this stack, the
+                accent for Send location, which is the one that does something
+                to the outside world. More fills in no pattern would make
+                colour look like it encodes meaning when it encodes nothing.
+                fabTracking keeps its own colour: that one is a state, not a
+                menu entry.
+            -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabDestinations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_destination"
+                android:contentDescription="@string/map_destinations"
+                app:fabSize="mini"
+                app:backgroundTint="?attr/colorSurfaceVariant" />
+        </LinearLayout>
+
+        <!-- Check-In is a permanent FAB below, not an expandable item -->
+
+        <!-- History -->
+        <LinearLayout
+            android:id="@+id/fabRowHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/labelHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_history"
+                android:textSize="12sp"
+                android:textColor="@color/fab_label_text"
+                android:background="@drawable/bg_fab_label"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:elevation="4dp" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_history"
+                android:contentDescription="@string/map_view_history"
+                app:fabSize="mini"
+                app:backgroundTint="?attr/colorSurfaceVariant" />
+        </LinearLayout>
+
+        <!-- Center on Me lives in the left view-control stack
+             (btnRecenterOnMe): a one-tap persistent control rather than
+             a two-tap action behind the (+) menu, as in the iOS app. -->
+
+        <!-- === Always visible ===
+             Each FAB lives in a horizontal LinearLayout paired with a
+             label TextView (gone by default). expandFabs()/collapseFabs()
+             toggles the labels so opening the dot menu reveals what every
+             on-screen button does in one consistent sweep, not just the
+             secondary actions in the speed dial above. -->
+
+        <!-- Expand/collapse toggle (no label — the icon morphs between
+             "more" and "close" and a label here would be misleading). Acts as
+             the column's divider: the expandable menu rows fan out ABOVE it,
+             while the always-visible buttons (search + quick actions) sit
+             BELOW it. -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabExpand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_more_vert"
+            android:contentDescription="@string/map_more_actions_cd"
+            app:fabSize="mini"
+            app:backgroundTint="?attr/colorSurfaceVariant" />
+
+        <!-- Search address (always visible). Address search is a first-class
+             map action, kept out of the ⋮ speed dial so it's one tap and
+             actually discoverable. Placed directly BELOW ⋮ with the other
+             persistent FABs (not above it, where it'd be wedged into the speed
+             dial's fan-out zone and break the "persistent buttons live below
+             ⋮" convention). Opens a bottom sheet; picking a result flies to +
+             drops a tapped marker, like a deliberate tap on that location. The
+             label is gone by default and shown on expand like the other
+             always-visible FAB labels. -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/labelSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_search_address"
+                android:textSize="12sp"
+                android:textColor="@color/fab_label_text"
+                android:background="@drawable/bg_fab_label"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:elevation="4dp"
+                android:visibility="gone" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search"
+                android:contentDescription="@string/map_search_address"
+                app:fabSize="mini"
+                app:backgroundTint="?attr/colorSurfaceVariant" />
+        </LinearLayout>
+
+        <!-- Tracking FAB (always visible). Intentionally NOT labelled when
+             the dot menu opens — the FAB itself is only shown while
+             tracking is active, so its presence already conveys the state
+             and a "Tracking active" label next to it is redundant noise
+             when the user opens the menu to learn what the other buttons
+             do. -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTracking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_play"
+            android:contentDescription="@string/map_tracking_active_cd"
+            android:visibility="gone"
+            app:fabSize="normal"
+            app:backgroundTint="?attr/colorPrimary" />
+
+        <!-- Quick Check-In FAB (always visible, above send location) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/labelQuickCheckIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_fab_label_quick_checkin"
+                android:textSize="12sp"
+                android:textColor="@color/fab_label_text"
+                android:background="@drawable/bg_fab_label"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:elevation="4dp"
+                android:visibility="gone" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabQuickCheckIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_check"
+                android:contentDescription="@string/map_fab_label_quick_checkin"
+                app:fabSize="mini"
+                app:backgroundTint="?attr/colorSurfaceVariant" />
+        </LinearLayout>
+
+        <!-- Send location FAB (always visible) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/labelSendLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_fab_label_send_location"
+                android:textSize="12sp"
+                android:textColor="@color/fab_label_text"
+                android:background="@drawable/bg_fab_label"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:elevation="4dp"
+                android:visibility="gone" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabSendLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_send"
+                android:contentDescription="@string/map_send_location_now_cd"
+                app:fabSize="mini"
+                app:backgroundTint="?attr/colorPrimary" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

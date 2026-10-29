@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="4dp">
+
+    <!-- The same bubble the map draws for this member: palette colour by
+         roster index, bold initials, so the list says which dot is whom.
+         Colour is applied in CircleMembersAdapter.
+
+         textColor here is a DEFAULT ONLY — the adapter sets it per row via
+         A11yInk.ink(), because the right ink depends on the bubble colour.
+         It is not white: white fails WCAG AA on all eight palette colours,
+         worst 1.44:1 on amber. -->
+    <TextView
+        android:id="@+id/tvMemberAvatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#1C1C1E"
+        android:background="@drawable/bg_member_avatar"
+        android:contentDescription="@null" />
+
+    <!-- Name and role -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvMemberName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvMemberRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <!-- Why this member's location isn't updating: "Location sharing off",
+             "Paused until 5:00 PM", "Paused". Shown only then; set in CircleMembersAdapter. -->
+        <TextView
+            android:id="@+id/tvMemberSharing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- You badge (shown for current user) -->
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chipYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You"
+        android:textSize="11sp"
+        android:visibility="gone"
+        style="@style/Widget.Material3.Chip.Assist"
+        app:chipMinHeight="24dp" />
+
+    <!-- Actions button (visible for owner/admin viewing other members) -->
+    <ImageButton
+        android:id="@+id/btnMemberActions"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@android:drawable/ic_menu_more"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Member actions"
+        android:visibility="gone"
+        app:tint="?android:attr/textColorSecondary" />
+
+</LinearLayout>

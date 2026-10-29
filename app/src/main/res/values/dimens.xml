@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- FAB margins for map -->
+    <dimen name="fab_margin_default">24dp</dimen>
+    <!-- The password field's sides in the in-place password dialog. -->
+    <dimen name="password_in_place_padding">20dp</dimen>
+    <!-- When history panel is shown, FABs sit just above it (panel is ~100dp tall + 16dp margin) -->
+    <dimen name="fab_margin_with_history">140dp</dimen>
+    <!-- Card margins on map -->
+    <dimen name="card_margin_top">16dp</dimen>
+    <dimen name="card_spacing">8dp</dimen>
+</resources>
