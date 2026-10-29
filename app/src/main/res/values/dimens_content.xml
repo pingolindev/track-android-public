@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Horizontal inset for the scrolling content of the main tabs.
+         ...
+         A settings column stretched to the full width of a 1280dp tablet is
+         one card, then a very long way to the right-hand edge. Material's
+         guidance is a readable column of roughly 600-720dp whatever the
+         screen, so these buckets are chosen to LAND on that, not to scale with
+         the display:
+
+         phone   (<600dp)   16dp  ->  content is the screen
+         600dp              24dp  ->  ~552dp
+         720dp              64dp  ->  ~592dp
+         840dp             120dp  ->  ~600dp
+         1000dp            200dp  ->  ~600dp
+         1200dp            300dp  ->  ~600dp
+
+         Padding rather than a max-width container on purpose: every one of
+         these screens is already a NestedScrollView or RecyclerView, so this
+         is one attribute per layout and no view hierarchy changes. The lists
+         also set clipToPadding=false, so a fling still paints to the edge. -->
+    <dimen name="content_side_padding">16dp</dimen>
+</resources>

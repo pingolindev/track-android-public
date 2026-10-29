@@ -1,0 +1,58 @@
+# Android Studio
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Kotlin compiler cache (2.x)
+.kotlin/
+
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Local configuration file
+local.properties
+
+# Android NDK
+obj/
+*.so
+*.a
+# But allow jniLibs (prebuilt native libraries)
+!**/jniLibs/**/*.so
+
+# Maven
+target/
+
+# Signing files
+*.jks
+*.keystore
+
+# Firebase config (contains API keys)
+google-services.json
+
+# Build outputs that shouldn't be committed
+*.apk
+*.aab
+*.idsig
+
+# E2E test artifacts (screenshots + JSON reports)
+e2e-screenshots/
+
+# Editor backup / swap files
+*.swp
+*.swo
+*~
+*.orig
+*.rej
+*.bak
+
+# Local tooling binaries (never committed)
+/bws
+/bws-*.zip

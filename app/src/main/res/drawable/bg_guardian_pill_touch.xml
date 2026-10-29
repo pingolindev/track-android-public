@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The guardian line's pill at the top of its 48dp touch target (fragment_map.xml):
+     as tall as the sync-error and location lines' pills, under the circle selector.
+     The 22dp under it reach into the gap above the controls, so a tap anywhere there
+     opens the explanation. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/bg_guardian_pill"
+    android:insetBottom="22dp" />

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_drag_handle" />
+
+    <!-- Header: location icon + formal name (POI). tvTappedName is shown only
+         once a POI name resolves from the map tiles; with no name the address
+         below carries the title role. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_place"
+            app:tint="?attr/colorPrimary"
+            android:contentDescription="@string/map_tapped_location_cd" />
+
+        <TextView
+            android:id="@+id/tvTappedName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Address (becomes the title when there is no POI name) -->
+    <TextView
+        android:id="@+id/tvTappedAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp" />
+
+    <!-- Coordinates -->
+    <TextView
+        android:id="@+id/tvTappedCoordinates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <ProgressBar
+        android:id="@+id/progressTappedLocation"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleSmall" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Actions. Stacked, start-aligned, full-width so they read like menu items. -->
+    <LinearLayout
+        android:id="@+id/tappedLocationActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddToPlaces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/map_tapped_add_to_places"
+            android:gravity="start|center_vertical"
+            app:icon="@drawable/ic_place"
+            style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShareDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/map_tapped_share_destination"
+            android:gravity="start|center_vertical"
+            app:icon="@drawable/ic_share"
+            style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCopyCoords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/map_tapped_copy_address"
+            android:gravity="start|center_vertical"
+            app:icon="@drawable/ic_copy"
+            style="@style/Widget.Material3.Button.TextButton.Icon" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,60 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="30"
+            android:viewportHeight="30">
+            <!-- Play icon in center (static) -->
+            <path
+                android:name="play"
+                android:fillColor="#FF000000"
+                android:pathData="M12,10v10l8,-5z"/>
+            <!-- Arrows group that will rotate clockwise -->
+            <group
+                android:name="arrowsGroup"
+                android:pivotX="15"
+                android:pivotY="15">
+                <!-- Top arc: circular path, from upper-left to upper-right -->
+                <path
+                    android:name="arc1"
+                    android:strokeColor="#FF000000"
+                    android:strokeWidth="2"
+                    android:strokeLineCap="round"
+                    android:fillColor="#00000000"
+                    android:pathData="M7,7 A11,11 0 0,1 23,7"/>
+                <!-- Top arrowhead at end of arc, pointing up (clockwise) -->
+                <path
+                    android:name="arrow1"
+                    android:fillColor="#FF000000"
+                    android:pathData="M20,10 L26,10 L23,4z"/>
+                <!-- Bottom arc: circular path, from lower-right to lower-left -->
+                <path
+                    android:name="arc2"
+                    android:strokeColor="#FF000000"
+                    android:strokeWidth="2"
+                    android:strokeLineCap="round"
+                    android:fillColor="#00000000"
+                    android:pathData="M23,23 A11,11 0 0,1 7,23"/>
+                <!-- Bottom arrowhead at end of arc, pointing down (clockwise) -->
+                <path
+                    android:name="arrow2"
+                    android:fillColor="#FF000000"
+                    android:pathData="M4,20 L10,20 L7,26z"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="arrowsGroup">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="2000"
+                android:valueFrom="0"
+                android:valueTo="360"
+                android:valueType="floatType"
+                android:repeatCount="infinite"
+                android:interpolator="@android:interpolator/linear"/>
+        </aapt:attr>
+    </target>
+</animated-vector>

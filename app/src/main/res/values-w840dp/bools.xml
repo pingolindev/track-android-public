@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- See values/bools.xml. Matches res/layout-w840dp/activity_main.xml, which
+         is the navigation-rail variant; keep the two qualifiers identical. -->
+    <bool name="is_wide_screen">true</bool>
+</resources>

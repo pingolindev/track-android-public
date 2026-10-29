@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="30"
+    android:viewportHeight="30">
+    <!-- Play icon in center -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M12,10v10l8,-5z"/>
+    <!-- Top arc: circular path, from upper-left to upper-right -->
+    <path
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M7,7 A11,11 0 0,1 23,7"/>
+    <!-- Top arrowhead at end of arc, pointing up (clockwise) -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M20,10 L26,10 L23,4z"/>
+    <!-- Bottom arc: circular path, from lower-right to lower-left -->
+    <path
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M23,23 A11,11 0 0,1 7,23"/>
+    <!-- Bottom arrowhead at end of arc, pointing down (clockwise) -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M4,20 L10,20 L7,26z"/>
+</vector>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.pingolin.track.ui.map.MapFragment"
+        android:label="Map" />
+
+    <fragment
+        android:id="@+id/circlesFragment"
+        android:name="com.pingolin.track.ui.circles.CirclesFragment"
+        android:label="Circles" />
+
+    <fragment
+        android:id="@+id/sosFragment"
+        android:name="com.pingolin.track.ui.sos.SosFragment"
+        android:label="@string/sos_title" />
+
+    <fragment
+        android:id="@+id/placesFragment"
+        android:name="com.pingolin.track.ui.places.PlacesFragment"
+        android:label="Places" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.pingolin.track.ui.settings.SettingsFragment"
+        android:label="Settings">
+        <action
+            android:id="@+id/action_settings_to_support"
+            app:destination="@id/supportTicketFragment" />
+        <action
+            android:id="@+id/action_settings_to_devices"
+            app:destination="@id/devicesFragment" />
+        <action
+            android:id="@+id/action_settings_to_licenses"
+            app:destination="@id/licensesFragment" />
+        <action
+            android:id="@+id/action_settings_to_my_keys"
+            app:destination="@id/myKeysFragment" />
+        <action
+            android:id="@+id/action_settings_to_blocked_people"
+            app:destination="@id/blockedPeopleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/blockedPeopleFragment"
+        android:name="com.pingolin.track.ui.settings.BlockedPeopleFragment"
+        android:label="@string/blocked_people_title" />
+
+    <fragment
+        android:id="@+id/myKeysFragment"
+        android:name="com.pingolin.track.ui.settings.MyKeysFragment"
+        android:label="@string/my_keys_title" />
+
+    <fragment
+        android:id="@+id/licensesFragment"
+        android:name="com.pingolin.track.ui.settings.LicensesFragment"
+        android:label="@string/licenses_title" />
+
+    <fragment
+        android:id="@+id/devicesFragment"
+        android:name="com.pingolin.track.ui.devices.DevicesFragment"
+        android:label="Devices" />
+
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.pingolin.track.ui.notifications.NotificationsFragment"
+        android:label="@string/notifications" />
+
+    <fragment
+        android:id="@+id/destinationsFragment"
+        android:name="com.pingolin.track.ui.destinations.DestinationsFragment"
+        android:label="Destinations" />
+
+    <fragment
+        android:id="@+id/alertsContainerFragment"
+        android:name="com.pingolin.track.ui.alerts.AlertsContainerFragment"
+        android:label="@string/safety_rules_title" />
+
+    <fragment
+        android:id="@+id/checkInFragment"
+        android:name="com.pingolin.track.ui.checkin.CheckInFragment"
+        android:label="Check-Ins">
+        <!-- The circle it is opened for (the map's check-in menu): the choice it opens on. -->
+        <argument
+            android:name="circle_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/supportTicketFragment"
+        android:name="com.pingolin.track.ui.support.SupportTicketFragment"
+        android:label="@string/support_ticket_title" />
+
+    <fragment
+        android:id="@+id/memberDetailFragment"
+        android:name="com.pingolin.track.ui.circles.MemberDetailFragment"
+        android:label="@string/member_security_details">
+        <argument
+            android:name="circle_id"
+            app:argType="string" />
+        <argument
+            android:name="user_id"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

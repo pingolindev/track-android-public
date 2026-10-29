@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neutral surface pill for the guardian-managed disclosure. Deliberately not
+     tinted as a warning: the arrangement is a supported one and colouring it
+     red would frame a parent as an attacker. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="?attr/colorSurfaceVariant" />
+    <corners android:radius="999dp" />
+</shape>
