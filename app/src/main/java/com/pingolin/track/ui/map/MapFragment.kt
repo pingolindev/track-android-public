@@ -167,6 +167,9 @@ class MapFragment : Fragment() {
     private var viewerAlertPlaceIds: Set<String> = emptySet()
 
     @Inject
+    lateinit var pushRouteSharing: com.pingolin.track.util.PushRouteSharing
+
+    @Inject
     lateinit var sessionManager: SessionManager
 
     /** The sync error's banner (KeyStoreRecovery): stored keys that need a sign-in. */
@@ -2668,19 +2671,25 @@ class MapFragment : Fragment() {
     /**
      * While Track has no usable location, the map says so until it does, and a tap asks for it:
      * otherwise "Not now" at the first question would leave a world map with nothing on it saying
-     * why.
+     * why. The same line says when nothing leaves the phone for want of a notification app, as
+     * this phone's own marker goes on saying "now" meanwhile: a tap explains and offers the way.
      */
     private fun bindLocationOff() {
         val b = _binding ?: return
-        val line = locationOffLine(
+        val hasCircles = mainViewModel.circles.value.isNotEmpty()
+        val offLine = locationOffLine(
             com.pingolin.track.util.LocationAccess.of(requireContext()),
-            hasCircles = mainViewModel.circles.value.isNotEmpty(),
+            hasCircles = hasCircles,
         )
+        val line = mapSharingLine(offLine, pushRouteSharing.isBlocked(), hasCircles)
         // Not while the controls' labels are open over its place: collapsing them binds it again.
         b.tvLocationOff.visibility = if (line != null && !isFabExpanded) View.VISIBLE else View.GONE
         if (line == null) return
         b.tvLocationOff.setText(line)
-        b.tvLocationOff.setOnClickListener { askForLocation() }
+        b.tvLocationOff.setOnClickListener {
+            if (offLine != null) askForLocation()
+            else (activity as? com.pingolin.track.ui.main.MainActivity)?.showPushNeeded()
+        }
         placeLocationOff()
     }
 
@@ -2778,6 +2787,11 @@ class MapFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
                 mainViewModel.circles.collect { bindLocationOff() }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                sessionManager.pushSettingsChanged.collect { bindLocationOff() }
             }
         }
         // Tapping an off-screen SOS arrow flies the camera to that alert and
@@ -5711,7 +5725,8 @@ class MapFragment : Fragment() {
                 val status = viewModel.sharingStatus(circleId, location.userId)
                 val now = System.currentTimeMillis()
                 val text = if (location.userId == sessionManager.getUserId()) {
-                    com.pingolin.track.ui.circles.MemberSharing.ownSentence(requireContext(), status, now)
+                    if (pushRouteSharing.isBlocked()) getString(R.string.own_sharing_no_push)
+                    else com.pingolin.track.ui.circles.MemberSharing.ownSentence(requireContext(), status, now)
                 } else {
                     com.pingolin.track.ui.circles.MemberSharing.detailSentence(requireContext(), name, status, now)
                 }
@@ -6424,6 +6439,19 @@ internal fun locationOffLine(access: com.pingolin.track.util.LocationAccess, has
         if (hasCircles) R.string.map_location_approximate else R.string.map_location_approximate_no_circles
     com.pingolin.track.util.LocationAccess.SERVICES_OFF ->
         if (hasCircles) R.string.map_location_services_off else R.string.map_location_services_off_no_circles
+}
+
+/**
+ * The map's line about sharing: [locationOff] first, as with no usable location there is nothing
+ * to share whatever else is wrong; then, for a phone the server takes no location from for want
+ * of a push route, that. A phone in no circle is keeping only its own history, so it is told that.
+ */
+@androidx.annotation.StringRes
+internal fun mapSharingLine(locationOff: Int?, noPushRoute: Boolean, hasCircles: Boolean): Int? = when {
+    locationOff != null -> locationOff
+    !noPushRoute -> null
+    hasCircles -> R.string.map_not_sharing_no_push
+    else -> R.string.map_not_saving_no_push
 }
 
 /**

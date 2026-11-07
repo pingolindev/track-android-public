@@ -2212,6 +2212,7 @@ class LocationRepositoryTest {
 
         assertFalse("no push route: not registered", locationRepository.ensureDeviceRegistered())
         assertFalse(registered)
+        verify(sessionManager).setPushRouteRefused(true)
         now += 60_000L
         assertFalse("and not asked again on every send", locationRepository.ensureDeviceRegistered())
         verify(tracksApi, times(1)).createDevice(any())
@@ -2222,6 +2223,7 @@ class LocationRepositoryTest {
         assertTrue(locationRepository.ensureDeviceRegistered())
         assertTrue(registered)
         verify(tracksApi, times(2)).createDevice(any())
+        verify(sessionManager).setPushRouteRefused(false)
     }
 
     @Test

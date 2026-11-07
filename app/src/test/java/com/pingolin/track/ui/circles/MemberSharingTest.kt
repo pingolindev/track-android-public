@@ -219,7 +219,7 @@ class MemberSharingTest {
         assertEquals(MemberSharing.ownSentence(context, SharingStatus.Off, now), MemberSharing.ownSentence(context, SharingStatus.Off, true, now))
         // The privacy dialog says it with the circle's history switch.
         val screen = java.io.File("src/main/java/com/pingolin/track/ui/circles/CirclesFragment.kt").readText()
-        assertTrue(screen.contains("val sentence = MemberSharing.ownSentence(requireContext(), status, settings.shareHistory, now)"))
+        assertTrue(screen.contains("MemberSharing.ownSentence(requireContext(), status, settings.shareHistory, now)"))
     }
 
     @Test

@@ -68,6 +68,9 @@ class CirclesFragment : Fragment() {
     @javax.inject.Inject
     lateinit var sessionManager: com.pingolin.track.util.SessionManager
 
+    @javax.inject.Inject
+    lateinit var pushRouteSharing: com.pingolin.track.util.PushRouteSharing
+
     /** An answered invitation's banner leaves the shade. */
     @javax.inject.Inject
     lateinit var alertHandler: com.pingolin.track.util.AlertHandler
@@ -864,7 +867,12 @@ class CirclesFragment : Fragment() {
             }
             val now = System.currentTimeMillis()
             val status = MemberSharing.own(settings.shareRealtime, settings.sharingMode, MemberSharing.epochMs(settings.pausedUntil), now)
-            val sentence = MemberSharing.ownSentence(requireContext(), status, settings.shareHistory, now)
+            // Nothing leaves the phone for want of a notification app: no switch here changes that.
+            val sentence = if (pushRouteSharing.isBlocked()) {
+                getString(R.string.own_sharing_no_push)
+            } else {
+                MemberSharing.ownSentence(requireContext(), status, settings.shareHistory, now)
+            }
             val consentShown = consentGranted
             if (consentShown) {
                 dialogBinding.tvConsentStatus.text = sentence ?: getString(R.string.consent_status_sharing)

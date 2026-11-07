@@ -118,13 +118,13 @@ class LocationOffTest {
         assertEquals("64dp", line.getAttributeNS(android, "layout_marginStart"))
 
         val map = source("ui/map/MapFragment.kt")
-        assertTrue(map.contains("hasCircles = mainViewModel.circles.value.isNotEmpty(),"))
+        assertTrue(map.contains("val hasCircles = mainViewModel.circles.value.isNotEmpty()"))
         assertTrue(map.contains("mainViewModel.circles.collect { bindLocationOff() }"))
         // Read again whenever the map comes back: Android's settings and its question change it.
         val resume = map.substring(map.indexOf("override fun onResume()"))
         assertTrue(resume.substring(0, resume.indexOf("\n    }\n")).contains("bindLocationOff()"))
-        assertTrue(map.contains("val line = locationOffLine(\n            com.pingolin.track.util.LocationAccess.of(requireContext()),"))
-        assertTrue(map.contains("b.tvLocationOff.setOnClickListener { askForLocation() }"))
+        assertTrue(map.contains("val offLine = locationOffLine(\n            com.pingolin.track.util.LocationAccess.of(requireContext()),"))
+        assertTrue(map.contains("if (offLine != null) askForLocation()"))
         // Out of the way of the controls' labels while the action menu is open, back after.
         val expand = map.substring(map.indexOf("private fun expandFabs()")).let { it.substring(0, it.indexOf("\n    }\n")) }
         assertTrue(expand.contains("binding.tvLocationOff.visibility = View.GONE"))

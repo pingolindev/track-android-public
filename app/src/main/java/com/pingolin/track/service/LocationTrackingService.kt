@@ -129,6 +129,7 @@ class LocationTrackingService : Service() {
     @Inject lateinit var placeAlertDao: PlaceAlertDao
     @Inject lateinit var privacySettingDao: PrivacySettingDao
     @Inject lateinit var sessionManager: SessionManager
+    @Inject lateinit var pushRouteSharing: com.pingolin.track.util.PushRouteSharing
     @Inject lateinit var monitoringManager: MonitoringManager
     @Inject lateinit var alertRulesReload: com.pingolin.track.domain.repository.AlertRulesReload
     @Inject lateinit var alertHandler: AlertHandler
@@ -3063,10 +3064,13 @@ class LocationTrackingService : Service() {
     }
 
     /** The notification's words while no circle receives the location; null while one does. */
-    private fun notSharingText(): String? = when (sharingNow) {
-        SharingNow.SHARING -> null
-        SharingNow.PAUSED -> getString(R.string.notification_sharing_paused)
-        SharingNow.OFF -> getString(R.string.member_sharing_off)
+    private fun notSharingText(): String? {
+        if (pushRouteSharing.isBlocked()) return getString(R.string.notification_not_sharing_no_push)
+        return when (sharingNow) {
+            SharingNow.SHARING -> null
+            SharingNow.PAUSED -> getString(R.string.notification_sharing_paused)
+            SharingNow.OFF -> getString(R.string.member_sharing_off)
+        }
     }
 
     private fun buildNotificationText(nowMs: Long): String {

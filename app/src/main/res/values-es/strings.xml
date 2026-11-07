@@ -837,4 +837,14 @@
     <string name="search_section_cached">Zonas guardadas</string>
     <string name="search_section_other">Otras ubicaciones</string>
     <string name="search_population">%1$s habitantes</string>
+
+    <string name="map_not_sharing_no_push">No estás compartiendo tu ubicación: Track necesita antes una app de notificaciones. Toca para configurarla.</string>
+    <string name="map_not_saving_no_push">Tu ubicación no se está guardando: Track necesita antes una app de notificaciones. Toca para configurarla.</string>
+    <string name="own_sharing_no_push">Aún no estás compartiendo: Track necesita antes una app de notificaciones.</string>
+    <string name="notification_not_sharing_no_push">Sin compartir: Track necesita antes una app de notificaciones</string>
+    <string name="push_needed_title">Track aún no puede compartir tu ubicación</string>
+    <string name="push_needed_body">Esta versión envía las notificaciones mediante una app de entrega que tú eliges, en lugar de la de Google, y Track no puede compartir tu ubicación hasta que haya una conectada. Las notificaciones de círculos y las alertas de lugares también la necesitan.\n\nntfy es la opción habitual y es gratuita. Instálala y ábrela, elígela en Ajustes de push y luego abre ntfy otra vez para que pueda recibir las alertas.</string>
+    <string name="push_needed_install">Instalar ntfy</string>
+    <string name="push_needed_settings">Ajustes de push</string>
+    <string name="push_needed_later">Ahora no</string>
 </resources>

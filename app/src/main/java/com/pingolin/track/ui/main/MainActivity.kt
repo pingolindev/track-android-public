@@ -1023,23 +1023,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Tell the user when nothing can deliver their alerts.
+     * Tell the user when nothing can deliver their alerts, or take their location.
      *
      * A Google-free build has no Firebase, so notifications arrive over
      * UnifiedPush through a distributor app the user installs themselves — ntfy
      * and NextPush are the common ones. That is a deliberate design: the
      * distributor is the user's choice and we never see their notifications.
-     * But with no distributor installed there is NO inbound path at all, and
-     * that includes SOS and place alerts. Saying so only on a settings screen
-     * most people never open is not good enough for a safety feature.
+     * But with no distributor there is NO inbound path at all, SOS and place
+     * alerts included, and sharing stops too: the server keeps nothing of a
+     * device but its push route and refuses every location from one without it.
+     * Saying so only on a settings screen most people never open is not good
+     * enough for a safety feature.
      *
      * Deliberately keyed on the resolved provider rather than on the build
      * flavour: a normal build on a device without Play services lands in
      * exactly the same state, and deserves the same warning.
-     *
-     * Location itself keeps working regardless — LocationHeartbeatWorker and
-     * WatchdogAlarmReceiver do not depend on push — so the message is about
-     * what you will not RECEIVE, not about tracking being broken.
      */
     private fun checkPushDeliveryAvailable() {
         val provider = pushNotificationManager.getPreferredProvider()
@@ -1050,27 +1048,25 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if (sessionManager.isPushUnavailableShown()) return
+        showPushNeeded()
+    }
 
+    /** Why there is nothing to share with until a delivery app is connected, and the way there. */
+    fun showPushNeeded() {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Alerts can't reach this device")
-            .setMessage(
-                "This build sends notifications through a delivery app of your choice " +
-                "instead of Google's. You don't have one installed, so circle " +
-                "notifications and place alerts won't arrive until you add one.\n\n" +
-                "ntfy is the usual choice and is free. Location sharing keeps working " +
-                "either way — this only affects what you receive."
-            )
-            .setPositiveButton("Install ntfy") { dialog, _ ->
+            .setTitle(R.string.push_needed_title)
+            .setMessage(R.string.push_needed_body)
+            .setPositiveButton(R.string.push_needed_install) { dialog, _ ->
                 sessionManager.setPushUnavailableShown(true)
                 dialog.dismiss()
                 openNtfyListing()
             }
-            .setNeutralButton("Push settings") { dialog, _ ->
+            .setNeutralButton(R.string.push_needed_settings) { dialog, _ ->
                 sessionManager.setPushUnavailableShown(true)
                 dialog.dismiss()
                 navController.navigate(R.id.settingsFragment)
             }
-            .setNegativeButton("Not now") { dialog, _ ->
+            .setNegativeButton(R.string.push_needed_later) { dialog, _ ->
                 sessionManager.setPushUnavailableShown(true)
                 dialog.dismiss()
             }
