@@ -452,6 +452,24 @@ class MainViewModel @Inject constructor(
         _isTracking.value = false
     }
 
+    /**
+     * A tracking setting changed while sharing: the running service re-reads its settings in place
+     * (ACTION_UPDATE_SETTINGS), so sharing never stops for it. Settings used to send [stopTracking]
+     * and then [startTracking]. Both reached the service before it handled the stop, whose
+     * stopSelf() then took the service down just after the start had run, and nothing was shared
+     * until the heartbeat brought it back, ten minutes later on a test phone. Not running, it starts.
+     */
+    fun applyTrackingSettings() {
+        if (!LocationTrackingService.isRunning) {
+            startTracking()
+            return
+        }
+        val intent = Intent(context, LocationTrackingService::class.java).apply {
+            action = LocationTrackingService.ACTION_UPDATE_SETTINGS
+        }
+        context.startService(intent)
+    }
+
     /** Call from onResume: the service can outlive or predate this ViewModel. */
     fun syncTrackingState() {
         _isTracking.value = LocationTrackingService.isRunning
