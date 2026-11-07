@@ -130,9 +130,10 @@ class ServerPlacePushTest {
 
     @Test
     fun `every backend place type posts at once, on the server's channel, in this app's own words when nothing here can name it`() {
-        // Titled by its event type, never the server's row title ("Member arrived at a place", in pushData).
+        // Titled by its event type, never the server's row title ("Member arrived at a place", in pushData),
+        // though a plain place_alert takes its direction from that title.
         val expected = mapOf(
-            "row-1" to ("Place Alert" to "A member · a place · "),
+            "row-1" to ("Arrival" to "A member arrived at a place · "),
             "row-2" to ("Arrival" to "A member arrived at a place · "),
             "row-3" to ("Departure" to "A member left a place · "),
         )
@@ -156,6 +157,81 @@ class ServerPlacePushTest {
         }
         // And each drives the wake for its named copy.
         coVerify(timeout = WAIT_MS, exactly = 3) { locationRepository.refreshLatestLocations("circle-1") }
+    }
+
+    /**
+     * Amber drove past Church, and two notifications said "Place Alert" with no way to tell the arrival
+     * from the departure, though the Alerts list said both. The row's title carries the direction whether
+     * or not this device can read it back off the hash.
+     */
+    @Test
+    fun `a push whose hash gives no direction takes it from its row's title, as the Alerts list does`() {
+        coEvery { evaluator.resolveServerPushCopy("p-1", "u-1", null) } returns
+            PlaceAlertEvaluator.ServerPushCopy("Amber", "Church", transition = null)
+
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + mapOf("alert_id" to "in", "title" to "A member arrived at a place"))
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + mapOf("alert_id" to "out", "title" to "A member left a place"))
+
+        assertEquals(2, awaitShade(2).size)
+        val arrival = shadowOf(notificationManager).getNotification(stableId("in"))
+        assertEquals("Arrival", arrival.title())
+        assertTrue(arrival.text(), arrival.text().startsWith("Amber arrived at Church · "))
+        val departure = shadowOf(notificationManager).getNotification(stableId("out"))
+        assertEquals("Departure", departure.title())
+        assertTrue(departure.text(), departure.text().startsWith("Amber left Church · "))
+        // The pairing with a local copy goes by the same direction the notification shows.
+        coVerify(timeout = WAIT_MS) { evaluator.planServerPush("in", "p-1", "u-1", PlaceAlertRules.Transition.ENTER, any()) }
+        coVerify(timeout = WAIT_MS) { evaluator.planServerPush("out", "p-1", "u-1", PlaceAlertRules.Transition.EXIT, any()) }
+    }
+
+    @Test
+    fun `a row title that says neither way still has nothing guessed from it`() {
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + ("title" to "Place alert"))
+
+        val posted = awaitShade(1).single()
+        assertEquals("Place Alert", posted.title())
+        assertTrue(posted.text(), posted.text().startsWith("A member · a place · "))
+    }
+
+    private fun bundle(): Notification? =
+        shadowOf(notificationManager).allNotifications.firstOrNull { it.flags and Notification.FLAG_GROUP_SUMMARY != 0 }
+
+    private fun Notification.lines(): List<String> =
+        extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)?.map { it.toString() }.orEmpty()
+
+    @Test
+    fun `a bundle says what is in it, not Tap to view`() {
+        coEvery { evaluator.resolveServerPushCopy("p-1", "u-1", null) } returns
+            PlaceAlertEvaluator.ServerPushCopy("Amber", "Church", transition = null)
+
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + mapOf("alert_id" to "in", "title" to "A member arrived at a place"))
+        assertEquals(1, awaitShade(1).size)
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + mapOf("alert_id" to "out", "title" to "A member left a place"))
+        assertEquals(2, awaitShade(2).size)
+        assertTrue(await { bundle()?.lines()?.size == 2 })
+
+        val summary = bundle()!!
+        assertEquals("Place Alerts", summary.title())
+        assertTrue(summary.text(), summary.text().startsWith("Amber "))
+        assertEquals(1, summary.lines().count { it.startsWith("Amber arrived at Church · ") })
+        assertEquals(1, summary.lines().count { it.startsWith("Amber left Church · ") })
+    }
+
+    @Test
+    fun `a bundle names nothing at the generic detail level`() {
+        every { sessionManager.getNotificationDetailLevel() } returns SessionManager.NOTIF_DETAIL_GENERIC
+        coEvery { evaluator.resolveServerPushCopy("p-1", "u-1", null) } returns
+            PlaceAlertEvaluator.ServerPushCopy("Amber", "Church", transition = null)
+
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + mapOf("alert_id" to "in", "title" to "A member arrived at a place"))
+        assertEquals(1, awaitShade(1).size)
+        handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + mapOf("alert_id" to "out", "title" to "A member left a place"))
+        assertEquals(2, awaitShade(2).size)
+        assertTrue(await { bundle() != null })
+
+        val summary = bundle()!!
+        assertEquals(AlertHandler.GENERIC_MESSAGE, summary.text())
+        assertTrue(summary.lines().toString(), summary.lines().none { "Amber" in it || "Church" in it })
     }
 
     @Test
@@ -218,7 +294,7 @@ class ServerPlacePushTest {
 
         handler.handleAlert(AlertHandler.TYPE_PLACE_ALERT, pushData + ("alert_id" to "row-shown"))
 
-        coVerify(timeout = WAIT_MS) { evaluator.planServerPush("row-shown", "p-1", "u-1", null, any()) }
+        coVerify(timeout = WAIT_MS) { evaluator.planServerPush("row-shown", "p-1", "u-1", PlaceAlertRules.Transition.ENTER, any()) }
         // Nothing follows the plan on this path: give a post that wrongly went ahead the time to show itself.
         Thread.sleep(SETTLE_MS)
         assertEquals(null, shadowOf(notificationManager).getNotification(stableId("row-shown")))

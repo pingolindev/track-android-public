@@ -399,7 +399,7 @@ class LocationTrackingService : Service() {
         // default chip.
         private const val LIVENESS_CHECKIN_INTERVAL_BATTERY_SAVER_MS = 3 * LIVENESS_CHECKIN_INTERVAL_MS
 
-        // ---- Battery saver ("Batch uploads" in the UI) ----
+        // ---- Battery saver ----
         //
         // A FLAT BALANCED (wifi/cell) poll at the batch interval the user picked, whatever
         // the motion state, the battery tier or the real-time send interval say — the same

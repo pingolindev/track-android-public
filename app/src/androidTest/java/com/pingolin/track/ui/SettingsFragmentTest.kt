@@ -428,10 +428,10 @@ class SettingsFragmentTest {
         }
     }
 
-    // ===== Battery Saver: Batch Uploads Tests =====
+    // ===== Battery Saver Tests =====
 
     @Test
-    fun batchUploadsSwitch_isDisplayed() {
+    fun batterySaverSwitch_isDisplayed() {
         ActivityScenario.launch(MainActivity::class.java).use {
             navigateToSettings()
 
@@ -443,11 +443,11 @@ class SettingsFragmentTest {
     }
 
     @Test
-    fun batchInterval_initiallyHidden() {
+    fun updateInterval_initiallyHidden() {
         ActivityScenario.launch(MainActivity::class.java).use {
             navigateToSettings()
 
-            // Batch interval options should be hidden initially
+            // Update interval options should be hidden initially
             onView(withId(R.id.layoutBatterySaverInterval))
                 .check(matches(not(isDisplayed())))
         }
@@ -455,11 +455,11 @@ class SettingsFragmentTest {
 
     @Test
     @Ignore("Toggling switchBatterySaver restarts LocationTrackingService → host process crash. See trackingIntervalChips_areSelectable kdoc.")
-    fun batchUploadsSwitch_showsIntervalWhenEnabled() {
+    fun batterySaverSwitch_showsIntervalWhenEnabled() {
         ActivityScenario.launch(MainActivity::class.java).use {
             navigateToSettings()
 
-            // Enable batch uploads
+            // Enable Battery Saver
             onView(withId(R.id.switchBatterySaver))
                 .perform(scrollTo())
                 .perform(click())
@@ -468,7 +468,7 @@ class SettingsFragmentTest {
             onView(withId(R.id.switchBatterySaver))
                 .perform(EspressoTestUtils.waitFor(TestData.SHORT_WAIT_MS))
 
-            // Batch interval layout should now be visible
+            // Update interval layout should now be visible
             onView(withId(R.id.layoutBatterySaverInterval))
                 .perform(scrollTo())
                 .check(matches(isDisplayed()))
@@ -477,11 +477,11 @@ class SettingsFragmentTest {
 
     @Test
     @Ignore("Toggling switchBatterySaver restarts LocationTrackingService → host process crash. See trackingIntervalChips_areSelectable kdoc.")
-    fun batchIntervalChips_displayWhenEnabled() {
+    fun updateIntervalChips_displayWhenEnabled() {
         ActivityScenario.launch(MainActivity::class.java).use {
             navigateToSettings()
 
-            // Enable batch uploads
+            // Enable Battery Saver
             onView(withId(R.id.switchBatterySaver))
                 .perform(scrollTo())
                 .perform(click())
@@ -762,7 +762,7 @@ class SettingsFragmentTest {
 
     @Test
     @Ignore("Toggling switchBatterySaver restarts LocationTrackingService → host process crash. See trackingIntervalChips_areSelectable kdoc.")
-    fun batchUploads_toggleShowsHidesInterval() {
+    fun batterySaver_toggleShowsHidesInterval() {
         ActivityScenario.launch(MainActivity::class.java).use {
             navigateToSettings()
 
@@ -770,7 +770,7 @@ class SettingsFragmentTest {
             onView(withId(R.id.layoutBatterySaverInterval))
                 .check(matches(not(isDisplayed())))
 
-            // Enable batch uploads
+            // Enable Battery Saver
             onView(withId(R.id.switchBatterySaver))
                 .perform(scrollTo())
                 .perform(click())
@@ -783,7 +783,7 @@ class SettingsFragmentTest {
                 .perform(scrollTo())
                 .check(matches(isDisplayed()))
 
-            // Disable batch uploads
+            // Disable Battery Saver
             onView(withId(R.id.switchBatterySaver))
                 .perform(scrollTo())
                 .perform(click())

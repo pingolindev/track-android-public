@@ -217,6 +217,9 @@ class AlertHandler @Inject constructor(
         private const val SUMMARY_ID_MESSAGES = 10003
         private const val SUMMARY_ID_PLACES_LOCAL = 10004
 
+        /** InboxStyle's own limit. */
+        private const val GROUP_SUMMARY_MAX_LINES = 5
+
         /** Body shown at the "generic" detail level — no names, places,
          *  or message content. Matches the server's privacy-generic copy. */
         internal const val GENERIC_MESSAGE = "Tap to view"
@@ -723,9 +726,10 @@ class AlertHandler @Inject constructor(
      * The stored row the server writes is `notification_type = 'place_alert'`
      * with the event type kept as a HASH, so enter/exit isn't in the push. This
      * device can often read it back (PlaceAlertEvaluator.resolveServerPushCopy,
-     * from its own alert's hashes); when it can't, nothing here guesses one: the push
-     * says "Place Alert", and "A member · a place" (detailedPlaceCopy's no-direction
-     * shape).
+     * from its own alert's hashes); when it can't, the row's title says which, as it
+     * does for the Alerts list (NamedNotificationCopy.placeRowIsArrival). A title
+     * that doesn't either has nothing guessed from it: the push says "Place Alert",
+     * and "A member · a place" (detailedPlaceCopy's no-direction shape).
      */
     private fun handleDirectionlessPlaceAlert(data: Map<String, String>, dedupeKey: String?) =
         postServerPlaceAlert(data, dedupeKey, known = null)
@@ -758,8 +762,13 @@ class AlertHandler @Inject constructor(
             val copy = runCatching { evaluator.resolveServerPushCopy(placeId, userId, data["event_type_hash"]) }
                 .onFailure { Log.w(TAG, "place push: couldn't name it here", it) }
                 .getOrNull()
-            // The push's own type when it has one; else what this device read back from its hash.
-            val transition = known ?: copy?.transition
+            // The push's own type when it has one; else what this device read back from its hash;
+            // else what its row's title says.
+            val transition = known ?: copy?.transition ?: when (NamedNotificationCopy.placeRowIsArrival(data["title"])) {
+                true -> PlaceAlertRules.Transition.ENTER
+                false -> PlaceAlertRules.Transition.EXIT
+                null -> null
+            }
             val outcome = evaluator.planServerPush(
                 notificationId = dedupeKey,
                 placeId = placeId,
@@ -845,10 +854,10 @@ class AlertHandler @Inject constructor(
      * wording PlaceAlertRules.describe uses for a live local crossing, so the two
      * paths do not read as two different features.
      *
-     * A direction the hash would not give up drops the verb rather than inventing
-     * one, and the title says "Place Alert". The server's own title ("Member arrived at
-     * a place") is not shown: every place push is titled by its event type, as its
-     * local copy is.
+     * A direction neither the hash nor the row's title gives up drops the verb rather
+     * than inventing one, and the title says "Place Alert". The server's own title
+     * ("Member arrived at a place") is read but not shown: every place push is titled
+     * by its event type, as its local copy is.
      */
     internal fun detailedPlaceCopy(copy: PlaceAlertEvaluator.ServerPushCopy): String =
         when (copy.transition) {
@@ -1357,7 +1366,7 @@ class AlertHandler @Inject constructor(
         notificationManager.notify(notificationId, notification)
 
         if (group != null) {
-            showGroupSummary(notificationManager, channelId, group, priority)
+            showGroupSummary(notificationManager, channelId, group, priority, displayMessage)
         }
         pruneEmptyGroupSummaries(notificationManager)
     }
@@ -1462,13 +1471,28 @@ class AlertHandler @Inject constructor(
     }
 
     /**
-     * The bundle header Android shows once several notifications share a group.
+     * What a bundle holds, newest first, in the words each of its notifications was posted with: so
+     * at this device's detail level, whatever it is. Nothing when the shade can't be read.
+     */
+    private fun groupLines(notificationManager: NotificationManager, group: NotificationGroup): List<String> =
+        runCatching { notificationManager.activeNotifications.toList() }.getOrDefault(emptyList())
+            .filter {
+                it.notification.group == group.key && it.notification.flags and Notification.FLAG_GROUP_SUMMARY == 0
+            }
+            .sortedByDescending { it.postTime }
+            .mapNotNull { it.notification.extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() }
+            .distinct()
+
+    /**
+     * The bundle header Android shows once several notifications share a group, saying what is in
+     * it rather than only that there is something. [latest] is the one just posted.
      */
     private fun showGroupSummary(
         notificationManager: NotificationManager,
         channelId: String,
         group: NotificationGroup,
-        priority: Int
+        priority: Int,
+        latest: String,
     ) {
         val summaryIntent = Intent(context, MainActivity::class.java)
         val summaryPendingIntent = PendingIntent.getActivity(
@@ -1476,10 +1500,16 @@ class AlertHandler @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val lines = groupLines(notificationManager, group)
         val summaryNotification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(group.summaryTitle)
-            .setContentText("Tap to view")
+            .setContentText(lines.firstOrNull() ?: latest)
+            .setStyle(
+                NotificationCompat.InboxStyle().also { style ->
+                    lines.take(GROUP_SUMMARY_MAX_LINES).forEach(style::addLine)
+                },
+            )
             .setPriority(priority)
             .setAutoCancel(true)
             .setContentIntent(summaryPendingIntent)

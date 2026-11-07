@@ -1516,10 +1516,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupBatterySaver() {
-        // "Battery saver" in storage, "Batch uploads" in the UI.
-        val isBatchEnabled = sessionManager.isBatterySaverEnabled()
-        binding.switchBatterySaver.isChecked = isBatchEnabled
-        binding.layoutBatterySaverInterval.visibility = if (isBatchEnabled) View.VISIBLE else View.GONE
+        val isEnabled = sessionManager.isBatterySaverEnabled()
+        binding.switchBatterySaver.isChecked = isEnabled
+        binding.layoutBatterySaverInterval.visibility = if (isEnabled) View.VISIBLE else View.GONE
 
         when (sessionManager.getBatterySaverInterval()) {
             5 -> binding.chipInterval5.isChecked = true
@@ -1534,9 +1533,9 @@ class SettingsFragment : Fragment() {
             binding.layoutBatterySaverInterval.visibility = if (isChecked) View.VISIBLE else View.GONE
 
             if (isChecked) {
-                Toast.makeText(requireContext(), "Batch uploads enabled - locations will be queued", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Battery Saver on", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Real-time location uploads enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Battery Saver off", Toast.LENGTH_SHORT).show()
             }
 
             // Restart tracking if active to apply new settings

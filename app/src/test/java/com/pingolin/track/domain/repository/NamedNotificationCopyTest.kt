@@ -241,4 +241,14 @@ class NamedNotificationCopyTest {
         assertEquals(Detail.FULL, NamedNotificationCopy.detailOf("full"))
         assertEquals(Detail.FULL, NamedNotificationCopy.detailOf("anything else"))
     }
+
+    @Test
+    fun `a place row's title says which way, in each wording the server has used`() {
+        assertEquals(true, NamedNotificationCopy.placeRowIsArrival("A member arrived at a place"))
+        assertEquals(false, NamedNotificationCopy.placeRowIsArrival("A member left a place"))
+        assertEquals(true, NamedNotificationCopy.placeRowIsArrival("Member arrived at a place"))
+        assertEquals(false, NamedNotificationCopy.placeRowIsArrival("Member left a place"))
+        assertEquals(null, NamedNotificationCopy.placeRowIsArrival("Place alert"))
+        assertEquals(null, NamedNotificationCopy.placeRowIsArrival(null))
+    }
 }

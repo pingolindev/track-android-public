@@ -82,6 +82,19 @@ object NamedNotificationCopy {
     fun closedCopy(who: String): String = "$who closed the alert"
 
     /**
+     * Whether a place_alert row's title says an arrival (true) or a departure (false), null when it
+     * says neither. The server knows which of an alert's two hashes fired and writes it there, so
+     * this holds even where this device can't read the direction back off the hash. Never shown as
+     * it stands: the title has nobody in it.
+     */
+    fun placeRowIsArrival(title: String?): Boolean? = when {
+        title == null -> null
+        title.contains("arrived") -> true
+        title.contains("left") -> false
+        else -> null
+    }
+
+    /**
      * The row's (title, body) after naming: the server's own words when the setting is
      * generic or nothing was resolved, and for any type or wording this does not know.
      */
@@ -102,10 +115,10 @@ object NamedNotificationCopy {
         if (names.person == null && !names.personIsMe && place == null) return title to body
         val who = names.person ?: SOMEONE
         return when (type) {
-            "place_alert" -> when {
-                title.contains("arrived") -> "$who arrived at ${place ?: A_PLACE}" to body
-                title.contains("left") -> "$who left ${place ?: A_PLACE}" to body
-                else -> title to body
+            "place_alert" -> when (placeRowIsArrival(title)) {
+                true -> "$who arrived at ${place ?: A_PLACE}" to body
+                false -> "$who left ${place ?: A_PLACE}" to body
+                null -> title to body
             }
             "check_in" -> title to checkInBody(body, who, place)
             "sos_alert" -> if (names.person == null) title to body

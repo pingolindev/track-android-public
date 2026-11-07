@@ -693,6 +693,43 @@ class MapViewModelTest {
     }
 
     /**
+     * The map's view always opens live, its history panel shut and its Live chip on,
+     * while this model outlives the view on a tab switch. A range left on would skip
+     * every paint of the live markers on the new, empty map, with nothing on screen
+     * saying why, until a restart made a new model.
+     */
+    @Test
+    fun `a new map view starts live whatever range the last one left on`() = runTest {
+        stubHistoryFetch(truncated = false)
+        viewModel.setSelectedCircle("c-1")
+        runCurrent()
+        viewModel.selectMember("m-1")
+        viewModel.setTimeRangeMode(TimeRangeMode.HOURS_24)
+        advanceUntilIdle()
+        assertTrue(viewModel.isShowingHistory())
+
+        viewModel.onMapViewCreated()
+        runCurrent()
+
+        assertFalse(viewModel.isShowingHistory())
+        assertEquals(TimeRangeMode.LIVE, viewModel.timeRangeMode.value)
+        assertNull(viewModel.selectedMemberId.value)
+        assertTrue(viewModel.locationHistory.value.isEmpty())
+        viewModel.stopPolling()
+    }
+
+    @Test
+    fun `a new map view leaves a live map as it is`() = runTest {
+        viewModel.selectMember("m-1")
+
+        viewModel.onMapViewCreated()
+        runCurrent()
+
+        assertEquals("nothing to end, so no poll is started from here", false, viewModel.isPolling.value)
+        assertEquals("m-1", viewModel.selectedMemberId.value)
+    }
+
+    /**
      * The map's history footer is the only place on screen that says how much
      * of the chosen range the trail is drawn from, so a range the server cut
      * short has to reach it. There is no "load the rest" to offer — the
