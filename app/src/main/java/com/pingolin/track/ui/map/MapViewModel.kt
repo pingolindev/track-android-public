@@ -1327,6 +1327,17 @@ class MapViewModel @Inject constructor(
     fun isShowingHistory(): Boolean = _timeRangeMode.value != TimeRangeMode.LIVE
 
     /**
+     * A new map view opens live: its history panel shut, its Live chip on. This model outlives the
+     * view on a tab switch, so a range left on would skip every paint of the live markers on the new,
+     * empty map, with nothing on screen saying why.
+     */
+    fun onMapViewCreated() {
+        if (!isShowingHistory()) return
+        setTimeRangeMode(TimeRangeMode.LIVE)
+        selectMember(null)
+    }
+
+    /**
      * Where a "Send location now" goes, taken when it is asked for: the circle on screen then
      * ([circleId], named [circleName] as the screen showed it), or with none (Just Me) this account's
      * own history. Never what is on screen once the precise fix comes in, seconds later, when the circle

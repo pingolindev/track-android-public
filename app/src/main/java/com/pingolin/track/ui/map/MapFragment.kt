@@ -477,6 +477,8 @@ class MapFragment : Fragment() {
 
         applyStatusBarInsets(view)
         binding.mapView.onCreate(savedInstanceState)
+        // First: this view opens live, and what follows paints by the model's mode.
+        viewModel.onMapViewCreated()
         setupMap()
         setupUI()
         observeViewModel()
