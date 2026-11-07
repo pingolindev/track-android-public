@@ -813,4 +813,14 @@
     <string name="search_section_cached">保存済みのエリア</string>
     <string name="search_section_other">その他の場所</string>
     <string name="search_population">人口%1$s人</string>
+
+    <string name="map_not_sharing_no_push">位置情報を共有していません。Track には先に通知アプリが必要です。タップして設定してください。</string>
+    <string name="map_not_saving_no_push">位置情報は保存されていません。Track には先に通知アプリが必要です。タップして設定してください。</string>
+    <string name="own_sharing_no_push">まだ共有していません。Track には先に通知アプリが必要です。</string>
+    <string name="notification_not_sharing_no_push">共有していません。Track には先に通知アプリが必要です</string>
+    <string name="push_needed_title">Track はまだ位置情報を共有できません</string>
+    <string name="push_needed_body">このビルドは Google の代わりに、お好みの配信アプリを通じて通知を届けます。配信アプリを接続するまで、Track は位置情報を共有できません。サークルの通知と場所のアラートにも必要です。\n\nntfy が一般的な選択肢で、無料です。インストールして開き、プッシュ設定で選択してから、アラートを受け取れるようにもう一度 ntfy を開いてください。</string>
+    <string name="push_needed_install">ntfy をインストール</string>
+    <string name="push_needed_settings">プッシュ設定</string>
+    <string name="push_needed_later">後で</string>
 </resources>

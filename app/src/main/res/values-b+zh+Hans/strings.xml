@@ -813,4 +813,14 @@
     <string name="search_section_cached">已缓存的区域</string>
     <string name="search_section_other">其他位置</string>
     <string name="search_population">人口 %1$s</string>
+
+    <string name="map_not_sharing_no_push">未在共享你的位置：Track 需要先有一个通知应用。点按即可设置。</string>
+    <string name="map_not_saving_no_push">未在保存你的位置：Track 需要先有一个通知应用。点按即可设置。</string>
+    <string name="own_sharing_no_push">你尚未共享：Track 需要先有一个通知应用。</string>
+    <string name="notification_not_sharing_no_push">未共享：Track 需要先有一个通知应用</string>
+    <string name="push_needed_title">Track 暂时无法共享你的位置</string>
+    <string name="push_needed_body">此版本通过你选择的推送应用（而不是 Google）发送通知，在连接推送应用之前，Track 无法共享你的位置。圈子通知和地点提醒也需要它。\n\nntfy 是常用选择，而且免费。安装并打开它，在推送设置中选择它，然后再打开一次 ntfy，以便接收提醒。</string>
+    <string name="push_needed_install">安装 ntfy</string>
+    <string name="push_needed_settings">推送设置</string>
+    <string name="push_needed_later">以后再说</string>
 </resources>

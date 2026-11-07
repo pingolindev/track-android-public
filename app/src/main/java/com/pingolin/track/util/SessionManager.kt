@@ -266,6 +266,7 @@ open class SessionManager @Inject constructor(
         // Motion detection and battery optimization
         private const val KEY_LAST_MOTION_STATE = "last_motion_state"
         private const val KEY_PUSH_UNAVAILABLE_SHOWN = "push_unavailable_shown"
+        private const val KEY_PUSH_ROUTE_REFUSED = "push_route_refused"
         private const val KEY_BATTERY_OPT_SHOWN = "battery_opt_shown"
 
         // App version tracking (for detecting updates)
@@ -1154,6 +1155,7 @@ open class SessionManager @Inject constructor(
             .remove(KEY_PUSH_TYPE)
             .remove(KEY_PUSH_ENDPOINT)
             .remove(KEY_PUSH_TOKEN_SYNCED)
+            .remove(KEY_PUSH_ROUTE_REFUSED)
             .remove(KEY_TRACKING_ENABLED)  // Don't auto-start tracking for a different user
             // SECURITY: app-lock + premium/circle belong to the PRIOR user and must
             // not carry into the next account. Reset app lock fully (method + hash +
@@ -1946,6 +1948,19 @@ open class SessionManager @Inject constructor(
      * distributor months later, and is once again unreachable gets told again.
      */
     fun isPushUnavailableShown(): Boolean = prefs.getBoolean(KEY_PUSH_UNAVAILABLE_SHOWN, false)
+
+    /**
+     * Whether the server last took this device without a push route. It keeps nothing of a
+     * device but that route and refuses every location from one without it, so until a
+     * route arrives nothing this phone sends gets anywhere: see [PushRouteSharing].
+     */
+    fun isPushRouteRefused(): Boolean = prefs.getBoolean(KEY_PUSH_ROUTE_REFUSED, false)
+
+    fun setPushRouteRefused(refused: Boolean) {
+        if (refused == isPushRouteRefused()) return
+        prefs.edit().putBoolean(KEY_PUSH_ROUTE_REFUSED, refused).apply()
+        _pushSettingsChanged.tryEmit(Unit)
+    }
 
     fun setPushUnavailableShown(shown: Boolean) {
         prefs.edit().putBoolean(KEY_PUSH_UNAVAILABLE_SHOWN, shown).apply()

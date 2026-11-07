@@ -2998,6 +2998,7 @@ class LocationRepository @Inject constructor(
                         ?: (pushToken != null || pushEndpoint != null)
                     sessionManager.setDeviceRegistered(registered)
                     sessionManager.setPushTokenSynced(registered)
+                    sessionManager.setPushRouteRefused(!registered)
                     if (!registered) {
                         noRouteAttempt = (pushToken ?: pushEndpoint) to elapsedNow()
                         Log.w(TAG, "Device taken without a push route; it registers once one arrives")

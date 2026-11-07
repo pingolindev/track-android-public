@@ -825,4 +825,14 @@
     <string name="search_section_cached">Gespeicherte Gebiete</string>
     <string name="search_section_other">Andere Orte</string>
     <string name="search_population">%1$s Einwohner</string>
+
+    <string name="map_not_sharing_no_push">Standort wird nicht geteilt: Track braucht zuerst eine Benachrichtigungs-App. Zum Einrichten tippen.</string>
+    <string name="map_not_saving_no_push">Dein Standort wird nicht gespeichert: Track braucht zuerst eine Benachrichtigungs-App. Zum Einrichten tippen.</string>
+    <string name="own_sharing_no_push">Du teilst deinen Standort noch nicht: Track braucht zuerst eine Benachrichtigungs-App.</string>
+    <string name="notification_not_sharing_no_push">Keine Standortfreigabe: Track braucht zuerst eine Benachrichtigungs-App</string>
+    <string name="push_needed_title">Track kann deinen Standort noch nicht teilen</string>
+    <string name="push_needed_body">Diese Version stellt Benachrichtigungen über eine Zustell-App deiner Wahl statt über Google zu, und Track kann deinen Standort erst teilen, wenn eine verbunden ist. Auch Kreis-Benachrichtigungen und Ortsalarme brauchen sie.\n\nntfy ist die übliche Wahl und kostenlos. Installiere und öffne die App, wähle sie in den Push-Einstellungen aus und öffne ntfy dann noch einmal, damit sie auf Alarme warten kann.</string>
+    <string name="push_needed_install">ntfy installieren</string>
+    <string name="push_needed_settings">Push-Einstellungen</string>
+    <string name="push_needed_later">Nicht jetzt</string>
 </resources>

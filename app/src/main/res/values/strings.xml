@@ -1260,4 +1260,15 @@
     <string name="search_section_cached">Cached areas</string>
     <string name="search_section_other">Other locations</string>
     <string name="search_population">%1$s people</string>
+
+    <!-- Nothing leaves the phone without a notification app: the server takes no location from a device with no push route. -->
+    <string name="map_not_sharing_no_push">Not sharing your location: Track needs a notification app first. Tap to set one up.</string>
+    <string name="map_not_saving_no_push">Your location isn\'t being saved: Track needs a notification app first. Tap to set one up.</string>
+    <string name="own_sharing_no_push">You\'re not sharing yet: Track needs a notification app first.</string>
+    <string name="notification_not_sharing_no_push">Not sharing: Track needs a notification app first</string>
+    <string name="push_needed_title">Track can\'t share your location yet</string>
+    <string name="push_needed_body">This build sends notifications through a delivery app of your choice instead of Google\'s, and Track can\'t share your location until one is connected. Circle notifications and place alerts need it too.\n\nntfy is the usual choice and is free. Install and open it, choose it in Push settings, then open ntfy once more so it can listen for alerts.</string>
+    <string name="push_needed_install">Install ntfy</string>
+    <string name="push_needed_settings">Push settings</string>
+    <string name="push_needed_later">Not now</string>
 </resources>

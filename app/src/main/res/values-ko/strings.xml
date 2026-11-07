@@ -813,4 +813,14 @@
     <string name="search_section_cached">저장된 지역</string>
     <string name="search_section_other">다른 위치</string>
     <string name="search_population">인구 %1$s명</string>
+
+    <string name="map_not_sharing_no_push">위치를 공유하고 있지 않습니다. Track을 쓰려면 먼저 알림 앱이 필요합니다. 탭하여 설정하세요.</string>
+    <string name="map_not_saving_no_push">위치가 저장되고 있지 않습니다. Track을 쓰려면 먼저 알림 앱이 필요합니다. 탭하여 설정하세요.</string>
+    <string name="own_sharing_no_push">아직 공유하고 있지 않습니다. Track을 쓰려면 먼저 알림 앱이 필요합니다.</string>
+    <string name="notification_not_sharing_no_push">공유 안 함: Track을 쓰려면 먼저 알림 앱이 필요합니다</string>
+    <string name="push_needed_title">Track이 아직 위치를 공유할 수 없습니다</string>
+    <string name="push_needed_body">이 빌드는 Google 대신 직접 선택한 전달 앱을 통해 알림을 보냅니다. 전달 앱을 연결할 때까지 Track은 위치를 공유할 수 없습니다. 서클 알림과 장소 알림에도 필요합니다.\n\nntfy가 일반적인 선택이며 무료입니다. 설치하고 연 다음 푸시 설정에서 선택하고, 알림을 받을 수 있도록 ntfy를 한 번 더 여세요.</string>
+    <string name="push_needed_install">ntfy 설치</string>
+    <string name="push_needed_settings">푸시 설정</string>
+    <string name="push_needed_later">나중에</string>
 </resources>

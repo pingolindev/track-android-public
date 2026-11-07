@@ -787,3 +787,12 @@ city_scope_no_match
 search_section_cached
 search_section_other
 search_population
+map_not_sharing_no_push
+map_not_saving_no_push
+own_sharing_no_push
+notification_not_sharing_no_push
+push_needed_title
+push_needed_body
+push_needed_install
+push_needed_settings
+push_needed_later
