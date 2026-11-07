@@ -1410,10 +1410,9 @@ class SettingsFragment : Fragment() {
             sessionManager.setTimeBasedTrackingEnabled(isChecked)
             binding.layoutTrackingInterval.visibility = if (isChecked) View.VISIBLE else View.GONE
 
-            // Restart tracking if active to apply new settings
+            // The running service takes it in place: a stop and start here stopped sharing
             if (mainViewModel.isTracking.value) {
-                mainViewModel.stopTracking()
-                mainViewModel.startTracking()
+                mainViewModel.applyTrackingSettings()
             }
         }
 
@@ -1430,8 +1429,7 @@ class SettingsFragment : Fragment() {
             sessionManager.setTrackingInterval(interval)
 
             if (mainViewModel.isTracking.value) {
-                mainViewModel.stopTracking()
-                mainViewModel.startTracking()
+                mainViewModel.applyTrackingSettings()
             }
         }
     }
@@ -1453,10 +1451,9 @@ class SettingsFragment : Fragment() {
             sessionManager.setDistanceSendingEnabled(isChecked)
             binding.layoutAlsoSendDistanceThreshold.visibility = if (isChecked) View.VISIBLE else View.GONE
 
-            // Restart tracking to apply
+            // The running service takes it in place: a stop and start here stopped sharing
             if (mainViewModel.isTracking.value) {
-                mainViewModel.stopTracking()
-                mainViewModel.startTracking()
+                mainViewModel.applyTrackingSettings()
             }
         }
 
@@ -1471,8 +1468,7 @@ class SettingsFragment : Fragment() {
             sessionManager.setDistanceSendingThreshold(threshold)
 
             if (mainViewModel.isTracking.value) {
-                mainViewModel.stopTracking()
-                mainViewModel.startTracking()
+                mainViewModel.applyTrackingSettings()
             }
         }
     }
@@ -1538,10 +1534,9 @@ class SettingsFragment : Fragment() {
                 Toast.makeText(requireContext(), "Battery Saver off", Toast.LENGTH_SHORT).show()
             }
 
-            // Restart tracking if active to apply new settings
+            // The running service takes it in place: a stop and start here stopped sharing
             if (mainViewModel.isTracking.value) {
-                mainViewModel.stopTracking()
-                mainViewModel.startTracking()
+                mainViewModel.applyTrackingSettings()
             }
         }
 
@@ -1556,8 +1551,7 @@ class SettingsFragment : Fragment() {
             sessionManager.setBatterySaverInterval(interval)
 
             if (sessionManager.isBatterySaverEnabled() && mainViewModel.isTracking.value) {
-                mainViewModel.stopTracking()
-                mainViewModel.startTracking()
+                mainViewModel.applyTrackingSettings()
             }
         }
 
