@@ -222,9 +222,10 @@ class TokenRefresher @Inject constructor(
             return Outcome.Refreshed
         }
         recordFailure()
-        // Only a 401 is a definitive rejection. Everything else — 5xx, 429, a
-        // proxy hiccup, a timeout — is transient and must NOT cost a session
-        // the server still considers valid.
+        // Only auth's JSON 401 is a definitive rejection: AuthRepository.refreshToken
+        // raises SessionExpiredException for nothing else. Everything else — a 401
+        // that isn't JSON, 5xx, 429, a proxy hiccup, a timeout — is transient and
+        // must NOT cost a session the server still considers valid.
         return if (result.exceptionOrNull() is SessionExpiredException) Outcome.SessionRejected
         else Outcome.Transient
     }

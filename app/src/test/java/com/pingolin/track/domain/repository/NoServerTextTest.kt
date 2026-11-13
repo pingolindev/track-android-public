@@ -464,6 +464,8 @@ class NoServerTextTest {
                 // The code step's refusal: its code decides which of this
                 // app's lines.
                 "val code = com.pingolin.track.data.remote.dto.ApiErrors.parse(runCatching { response.errorBody()?.string() }.getOrNull())?.errorCode",
+                // The token refresh's rejection decision: the media type, never its text.
+                "val contentType = response.errorBody()?.contentType()?.toString()",
                 // The token refresh's log.
                 "val serverMsg = body?.error",
                 "?: response.errorBody()?.string()",

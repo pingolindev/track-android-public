@@ -986,6 +986,9 @@ class AuthRepository @Inject constructor(
                 Log.d(TAG, "refreshToken: success")
                 Result.success(Unit)
             } else {
+                // The rejection decision reads the body's media type, never its
+                // text; before the message below, whose read consumes the body.
+                val contentType = response.errorBody()?.contentType()?.toString()
                 // Capture *why* — server-side messages explain which check
                 // tripped (session not found / revoked / expired / signature
                 // failure). Without this the client side just sees "401" and
@@ -998,12 +1001,16 @@ class AuthRepository @Inject constructor(
                     TAG,
                     "refreshToken: failed code=${response.code()} server=\"$serverMsg\""
                 )
-                // Only a 401 is a definitive auth rejection (session looked up
-                // by refresh-token hash and not found / revoked / expired). Any
-                // other status (5xx, 429, proxy 502, …) is transient and must
-                // NOT cause the caller to wipe a still-valid session.
+                // Only a 401 with auth's JSON error is a definitive auth rejection
+                // (session looked up by refresh-token hash and not found /
+                // revoked / expired: every refusal of auth's refresh route is a
+                // JSON 401). A 401 that isn't JSON (an HTML 401 from Cloudflare or
+                // a proxy, or one with no content type) and any other status
+                // (5xx, 429, 403, proxy 502, …) is transient and must NOT cause
+                // the caller to wipe a still-valid session. As Note's
+                // TokenAuthenticator.isRefusal.
                 // The server's words stay in the log above, out of the failure.
-                if (response.code() == 401) {
+                if (response.code() == 401 && contentType?.contains("application/json", ignoreCase = true) == true) {
                     Result.failure(com.pingolin.track.util.SessionExpiredException("Token refresh rejected: HTTP 401"))
                 } else {
                     Result.failure(Exception("Token refresh failed transiently: HTTP ${response.code()}"))
