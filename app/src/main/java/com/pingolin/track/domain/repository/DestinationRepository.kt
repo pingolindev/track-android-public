@@ -658,7 +658,7 @@ class DestinationRepository @Inject constructor(
                 // synthetic local mutation here would race the source
                 // of truth.
                 refreshDestinations()
-                Result.failure(RefusedException("This destination is no longer active — refresh the list", 404, null))
+                Result.failure(RefusedException("This destination is no longer active.", 404, null))
             } else {
                 val errorBody = response.errorBody()?.string()?.take(500) ?: ""
                 val apiError = response.body()?.error

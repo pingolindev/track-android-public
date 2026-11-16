@@ -120,20 +120,18 @@ class RestoreRepository @Inject constructor(
             file.arrayOrEmpty("inactivity_alerts").size()
         if (rules > 0) {
             summary.notes.add(
-                "$rules condition/inactivity rule(s) were in the backup and were not restored here — " +
-                    "restore them from the web."
+                "$rules alert rule(s) in the backup were not restored here. Restore them on the web."
             )
         }
         val history = file.arrayOrEmpty("locations").size()
         if (history > 0) {
             summary.notes.add(
-                "$history location history point(s) were in the backup and were not restored — " +
-                    "putting history back is available on the web."
+                "$history location(s) in the backup were not restored here. You can restore history on the web."
             )
         }
         if (file.arrayOrEmpty("check_ins").size() > 0) {
             summary.notes.add(
-                "Check-ins are a record of something that happened, not a setting, so they are not restored."
+                "Check-ins are not restored."
             )
         }
         if (file.arrayOrEmpty("circles").size() > 0) {
@@ -257,7 +255,7 @@ class RestoreRepository @Inject constructor(
         }
         if (summary.placesSkipped > 0) {
             summary.notes.add(
-                "${summary.placesSkipped} place(s) couldn't be restored — no readable name or location in the file."
+                "${summary.placesSkipped} place(s) couldn't be restored: the file had no readable name or location for them."
             )
         }
         val moved = ids.count { (from, to) -> from != to }
@@ -345,7 +343,7 @@ class RestoreRepository @Inject constructor(
 
         if (summary.privacySkipped > 0) {
             summary.notes.add(
-                "${summary.privacySkipped} circle privacy setting(s) couldn't be applied — usually a circle you're no longer in."
+                "${summary.privacySkipped} circle privacy setting(s) couldn't be applied, usually because you're no longer in the circle."
             )
         }
     }

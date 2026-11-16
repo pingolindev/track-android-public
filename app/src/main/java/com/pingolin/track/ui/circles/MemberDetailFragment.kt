@@ -141,8 +141,9 @@ class MemberDetailFragment : Fragment() {
                 } else {
                     null
                 }
-                binding.tvSafetyNumber.text = sas
-                    ?: "Safety number unavailable — member hasn't migrated to the new identity scheme yet."
+                binding.tvSafetyNumber.text = sas ?: "Their security code isn't available yet."
+                // The line under the heading speaks of a code: only while one is shown.
+                binding.tvSafetyNumberHint.visibility = if (sas != null) View.VISIBLE else View.GONE
             }
         }
     }
@@ -150,15 +151,10 @@ class MemberDetailFragment : Fragment() {
     private fun renderHeader(displayName: String) {
         val name = displayName.ifBlank { "Unknown" }
         binding.tvDisplayName.text = name
-        binding.tvSubtitle.text = "Compare with $name out of band before continuing"
-        // Both hints name the screen on the OTHER device that shows the same
-        // value, so the number and the hex each have a stated counterpart. The
-        // safety number is pairwise and has no equivalent on the Encryption
-        // screen; the hex does, and matches it character for character.
+        // One line under the code, and nothing about comparing: those who check a code
+        // know what to do with it.
         binding.tvSafetyNumberHint.text =
             getString(R.string.member_detail_safety_number_hint, name)
-        binding.tvTechnicalDetailsHint.text =
-            getString(R.string.member_detail_technical_hint, name)
     }
 
     private fun renderTechnicalDetails(sharingHex: String, signingHex: String) {
@@ -203,7 +199,7 @@ class MemberDetailFragment : Fragment() {
             val formatter = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
             "Verified ${formatter.format(Date(verifiedAt))}"
         } else {
-            "Not yet verified out of band"
+            "Not verified"
         }
     }
 

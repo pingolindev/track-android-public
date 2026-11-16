@@ -446,7 +446,7 @@ class PlaceRepository @Inject constructor(
                 cryptoManager.encryptDataV2(circleId, name, "name")
             } catch (e: IllegalStateException) {
                 android.util.Log.e("PlaceRepository", "Encryption failed for circle place: ${e.message}")
-                return Result.failure(Exception("Couldn't encrypt this place on this phone, so it wasn't saved."))
+                return Result.failure(Exception("Couldn't save this place on this phone."))
             }
 
             // Encrypt location as JSON for cross-platform compatibility with web
@@ -466,7 +466,7 @@ class PlaceRepository @Inject constructor(
                 cryptoManager.encryptDataV2(circleId, locationJson, "location")
             } catch (e: IllegalStateException) {
                 android.util.Log.e("PlaceRepository", "Location encryption failed for circle place: ${e.message}")
-                return Result.failure(Exception("Couldn't encrypt this place on this phone, so it wasn't saved."))
+                return Result.failure(Exception("Couldn't save this place on this phone."))
             }
 
             // Encrypt address if provided
@@ -604,7 +604,7 @@ class PlaceRepository @Inject constructor(
                 cryptoManager.encryptWithPlaceKeyV2(placeKey, name, "name")
             } catch (e: Exception) {
                 android.util.Log.e("PlaceRepository", "createPersonalPlace: name encrypt failed", e)
-                return Result.failure(Exception("Couldn't encrypt this place on this phone, so it wasn't saved."))
+                return Result.failure(Exception("Couldn't save this place on this phone."))
             }
 
             // Encrypt location as JSON for cross-platform compatibility with web
@@ -624,7 +624,7 @@ class PlaceRepository @Inject constructor(
                 cryptoManager.encryptWithPlaceKeyV2(placeKey, locationJson, "location")
             } catch (e: Exception) {
                 android.util.Log.e("PlaceRepository", "createPersonalPlace: location encrypt failed", e)
-                return Result.failure(Exception("Couldn't encrypt this place on this phone, so it wasn't saved."))
+                return Result.failure(Exception("Couldn't save this place on this phone."))
             }
 
             val encryptedAddress = address?.let {
@@ -656,7 +656,7 @@ class PlaceRepository @Inject constructor(
                 cryptoManager.wrapPlaceKey(PERSONAL_CIRCLE_ID, placeKey, senderUserId, "")
             } catch (e: Exception) {
                 android.util.Log.e("PlaceRepository", "createPersonalPlace: owner wrap failed", e)
-                return Result.failure(Exception("Couldn't encrypt this place on this phone, so it wasn't saved."))
+                return Result.failure(Exception("Couldn't save this place on this phone."))
             }
 
             // Use null for personal places on the server (not nil UUID)

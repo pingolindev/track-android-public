@@ -777,10 +777,8 @@ class MainActivity : AppCompatActivity() {
             androidx.appcompat.app.AlertDialog.Builder(this@MainActivity)
                 .setTitle("Security Warning")
                 .setMessage(
-                    "This device appears to be rooted or modified:\n\n$reasons\n\n" +
-                        "Rooted devices have reduced security protections. " +
-                        "Your location data may be at risk.\n\n" +
-                        "For maximum security, use an unmodified device."
+                    "This phone appears to be rooted or modified:\n\n$reasons\n\n" +
+                        "Your location data is less protected on a rooted phone."
                 )
                 .setPositiveButton("I Understand the Risks") { dialog, _ ->
                     dialog.dismiss()
@@ -1175,17 +1173,18 @@ class MainActivity : AppCompatActivity() {
                         "You've joined the circle. It opens here as soon as another member's app is online."
                     is com.pingolin.track.util.UxEvent.SendingStale -> {
                         val minutes = (event.ageMillis / 60_000L).coerceAtLeast(1)
-                        "Location hasn't been shared in ${minutes}m — check connection"
+                        "Location hasn't been shared in ${minutes}m. Check your connection."
                     }
                     is com.pingolin.track.util.UxEvent.DecryptionKeyMissing ->
-                        "Couldn't decrypt ${event.count} location(s) — try refreshing the circle"
+                        // The map's own words for the same thing: nothing for the person to do.
+                        resources.getQuantityString(R.plurals.map_locations_waiting_for_sync, event.count, event.count)
                     is com.pingolin.track.util.UxEvent.HistoryClamped ->
                         "Showing ${event.allowedDays}-day history (your plan limit). Requested ${event.requestedDays} days."
                     is com.pingolin.track.util.UxEvent.HistoryTruncated ->
-                        "That range had too much history to show at once — the oldest points were left out. Pick a shorter range."
+                        "That range had too much history to show at once, so the oldest points were left out. Pick a shorter range."
                     is com.pingolin.track.util.UxEvent.PlaceAlertsTooCoarse ->
                         "Location is too approximate to check ${event.placeCount} of your place" +
-                            "${if (event.placeCount == 1) "" else "s"} — turn off battery saver for alerts there"
+                            "${if (event.placeCount == 1) "" else "s"}. Turn off battery saver for alerts there."
                 }
                 com.google.android.material.snackbar.Snackbar.make(
                     binding.mainContent,

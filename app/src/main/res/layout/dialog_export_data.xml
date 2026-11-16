@@ -124,9 +124,9 @@
 
         <!--
             What the file is, said plainly, because it is the one property of it that
-            can hurt someone: it is decrypted (the iOS sentence, word for word).
-            Above the passphrase, so "seal it below" points at it. No lock icon: the
-            file is not locked unless a passphrase seals it.
+            can hurt someone: anyone who opens it can read it (the web's sentence).
+            Above the passphrase, so "add a passphrase below" points at it. No lock
+            icon: the file is not locked unless a passphrase protects it.
         -->
         <TextView
             android:id="@+id/exportReadableNotice"

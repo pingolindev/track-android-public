@@ -38,15 +38,6 @@
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 tools:text="Alice Smith" />
 
-            <TextView
-                android:id="@+id/tvSubtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                tools:text="Member since May 2026" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -59,8 +50,7 @@
                 android:text="@string/member_detail_safety_number"
                 android:textAppearance="?attr/textAppearanceTitleMedium" />
 
-            <!-- Says which screen on the OTHER device shows the same digits.
-                 Filled in with the member's name by the fragment. -->
+            <!-- One line, with the member's name; hidden while there is no code. -->
             <TextView
                 android:id="@+id/tvSafetyNumberHint"
                 android:layout_width="match_parent"
@@ -68,7 +58,7 @@
                 android:layout_marginTop="4dp"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                tools:text="Compare these 60 digits with Alice over a channel you already trust." />
+                tools:text="Alice sees the same security code for you." />
 
             <TextView
                 android:id="@+id/tvSafetyNumber"
@@ -126,18 +116,6 @@
                 android:orientation="vertical"
                 android:visibility="gone"
                 tools:visibility="visible">
-
-                <!-- Names the exact destination on the peer's device that these
-                     hex values match. Both sides render hex::encode of the same
-                     user_keys bytes, so they agree character for character. -->
-                <TextView
-                    android:id="@+id/tvTechnicalDetailsHint"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    tools:text="Alice's published keys. On their own device these appear under Settings → Security &amp; Devices → My Encryption Keys." />
 
                 <TextView
                     android:layout_width="wrap_content"

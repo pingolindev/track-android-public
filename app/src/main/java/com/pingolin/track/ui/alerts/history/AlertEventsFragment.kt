@@ -114,7 +114,7 @@ class AlertEventsFragment : Fragment() {
                         AlertEventItem(
                             id = event.id,
                             type = "inactivity",
-                            message = "Inactivity detected - no location for ${event.timeoutHours} hours",
+                            message = "Inactivity detected: no location for ${event.timeoutHours} hours",
                             dayBucket = event.triggeredDayBucket,
                             isAcknowledged = event.resolvedDayBucket != null,
                             circleName = circleName

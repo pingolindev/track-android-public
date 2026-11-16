@@ -217,7 +217,7 @@ class NoServerTextTest {
 
         val result = auth.loginSrp("dana@x.test", "correct horse".toCharArray()) as LoginResult.Error
 
-        assertEquals("Please verify your email address first. Open the link we sent you, then sign in again.", result.message)
+        assertEquals("Verify your email address first. Open the link we sent you, then sign in again.", result.message)
         io.mockk.verify(exactly = 0) { rateLimiter.recordFailedAttempt(any()) }
 
         // Any other 403 is still the credentials.

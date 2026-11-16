@@ -218,8 +218,8 @@ data class CircleMemberStates(
  * [Result.failure] the UI shows — never silently degraded to lazy delivery.
  */
 private class RecipientKeyChangedException : Exception(
-    "This account changed since it was last in this circle — for example after a password reset — " +
-        "so Pingolin didn't send the invitation, to be safe."
+    "This account changed since it was last in this circle, for example after a password reset, " +
+        "so Pingolin didn't send the invitation."
 )
 
 /**
@@ -237,8 +237,8 @@ class InviteeChangedException(
     /** Their number (the security code) with the new details; null when it could not be computed. */
     val number: String?,
 ) : Exception(
-    "This account changed since it was last in this circle — for example after a password reset — " +
-        "so Pingolin didn't send the invitation, to be safe."
+    "This account changed since it was last in this circle, for example after a password reset, " +
+        "so Pingolin didn't send the invitation."
 )
 
 /**

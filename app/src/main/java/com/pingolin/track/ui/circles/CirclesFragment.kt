@@ -408,7 +408,7 @@ class CirclesFragment : Fragment() {
                     }
                     is CirclesUiState.CircleCreated -> {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Circle created!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Circle created", Toast.LENGTH_SHORT).show()
                         viewModel.refreshCircles()
                         viewModel.resetState()
                     }
@@ -438,7 +438,7 @@ class CirclesFragment : Fragment() {
                     }
                     is CirclesUiState.OwnershipTransferred -> {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Ownership transferred successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Ownership transferred", Toast.LENGTH_SHORT).show()
                         viewModel.refreshCircles()
                         viewModel.resetState()
                     }
@@ -511,7 +511,7 @@ class CirclesFragment : Fragment() {
                     is CirclesUiState.InviteAccepted -> {
                         binding.progressBar.visibility = View.GONE
                         alertHandler.cancelInvite(state.circleId)
-                        Toast.makeText(requireContext(), "Invite accepted!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Invite accepted", Toast.LENGTH_SHORT).show()
                         viewModel.refreshCircles()
                         viewModel.resetState()
                         // No location notice here: it ran BEFORE
@@ -540,8 +540,7 @@ class CirclesFragment : Fragment() {
                             .setTitle("The owner has been asked")
                             .setMessage(
                                 buildString {
-                                    append("They have been notified, and they can refuse at any time — ")
-                                    append("which ends it for good.\n\n")
+                                    append("They have been told and can refuse at any time.\n\n")
                                     if (deadline != null) {
                                         append("If they do nothing, the circle becomes yours on ")
                                         append(OwnershipClaimFormat.deadlineText(deadline))
@@ -576,11 +575,9 @@ class CirclesFragment : Fragment() {
                         // An owner who taps Refuse and sees a toast vanish cannot tell
                         // whether it worked, and the cost of guessing wrong is the circle.
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Refused — the circle stays yours")
+                            .setTitle("Refused. The circle stays yours")
                             .setMessage(
-                                "The request has been turned down for good. Nothing about the circle " +
-                                    "has changed and everyone in it keeps the access they had.\n\n" +
-                                    "An admin can ask again, and you will be told if they do."
+                                "The request has ended. An admin can ask again later, and you would be told if they do."
                             )
                             .setPositiveButton("OK", null)
                             .show()
@@ -1147,7 +1144,7 @@ class CirclesFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "No one else is in this circle yet — invite someone first",
+                        "No one else is in this circle yet. Invite someone first.",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -1210,16 +1207,15 @@ class CirclesFragment : Fragment() {
 
             dialogBinding.tvOwnershipClaimBody.text = when {
                 isClaimant ->
-                    "The owner has been told, and can refuse at any time — which ends it for good."
+                    "The owner has been told and can refuse at any time."
                 // What actually happens to them is decided by the server: the outgoing
                 // owner is set to role 'admin' with can_rotate_keys, NOT demoted to plain
                 // member. Saying "you would become an ordinary member" would be a lie on
                 // the one screen where they are deciding whether to act.
                 circle.isOwner ->
-                    "$claimantName has asked to become the owner of this circle. If you do " +
-                        "nothing, they become the owner and you become an admin — you would " +
-                        "keep the ability to invite and remove members, but not to delete the " +
-                        "circle or hand it on."
+                    "$claimantName has asked to become the owner of this circle. The owner can " +
+                        "delete the circle, hand it on, and choose its admins. If you do nothing, " +
+                        "they become the owner and you would stay an admin."
                 else ->
                     "$claimantName has asked to become the owner of this circle. Only the " +
                         "current owner can refuse."
@@ -1245,8 +1241,8 @@ class CirclesFragment : Fragment() {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Refuse this request?")
                 .setMessage(
-                    "The circle stays yours and nothing about it changes. This cannot be " +
-                        "undone — but an admin can ask again, and you will be told if they do."
+                    "You stay the owner of this circle. An admin can ask again later, and you " +
+                        "would be told if they do."
                 )
                 .setPositiveButton("Refuse") { _, _ -> viewModel.refuseOwnershipClaim(circle.id) }
                 .setNegativeButton("Cancel", null)
@@ -1295,10 +1291,9 @@ class CirclesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Ask to take over this circle?")
             .setMessage(
-                "The owner of \"${circle.name}\" is told straight away — by notification and " +
-                    "by email — and can refuse with one tap, which ends it for good.\n\n" +
-                    "Only if they never respond does the circle become yours, once the notice " +
-                    "period ends. Everyone in the circle can see that you asked."
+                "The owner of \"${circle.name}\" is told straight away and can refuse with one tap.\n\n" +
+                    "If they never respond, the circle becomes yours when the notice period ends. " +
+                    "Everyone in the circle can see that you asked."
             )
             .setPositiveButton("Ask") { _, _ -> viewModel.claimOwnership(circle.id) }
             .setNegativeButton("Cancel", null)

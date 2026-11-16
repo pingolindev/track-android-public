@@ -124,7 +124,7 @@ class UnderReviewScreenTest {
     fun `the words are the web's, with no key talk`() {
         assertEquals("Your account is under review", app.getString(R.string.under_review_title))
         assertEquals(
-            "Your account request is checked by an admin before access is granted. We'll email you the moment it's approved — then Track unlocks automatically.",
+            "An admin checks each account request. We'll email you when yours is approved.",
             app.getString(R.string.under_review_body),
         )
         assertEquals("Signed in as dana@pingolin.test", app.getString(R.string.under_review_signed_in_as, "dana@pingolin.test"))

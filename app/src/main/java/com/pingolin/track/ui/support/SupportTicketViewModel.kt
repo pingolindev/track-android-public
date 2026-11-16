@@ -47,11 +47,11 @@ class SupportTicketViewModel @Inject constructor(
      */
     fun submitTicket(subject: String, message: String) {
         if (subject.isBlank()) {
-            _uiState.value = SupportTicketUiState.ValidationError("Please enter a subject")
+            _uiState.value = SupportTicketUiState.ValidationError("Enter a subject")
             return
         }
         if (message.isBlank()) {
-            _uiState.value = SupportTicketUiState.ValidationError("Please enter a message")
+            _uiState.value = SupportTicketUiState.ValidationError("Enter a message")
             return
         }
 
@@ -78,7 +78,7 @@ class SupportTicketViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.value = SupportTicketUiState.Error(
-                    e.plainText("Network error. Please check your connection.")
+                    e.plainText("Network error. Check your connection.")
                 )
             }
         }

@@ -65,7 +65,7 @@
     <string name="place_needs_a_position">请先搜索该地点的地址：Track 还没有获取到你的位置。</string>
     <string name="sos_title">提醒</string>
     <string name="sos_button">通知我的圈子（并非紧急服务）</string>
-    <string name="sos_tap_hint">点按即可通知这个圈子中已加入的成员，并向他们显示你所在的位置——在短暂的倒计时内，你可以取消</string>
+    <string name="sos_tap_hint">点按即可通知这个圈子中已加入的成员，并向他们显示你所在的位置。在短暂的倒计时内，你可以取消。</string>
     <string name="sos_reach_explanation">此操作只会将你的位置发送给这个圈子中已加入的成员。无法保证送达。如果你正面临迫在眉睫的危险，请联系当地的紧急服务。</string>
     <string name="sos_sending">正在通知你的圈子…</string>
     <string name="sos_not_sent_waiting">尚未发送：没有网络连接。此手机恢复联网后，就会立即通知你的圈子。如果你现在就需要他们，请打电话或发短信给他们。</string>
@@ -85,7 +85,7 @@
     <string name="sos_notice_unsure_text">无法确定你的圈子是否已收到通知。重试可能会让他们收到两次通知。如果你现在就需要他们，请打电话或发短信给他们。</string>
     <string name="sos_notice_not_sent_title">你的圈子通知未发出 · %1$s</string>
     <string name="sos_notice_not_sent_text">你的圈子未收到通知。请重试，或自己打电话或发短信给他们。</string>
-    <string name="sos_sent">已发送——正在确认是否送达…</string>
+    <string name="sos_sent">已发送。正在确认是否送达…</string>
     <string name="sos_cancel">取消</string>
     <string name="sos_active_alerts">未处理的通知</string>
     <string name="sos_no_alerts">没有人请求关注</string>
@@ -97,9 +97,9 @@
     <string name="sos_undismiss">撤销</string>
     <string name="sos_dismissed_countdown">已隐藏 · %1$s 后移除</string>
     <string name="sos_dismissed_expiring">已隐藏 · 正在移除</string>
-    <string name="sos_restored">已恢复——重新显示在地图上</string>
+    <string name="sos_restored">已恢复 · 重新显示在地图上</string>
     <string name="sos_no_location">此通知没有可在地图上显示的位置</string>
-    <string name="sos_dismissed">已隐藏——仅对你生效</string>
+    <string name="sos_dismissed">已隐藏 · 仅对你生效</string>
     <string name="sos_dismiss_explainer">此通知只会对你隐藏。其他成员仍能看到它，它也仍处于未处理状态。</string>
     <string name="sos_sent_from_here">从此处发出 · %1$s</string>
     <string name="sos_location_snapshot">从此处发出。此位置是在发送通知时记录的。</string>
@@ -123,11 +123,11 @@
     <string name="sos_delivery_checking">正在确认你的圈子是否已收到…</string>
     <string name="sos_delivery_alone">这个圈子里没有其他人，因此没有可通知的人。请添加成员，或选择其他圈子。</string>
     <string name="sos_delivery_confirmed">所有人的设备都已确认收到（共 %1$d 人）。</string>
-    <string name="sos_delivery_partial">%2$d 人中有 %1$d 人的设备已确认收到。其余设备尚未确认——关机或没有信号的手机无法确认。</string>
+    <string name="sos_delivery_partial">%2$d 人中有 %1$d 人的设备已确认收到。其余设备尚未确认。关机或没有信号的手机无法确认。</string>
     <string name="sos_delivery_no_confirmation">还没有任何人的设备确认收到。我们已经发送，但无法判断是否送达。如果你现在急需联系他人，请改用其他方式。</string>
     <string name="sos_delivery_undeliverable">这条通知没有送达任何人。这个圈子里没有任何人的设备可以接收通知。请通过其他方式联系他们。</string>
     <string name="sos_delivery_emailed">我们还向 %1$d 人发送了电子邮件。</string>
-    <string name="sos_delivery_not_response">“确认收到”只表示通知已送达对方的设备——并不表示有人已阅读，或已在赶来的路上。</string>
+    <string name="sos_delivery_not_response">“确认收到”只表示通知已送达对方的设备。并不表示有人已阅读，或已在赶来的路上。</string>
     <string name="sos_delivery_no_answer">我们无法确认是否送达。如果你现在急需联系他人，请改用其他方式。</string>
     <string name="sos_reached_nobody_title">你的圈子通知没有送达任何人</string>
     <string name="sos_reached_nobody_alone">这个圈子里没有其他人，因此没有可通知的人。如果你现在需要帮助，请直接联系他人，或通知其他圈子。</string>
@@ -159,13 +159,13 @@
     <string name="geocoding_delete">删除</string>
     <string name="geocoding_downloaded">已下载</string>
     <string name="geocoding_privacy_note">所有地址查询都在你的设备上本地执行</string>
-    <string name="geocoding_privacy_note_server">地址查询会发送到我们的地理编码服务</string>
+    <string name="geocoding_privacy_note_server">地址查询会发送到我们的服务器</string>
     <string name="geocoding_server_title">服务器端地理编码</string>
-    <string name="geocoding_server_description">使用我们托管的地理编码服务查找地址和地点，而不是使用设备上的数据。\n\n你的搜索文本和你查询的坐标会发送到我们的服务器。请求不包含任何账户标识，坐标在发送前会舍入到约 10 米，因此服务器不会将查询与你或你的账户关联。\n\n关闭此选项时，有关搜索的任何信息都不会离开设备——查询使用下载到你手机上的地图数据。</string>
+    <string name="geocoding_server_description">将你的搜索内容和查询的坐标发送到我们的服务器，但不附带你的账户信息。关闭时，搜索会使用下载到此手机上的地图数据。</string>
     <string name="geocoding_server_info_content_description">关于服务器端地理编码</string>
     <string name="premium_badge">高级版</string>
     <string name="map_refresh_status_updating">正在更新…</string>
-    <string name="map_refresh_status_offline">无法连接服务器——正在显示最后已知的位置</string>
+    <string name="map_refresh_status_offline">无法连接 Pingolin：正在显示最后已知的位置</string>
     <string name="map_fab_label_quick_checkin">快速签到</string>
     <string name="map_fab_label_send_location">发送位置</string>
     <string name="map_fab_label_center_on_all">居中显示全部</string>
@@ -219,7 +219,7 @@
         <item quantity="other">已加载 %d 个位置点</item>
     </plurals>
     <plurals name="map_history_points_truncated">
-        <item quantity="other">%d 个位置点——较早的未显示，请缩短时间范围</item>
+        <item quantity="other">%d 个位置点：较早的未显示，请缩短时间范围</item>
     </plurals>
     <string name="map_tracking_started">已开始持续共享位置</string>
     <string name="map_location_failed">获取位置失败</string>
@@ -259,7 +259,7 @@
     <string name="map_cancelling_trip">正在取消前往%1$s的行程…</string>
     <string name="map_cancelling_trip_unnamed">正在取消你当前的行程…</string>
     <string name="map_cancel_trip_failed">暂时无法取消该行程。</string>
-    <string name="destination_limit_body_unnamed">你的方案同一时间只能有一个进行中的目的地。取消当前的行程即可共享新的目的地——高级版不限目的地数量。</string>
+    <string name="destination_limit_body_unnamed">你的方案同一时间只能有一个进行中的目的地。取消当前的行程即可共享新的目的地。高级版不限目的地数量。</string>
     <string name="map_last_seen">最后活跃：%1$s</string>
     <string name="map_shared_with_by">由%2$s共享给%1$s</string>
     <string name="map_shared_with_by_another">由另一位成员共享给%1$s</string>
@@ -288,11 +288,11 @@
     <string name="map_send_failed">无法发送位置</string>
     <string name="member_unknown">未知</string>
     <string name="recovery_email_title">恢复邮箱</string>
-    <string name="recovery_email_desc">可选的第二个邮箱地址，当你无法访问主邮箱时，可用它接收密码重置链接。它只能恢复账户访问权限——你的加密数据仍需要恢复密钥。只能在登录状态下添加。</string>
+    <string name="recovery_email_desc">可用来接收密码重置链接的第二个邮箱地址。它只能恢复账户访问权限：你的数据仍需要恢复密钥。</string>
     <string name="recovery_email_status_unknown">正在检查…</string>
-    <string name="recovery_email_status_none">尚未设置——请提前添加一个，以免日后无法访问账户。</string>
-    <string name="recovery_email_status_pending">%1$s——等待验证。请在该邮箱中查收链接。</string>
-    <string name="recovery_email_status_verified">%1$s——已验证</string>
+    <string name="recovery_email_status_none">尚未设置。请提前添加，以免日后无法访问账户。</string>
+    <string name="recovery_email_status_pending">%1$s：等待验证。请在该邮箱中查收链接。</string>
+    <string name="recovery_email_status_verified">%1$s：已验证</string>
     <string name="recovery_email_info_cd">什么是恢复邮箱？</string>
     <string name="recovery_email_manage">管理恢复邮箱（在浏览器中打开）</string>
     <string name="recovery_no_browser">没有可用的浏览器</string>
@@ -307,7 +307,7 @@
     <string name="security_devices_section">安全与设备</string>
     <string name="devices_button">管理设备</string>
     <string name="devices_row_description">让设备退出登录，并查看此账户下已注册的设备</string>
-    <string name="my_keys_row_description">其他成员用来比对、确认是你本人的信息</string>
+    <string name="my_keys_row_description">其他成员看到的你的公开信息</string>
     <string name="blocked_people_title">已屏蔽的人</string>
     <string name="blocked_people_description">你屏蔽的人即使更改了电子邮件地址，也无法邀请你加入圈子。对方不会收到通知。</string>
     <string name="blocked_people_email_label">电子邮件地址</string>
@@ -318,16 +318,12 @@
     <string name="blocked_people_unblock_cd">取消屏蔽 %1$s</string>
     <string name="my_keys_title">安全详情</string>
     <string name="my_keys_button">安全详情</string>
-    <string name="my_keys_explainer">其他成员可以将这些详情与其手机上显示的你的信息进行比对，以确认确实是在与你本人交流。</string>
-    <string name="my_keys_compare_heading">哪些内容彼此对应</string>
-    <string name="my_keys_compare_safety_number">要核对安全码，请打开“圈子” → 该圈子 → 该成员的 ⋮ 菜单 → “安全详情”。对方应在其手机上打开你的“安全详情”。两部手机上的十二组数字会完全相同——此页面上没有属于你自己的安全码，因为安全码总是根据两个人的信息共同计算得出。</string>
-    <string name="my_keys_compare_keys">要核对下方的详情，请让该成员打开“圈子” → 该圈子 → 你的 ⋮ 菜单 → “安全详情” → “显示技术详情”。对方在那里看到的内容与你在这里看到的完全一致，逐字相同。</string>
+    <string name="my_keys_explainer">这些是其他成员看到的你的公开信息。</string>
     <string name="my_keys_sharing_label">加密 ID（X25519）</string>
     <string name="my_keys_signing_label">签名 ID（Ed25519）</string>
     <string name="my_keys_user_id_label">用户 ID</string>
     <string name="my_keys_copy">复制</string>
     <string name="my_keys_unavailable">不可用</string>
-    <string name="my_keys_footnote">仅显示公开信息。任何机密内容都不会离开此手机，也不会显示在这里。</string>
     <string name="password_in_place_title">输入你的密码</string>
     <string name="password_in_place_body">此手机需要你再输入一次密码，才能让你的圈子继续正常运作。你会保持登录状态。</string>
     <string name="password_in_place_hint">密码</string>
@@ -338,8 +334,7 @@
     <string name="member_detail_safety_number">安全码</string>
     <string name="member_detail_show_technical_details">显示技术详情</string>
     <string name="member_detail_hide_technical_details">隐藏技术详情</string>
-    <string name="member_detail_safety_number_hint">请与%1$s当面核对这 60 位数字，或通过你自己拨出的电话核对。对方应在其手机上打开你的“安全详情”（“圈子” → 该圈子 → 你的 ⋮ 菜单）；两部手机上的十二组数字会完全相同。</string>
-    <string name="member_detail_technical_hint">%1$s的技术详情。在对方自己的手机上，这些内容显示在“设置” → “安全与设备” → “安全详情”中，逐字相同。</string>
+    <string name="member_detail_safety_number_hint">%1$s看到的你的安全码与这里相同。</string>
     <string name="app_lock_title">应用锁</string>
     <string name="app_lock_pin">使用 PIN 码保护</string>
     <string name="app_lock_pin_description">使用 4 位 PIN 码锁定应用</string>
@@ -364,7 +359,7 @@
     <string name="app_lock_biometrics_disabled">生物识别锁定已关闭</string>
     <string name="app_lock_biometrics_unavailable">生物识别验证不可用</string>
     <string name="app_lock_no_hardware">此手机无法使用指纹或人脸解锁应用</string>
-    <string name="app_lock_none_enrolled">请先在手机设置中添加指纹才能使用此功能；部分手机也支持人脸解锁</string>
+    <string name="app_lock_none_enrolled">请先在手机设置中添加指纹才能使用此功能。部分手机也支持人脸解锁。</string>
     <string name="app_lock_hardware_unavailable">指纹或人脸解锁暂时不可用</string>
     <string name="app_lock_mend_title">为应用锁设置 PIN 码</string>
     <string name="app_lock_mend_body">此手机已无法再用指纹或人脸解锁 Track，而且没有可作为备用的 PIN 码。请设置 PIN 码以保持 Track 锁定，或关闭应用锁。</string>
@@ -399,7 +394,7 @@
     <string name="crash_log_share">分享日志</string>
     <string name="crash_log_delete">删除日志</string>
     <string name="location_precise_required_title">需要确切位置</string>
-    <string name="location_precise_required_body">Pingolin Track 只有大致位置权限，精度太低，无法用来共享你的位置——不会记录任何内容。\n\n请打开“设置”，在“权限” → “位置信息”下开启<b>使用确切位置</b>。</string>
+    <string name="location_precise_required_body">Track 只有你的大致位置，精度太低，因此不会记录任何内容。\n\n请打开“设置”，在“位置信息”权限中开启<b>使用确切位置</b>。</string>
     <string name="location_precise_required_open_settings">打开设置</string>
     <string name="location_precise_required_dismiss">暂不</string>
     <string name="settings_logout">退出登录</string>
@@ -444,13 +439,13 @@
     <string name="notification_queue_full_body">Track 有一段时间无法发送你的位置，因此只保留最新的位置。能发送时就会发送。</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="export_readable_notice">该文件以 JSON 格式写入，已在此设备上解密。任何人打开都能读取，因此请妥善保管——或在下方为其加密。</string>
-    <string name="export_readable_notice_settings">导出文件以 JSON 格式写入，已在此设备上解密。任何人打开都能读取，因此请妥善保管——或在导出时使用密码短语为其加密。</string>
+    <string name="export_readable_notice">任何人打开该文件都能读取，因此请妥善保管，或在下方添加密码短语。</string>
+    <string name="export_readable_notice_settings">任何人打开导出文件都能读取，因此请妥善保管，或在导出时添加密码短语。</string>
     <string name="export_passphrase_hint">使用密码短语加密（可选）</string>
     <string name="export_passphrase_placeholder">留空则生成可读文件</string>
-    <string name="export_passphrase_help">设置密码短语后，文件会被加密，只有该密码短语才能打开。不设置则文件保持可读，适合需要导入到其他应用的情况。密码短语丢失后无法找回。</string>
+    <string name="export_passphrase_help">设置密码短语后，只有该密码短语才能打开文件，丢失后无法找回。如果需要让其他应用读取该文件，请留空。</string>
     <string name="restore_data_title">从备份恢复</string>
-    <string name="restore_data_explainer">请选择一个 Pingolin Track 导出文件——.json 文件，或者使用密码短语导出时生成的 .enc 文件。文件中的地点和提醒会添加到此账户，此处已有的内容不会被删除。\n\n你的通知设置将被文件中的设置替换。你在每个圈子的隐私设置保持不变；只有尚无隐私设置的圈子才会使用文件中的设置。\n\n圈子成员资格无法从文件恢复；重新加入需要邀请。如果文件已加密，接下来会要求你输入其密码短语。</string>
+    <string name="restore_data_explainer">请选择一个 Track 导出文件。文件中的地点和提醒会被添加，此处已有的内容不会被删除。圈子成员资格不会恢复。\n\n你的通知设置将被文件中的设置替换。你在每个圈子的隐私设置保持不变。只有尚无隐私设置的圈子才会使用文件中的设置。</string>
     <string name="restore_data_choose">选择文件</string>
     <string name="location_rationale_title">Track 需要你的位置信息</string>
     <string name="location_rationale_body">Track 会与你选择的圈子共享你的位置，并向你显示他们的位置。在你加入或创建圈子之前，不会共享任何内容，而且你可以随时暂停。\n\n接下来 Android 会向你询问。</string>
@@ -463,11 +458,11 @@
     <string name="map_location_approximate_no_circles">Track 的“使用确切位置”已关闭。点按即可开启。</string>
     <string name="map_location_services_off_no_circles">此手机的位置信息已关闭。点按即可开启。</string>
     <string name="location_settings_title">在“设置”中开启位置信息</string>
-    <string name="location_settings_body">Android 不会再次询问。若要共享你的位置，请打开“设置”，在“权限” → “位置信息”下允许 Pingolin Track 使用位置信息。</string>
+    <string name="location_settings_body">Android 不会再次询问。若要共享你的位置，请打开“设置”，允许 Track 使用“位置信息”权限。</string>
     <string name="location_services_off_title">此手机的位置信息已关闭</string>
     <string name="location_services_off_body">在开启“位置信息”之前，Track 无法获取你的位置。</string>
     <string name="background_exemption_title">允许 Track 在后台运行吗？</string>
-    <string name="background_exemption_body">此手机可能会停止在后台运行的应用，这样你的圈子可能就收不到你的位置了。允许 Track 在后台运行有助于保持共享。Android 会请你确认。这可能会消耗更多电量，你可以随时在 Track 的设置中更改。</string>
+    <string name="background_exemption_body">此手机可能会停止在后台运行的应用，这样你的圈子可能就收不到你的位置了。允许 Track 在后台运行可能会消耗更多电量，你可以在 Track 的设置中更改。</string>
     <string name="background_exemption_continue">继续</string>
     <string name="background_exemption_not_now">暂不</string>
     <string name="settings_background_exemption_title">在后台运行</string>
@@ -476,7 +471,7 @@
     <string name="settings_oem_battery_title">此手机自带的电池设置</string>
     <string name="settings_oem_battery_summary">有些手机有自己的设置，可能会停止 Track。请打开该设置，确认已允许 Track 在后台运行。</string>
     <string name="background_location_rationale_title">应用关闭时保持共享</string>
-    <string name="background_location_rationale_body">为了在 Track 处于后台时让你的圈子获得你的最新位置，Android 需要将位置信息权限设为“始终允许”。下一个页面是 Android 为此应用提供的设置页——请选择“位置信息”，然后选择“始终允许”。\n\n如果跳过此步骤，Track 仍会在应用打开时共享你的位置。</string>
+    <string name="background_location_rationale_body">为了在 Track 关闭时让你的圈子获得你的最新位置，请在下一个页面选择“始终允许”。\n\n如果跳过此步骤，Track 仍会在打开时共享你的位置。</string>
     <string name="delete">删除</string>
     <string name="share">共享</string>
     <string name="premium_sheet_title_default">高级版功能</string>
@@ -498,7 +493,7 @@
     <string name="premium_destinations_title">添加更多目的地</string>
     <string name="premium_destinations_body">免费方案同一时间只能有 1 个进行中的目的地。高级版取消此限制。</string>
     <string name="destination_limit_title">同一时间只能有一个目的地</string>
-    <string name="destination_limit_body">你的方案同一时间只能有一个进行中的目的地。取消前往%1$s的行程即可共享新的目的地——高级版不限目的地数量。</string>
+    <string name="destination_limit_body">你的方案同一时间只能有一个进行中的目的地。取消前往%1$s的行程即可共享新的目的地。高级版不限目的地数量。</string>
     <string name="destination_limit_replace">取消并共享新目的地</string>
     <string name="destination_limit_keep">保留当前目的地</string>
     <string name="premium_history_title">更长的位置历史</string>
@@ -528,7 +523,7 @@
     <string name="locked_circle_sync_title">等待同步</string>
     <string name="locked_circle_sync_body">正在等待其他成员同步圈子设置。同步完成前，位置信息将排队等候。</string>
     <string name="locked_circle_reset_title">等待圈子确认</string>
-    <string name="locked_circle_reset_body">你重置了密码，因此已请%1$s的另一位成员确认是你本人。只要其中有一人确认，圈子就会在这里打开。如果你仍有恢复密钥，也可以改为恢复之前的设置：“账户” → “设置” → “密码重置之前的数据”。</string>
+    <string name="locked_circle_reset_body">你重置了密码，因此已请%1$s的一位成员确认是你本人。对方确认后，圈子就会在这里打开。如果你仍有恢复密钥，也可以改为在账户设置中恢复访问。</string>
     <string name="locked_circle_restore">打开账户设置</string>
     <string name="rekey_warning_member_removed">正在完成移除成员。只要有成员的应用在线就会完成。</string>
     <string name="rekey_warning_member_left">正在处理成员退出。只要有成员的应用在线就会完成。</string>
@@ -543,7 +538,7 @@
     <string name="member_reset_title">真的是%1$s吗？</string>
     <string name="member_reset_body">%1$s重置了密码，因此 Pingolin 无法自行判断是否仍是同一个人。如果你确定，请让其重新加入%2$s。</string>
     <string name="promote_email_invitee_title">将%1$s设为管理员吗？</string>
-    <string name="promote_email_invitee_body">%1$s是通过发送到其电子邮箱的邀请加入的。成为管理员后，此人可以邀请他人，而且每位成员的应用都会信任此人。如果不确定是否本人，请先通过其他方式向%1$s核实。用于比对的号码：%2$s。</string>
+    <string name="promote_email_invitee_body">%1$s是通过电子邮件受邀加入这个圈子的。如果不确定是否本人，请先通过其他方式向%1$s核实。用于比对的号码：%2$s。</string>
     <string name="promote_email_invitee_confirm">设为管理员</string>
     <string name="invitee_changed_title">真的是%1$s吗？</string>
     <string name="invitee_changed_body">%1$s重置了密码，因此 Pingolin 无法自行判断是否仍是同一个人。如果不确定，请先通过其他方式核实。</string>
@@ -578,7 +573,7 @@
     <string name="destination_shared_by">由%1$s共享</string>
     <string name="destination_shared_by_member">由圈子成员共享</string>
     <string name="destination_hidden_toast">已在此设备上隐藏</string>
-    <string name="signouts_unenforced">退出登录可能尚未生效。过去几分钟内，我们无法确认会话已经结束，因此你在这里退出登录的设备可能还会在短时间内继续接收位置——手机最长 15 分钟，浏览器则持续到会话结束。如需立即停止共享，请改为离开圈子。</string>
+    <string name="signouts_unenforced">退出登录可能会延迟生效。你在这里退出登录的设备可能还会继续接收位置一段时间：手机最长 15 分钟，浏览器则持续到其会话结束。如需立即停止共享，请离开圈子。</string>
     <string name="location_notice_title">在与%1$s共享之前</string>
     <string name="location_notice_this_circle">这个圈子</string>
     <string name="consent_status_sharing">你正在与这个圈子共享你的位置</string>
@@ -599,7 +594,7 @@
     <string name="own_sharing_and_history_off">此圈子中的位置共享和位置历史均已关闭。成员会在你的名字旁看到“位置共享已关闭”，且看不到你的任何位置。</string>
     <string name="own_sharing_paused_until">暂停至%1$s。成员会在你的名字旁看到此状态。</string>
     <string name="own_sharing_paused">已暂停。成员会在你的名字旁看到此状态。</string>
-    <string name="pause_tracking_moved">“Pause Tracking”开关已移至各个圈子。你在各圈子的共享目前已暂停；请在每个圈子中分别恢复。Track 会再次记录你自己的位置历史，只有你能看到。</string>
+    <string name="pause_tracking_moved">“Pause Tracking”开关已移至各个圈子。你在各圈子的共享目前已暂停，请在每个圈子中分别恢复。Track 会再次记录你自己的位置历史，只有你能看到。</string>
     <string name="pause_tracking_removed_no_circles">“Pause Tracking”开关已移除。Track 会再次记录你自己的位置历史，只有你能看到。</string>
     <string name="inactivity_since">%1$s自%2$s以来没有共享过位置。</string>
     <string name="inactivity_no_time">%1$s已有一段时间没有共享位置。</string>
@@ -611,7 +606,7 @@
     <string name="cant_start_trying">Track 会自动不断重试。如果几分钟内问题仍未解决，请重启手机。</string>
     <string name="cant_start_reinstall">如果重启后问题仍然存在，请卸载并重新安装 Track，然后登录。你的圈子、地点和提醒设置会从你的账户恢复。仅保存在此手机上的内容会丢失，包括所有仍在等待发送的内容。</string>
     <string name="under_review_title">你的账户正在审核中</string>
-    <string name="under_review_body">你的账户申请会在开放访问前由管理员审核。一旦获批，我们会立即发邮件通知你，届时 Track 会自动解锁。</string>
+    <string name="under_review_body">每个账户申请都由管理员审核。你的申请获批后，我们会发邮件通知你。</string>
     <string name="under_review_signed_in_as">已登录：%1$s</string>
     <string name="not_approved_title">你的申请未获批准</string>
     <string name="not_approved_body">此账户无法用于 Track。我们会在作出决定 30 天后删除该账户及你的申请。</string>
@@ -631,14 +626,14 @@
     <plurals name="received_invites_count">
         <item quantity="other">你有 %d 个邀请</item>
     </plurals>
-    <string name="invite_history_warning">对方将能看到这个圈子已有的位置历史记录，而不只是从现在开始的记录——免费圈子为两天，高级圈子最长可达一年。</string>
+    <string name="invite_history_warning">对方还能看到这个圈子过去的位置历史记录：免费圈子为两天，高级圈子最长可达一年。</string>
     <string name="guardian_map_line">监护人可查看你的位置和历史记录</string>
     <string name="sync_error_sign_in_again">同步出错。请重新登录。</string>
     <string name="guardian_detail_title">此账户由监护人创建</string>
     <string name="guardian_handover_line">此账户现在应归你所有</string>
     <string name="guardian_handover_title">此账户现在归你所有</string>
-    <string name="guardian_handover_detail">你的监护人设定的移交日期已过，因此这个账户现在属于你。对方无法自行完成移交，我们也不会悄悄代办——请写信至 help@support.pingolin.com，我们会协助你接管，包括恢复密钥以及任何本来仍会生效的通行密钥。</string>
-    <string name="guardian_detail_body">创建此账户的人知道它的密码，而你的数据正是用这个密码解密的——因此对方能看到你现在在哪里、在这个圈子保留历史记录的期限内你去过的所有地方，还能设置提醒，在你到达或离开某地时收到通知。\n\n对方查看时不会有任何提示。没有通知，没有你能查阅的记录，我们也无法为你提供——查看地图不留痕迹。\n\n你满18岁时，账户归你所有，对方的责任随之结束。仅更改密码并不能撤销其访问权限，因为他们注册的恢复密钥或通行密钥仍然有效。条款第6节说明了具体步骤。\n\n如果询问对方并不安全，就不要询问。你可以改为写信至 abuse@mail.pingolin.com——未成年人可以举报由监护人持有的账户，成年人也可以举报监护人为其创建的账户。</string>
+    <string name="guardian_handover_detail">你的监护人设定的移交日期已过，因此这个账户现在属于你。请写信至 help@support.pingolin.com，我们会协助你接管。</string>
+    <string name="guardian_detail_body">创建此账户的人知道它的密码。在这个圈子保留历史记录的期限内，对方能看到你现在在哪里、去过哪里，还能设置提醒，在你到达或离开某地时收到通知。\n\n对方查看时你不会收到提示，也不会留下记录。\n\n你满18岁时，账户归你所有。仅更改密码并不能撤销对方的访问权限。条款第6节说明了具体步骤。\n\n如果询问对方并不安全，就不要询问。你可以改为写信至 abuse@mail.pingolin.com。</string>
     <string name="place_alert_button">创建提醒</string>
     <string name="place_alert_suppressed_by_target">提醒已暂停：此人已在这个圈子中关闭关于自己的提醒</string>
     <string name="privacy_share_realtime_title">共享实时位置</string>
@@ -819,7 +814,7 @@
     <string name="own_sharing_no_push">你尚未共享：Track 需要先有一个通知应用。</string>
     <string name="notification_not_sharing_no_push">未共享：Track 需要先有一个通知应用</string>
     <string name="push_needed_title">Track 暂时无法共享你的位置</string>
-    <string name="push_needed_body">此版本通过你选择的推送应用（而不是 Google）发送通知，在连接推送应用之前，Track 无法共享你的位置。圈子通知和地点提醒也需要它。\n\nntfy 是常用选择，而且免费。安装并打开它，在推送设置中选择它，然后再打开一次 ntfy，以便接收提醒。</string>
+    <string name="push_needed_body">在连接通知应用之前，Track 无法共享你的位置。圈子通知和地点提醒也需要它。\n\nntfy 免费，也是常用选择。安装并打开它，在推送设置中选择它，然后再打开一次 ntfy，以便接收提醒。</string>
     <string name="push_needed_install">安装 ntfy</string>
     <string name="push_needed_settings">推送设置</string>
     <string name="push_needed_later">以后再说</string>

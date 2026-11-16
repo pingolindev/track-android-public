@@ -84,7 +84,7 @@ class LocationOffTest {
         assertEquals("Location is off on this phone. Tap to turn it on.", context.getString(R.string.map_location_services_off_no_circles))
         assertEquals("Turn on location in Settings", context.getString(R.string.location_settings_title))
         assertEquals(
-            "Android won't ask again. To share where you are, open Settings and allow location for Pingolin Track under Permissions → Location.",
+            "Android won't ask again. To share where you are, open Settings and allow the Location permission for Track.",
             context.getString(R.string.location_settings_body),
         )
         assertEquals("Location is off on this phone", context.getString(R.string.location_services_off_title))
@@ -94,8 +94,8 @@ class LocationOffTest {
             context.getString(R.string.location_services_off_body),
         )
         assertEquals(
-            "Pingolin Track has approximate location only, which is far too rough to share your position — nothing will be recorded." +
-                "\n\nOpen Settings and turn on Use precise location under Permissions → Location.",
+            "Track only has your approximate location, which is too rough, so nothing is recorded." +
+                "\n\nOpen Settings and turn on Use precise location in the Location permission.",
             context.getString(R.string.location_precise_required_body),
         )
     }

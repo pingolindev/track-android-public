@@ -72,9 +72,9 @@ class AlertEventsViewModel @Inject constructor(
                     id = e.id,
                     type = "inactivity",
                     message = if (resolved) {
-                        "${e.targetDisplayName} — was silent ${e.timeoutHours}h, now active"
+                        "${e.targetDisplayName}: was silent ${e.timeoutHours}h, now active"
                     } else {
-                        "${e.targetDisplayName} — no location for ${e.timeoutHours}h"
+                        "${e.targetDisplayName}: no location for ${e.timeoutHours}h"
                     },
                     dayBucket = e.triggeredDayBucket,
                     isAcknowledged = resolved,

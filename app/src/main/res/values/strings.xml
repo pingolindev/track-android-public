@@ -107,7 +107,7 @@
     -->
     <string name="sos_title">Alerts</string>
     <string name="sos_button">Notify my circle - not emergency services</string>
-    <string name="sos_tap_hint">Tap to notify the active members of this circle and show them where you are — a short countdown lets you cancel</string>
+    <string name="sos_tap_hint">Tap to notify the active members of this circle and show them where you are. A short countdown lets you cancel.</string>
     <!--
         What notifying actually does, shown while the countdown is running —
         which is this flow's last moment before anything is sent, the countdown
@@ -145,7 +145,7 @@
     <!-- Deliberately NOT "your circle has been notified". At this point the
          server has stored the request and nothing more; whether it reached a
          single device is what the delivery strings below report. -->
-    <string name="sos_sent">Sent — checking whether it arrived…</string>
+    <string name="sos_sent">Sent. Checking whether it arrived…</string>
     <string name="sos_cancel">Cancel</string>
     <string name="sos_active_alerts">Open notifications</string>
     <string name="sos_no_alerts">Nobody has asked for attention</string>
@@ -157,9 +157,9 @@
     <string name="sos_undismiss">Undo</string>
     <string name="sos_dismissed_countdown">Dismissed · removed in %1$s</string>
     <string name="sos_dismissed_expiring">Dismissed · removing now</string>
-    <string name="sos_restored">Restored — showing on the map again</string>
+    <string name="sos_restored">Restored · showing on the map again</string>
     <string name="sos_no_location">This notification has no location to show on the map</string>
-    <string name="sos_dismissed">Dismissed — hidden for you only</string>
+    <string name="sos_dismissed">Dismissed · hidden for you only</string>
     <string name="sos_dismiss_explainer">Dismissing only hides this for you. Other members still see it, and it stays open.</string>
     <!-- Under the standalone map marker. Shown ONLY when the raiser has moved
          away from where they sent it, so two triangles would otherwise sit on
@@ -205,11 +205,11 @@
     <string name="sos_delivery_checking">Checking whether your circle received it…</string>
     <string name="sos_delivery_alone">Nobody else is in this circle, so there was no one to notify. Add someone, or pick a different circle.</string>
     <string name="sos_delivery_confirmed">All %1$d confirmed their device received it.</string>
-    <string name="sos_delivery_partial">%1$d of %2$d confirmed their device received it. The rest have not yet — a phone that is off or has no signal cannot confirm.</string>
+    <string name="sos_delivery_partial">%1$d of %2$d confirmed their device received it. The rest have not yet. A phone that is off or has no signal cannot confirm.</string>
     <string name="sos_delivery_no_confirmation">Nobody\'s device has confirmed yet. We sent it, but we cannot tell whether it arrived. If this matters right now, reach someone another way.</string>
     <string name="sos_delivery_undeliverable">This did not reach anyone. Nobody in this circle has a device we can notify. Contact them another way.</string>
     <string name="sos_delivery_emailed">We also emailed %1$d.</string>
-    <string name="sos_delivery_not_response">Confirmed means the notification reached their device — not that anyone has read it or is on their way.</string>
+    <string name="sos_delivery_not_response">Confirmed means the notification reached their device. It doesn\'t mean anyone has read it or is on their way.</string>
     <!-- The checks ended with no answer at all: said, never "Checking…" for good (as iOS says it). -->
     <string name="sos_delivery_no_answer">We couldn\'t find out whether it arrived. If this matters right now, reach someone another way.</string>
     <!-- Once, outside the Safety tab, for a request that went (as on iOS): it reached nobody, or
@@ -268,15 +268,15 @@
     <!-- These two state the CURRENT situation and nothing else. The switch
          directly above is the instruction, so the note does not repeat "turn
          this off to …", and the (i) dialog carries the detail. -->
-    <string name="geocoding_privacy_note_server">Address lookups are sent to our geocoder</string>
+    <string name="geocoding_privacy_note_server">Address lookups are sent to our server</string>
     <string name="geocoding_server_title">Server-side geocoder</string>
-    <string name="geocoding_server_description">Look up addresses and places from our hosted geocoder instead of on-device data.\n\nYour search text and the coordinates you look up are sent to our server. Requests carry no account identifier, and coordinates are rounded to about 10 metres before they are sent, so the server does not link queries to you or your account.\n\nWhen this is off, nothing about your searches leaves the device — lookups use map data downloaded to your phone.</string>
+    <string name="geocoding_server_description">Sends your searches and the coordinates you look up to our server, without your account details. When off, searches use map data downloaded to this phone.</string>
     <string name="geocoding_server_info_content_description">About the server-side geocoder</string>
     <string name="premium_badge">Premium</string>
 
     <!-- Map refresh-state strip -->
     <string name="map_refresh_status_updating">Updating…</string>
-    <string name="map_refresh_status_offline">Couldn\'t reach server — showing last known</string>
+    <string name="map_refresh_status_offline">Couldn\'t reach Pingolin: showing last known</string>
 
     <!-- Labels shown next to always-visible map FABs / icon buttons while
          the dot menu is expanded, so the user can see what every on-screen
@@ -338,8 +338,8 @@
         <item quantity="other">%d points loaded</item>
     </plurals>
     <plurals name="map_history_points_truncated">
-        <item quantity="one">%d point — oldest left out, try a shorter range</item>
-        <item quantity="other">%d points — oldest left out, try a shorter range</item>
+        <item quantity="one">%d point: oldest left out, try a shorter range</item>
+        <item quantity="other">%d points: oldest left out, try a shorter range</item>
     </plurals>
     <string name="map_tracking_started">Continuous tracking started</string>
     <string name="map_location_failed">Failed to get location</string>
@@ -371,7 +371,7 @@
     <string name="map_sending_check_in">Sending check-in…</string>
     <string name="map_check_in_sent">Check-in sent</string>
     <string name="map_check_in_failed">Couldn\'t send the check-in just now.</string>
-    <string name="map_please_select_circle">Please select a circle</string>
+    <string name="map_please_select_circle">Choose a circle</string>
     <string name="map_destination_tap_first">Tap a spot on the map first to set the destination location.</string>
     <string name="map_sharing_destination">Sharing destination…</string>
     <string name="map_destination_shared">Destination shared with %1$s</string>
@@ -380,7 +380,7 @@
     <string name="map_cancelling_trip">Cancelling trip to %1$s…</string>
     <string name="map_cancelling_trip_unnamed">Cancelling your current trip…</string>
     <string name="map_cancel_trip_failed">Couldn\'t cancel that trip just now.</string>
-    <string name="destination_limit_body_unnamed">Your plan includes one active destination at a time. Cancel your current trip to share a new one — Premium includes unlimited destinations.</string>
+    <string name="destination_limit_body_unnamed">Your plan includes one active destination at a time. Cancel your current trip to share a new one. Premium includes unlimited destinations.</string>
     <string name="map_last_seen">Last seen: %1$s</string>
     <string name="map_shared_with_by">Shared with %1$s by %2$s</string>
     <string name="map_shared_with_by_another">Shared with %1$s by another member</string>
@@ -419,17 +419,15 @@
          address restores ACCOUNT ACCESS, and that encrypted data still needs
          the recovery key. -->
     <string name="recovery_email_title">Recovery email</string>
-    <string name="recovery_email_desc">An optional second address that can receive a password-reset link if you lose access to your primary email. It recovers account access only — your encrypted data still needs your recovery key. It can only be added while you are signed in.</string>
+    <string name="recovery_email_desc">A second address that can receive a password-reset link. It restores account access only: your data still needs your recovery key.</string>
     <!-- Deliberately short. This is the state almost every account is in, so
          it is on screen for almost everyone: a two-line bold red paragraph
          here would be the loudest thing in Settings and drown the
-         explanation below it. The state gets the emphasis; the mechanism
-         ("only while signed in") lives in the neutral description, where it
-         is true in every state. -->
+         explanation below it. -->
     <string name="recovery_email_status_unknown">Checking…</string>
-    <string name="recovery_email_status_none">Not set up — add one before you are locked out.</string>
-    <string name="recovery_email_status_pending">%1$s — awaiting verification. Check that inbox for the link.</string>
-    <string name="recovery_email_status_verified">%1$s — verified</string>
+    <string name="recovery_email_status_none">Not set up. Add one before you are locked out.</string>
+    <string name="recovery_email_status_pending">%1$s: awaiting verification. Check that inbox for the link.</string>
+    <string name="recovery_email_status_verified">%1$s: verified</string>
     <string name="recovery_email_info_cd">What is a recovery email?</string>
     <string name="recovery_email_manage">Manage recovery email (opens in your browser)</string>
     <string name="recovery_no_browser">No browser available</string>
@@ -456,7 +454,7 @@
     <string name="devices_button">Manage Devices</string>
     <string name="devices_row_description">Sign devices out and review what\'s registered to this account</string>
     <!-- The page has no repair button: this phone checks that copy by itself. -->
-    <string name="my_keys_row_description">What other members compare to confirm it\'s you</string>
+    <string name="my_keys_row_description">The public values other members see for you</string>
 
     <!-- Blocked people (Settings → Security & Devices). -->
     <string name="blocked_people_title">Blocked people</string>
@@ -471,29 +469,15 @@
 
     <!-- Security details (Settings → Security & Devices → Security details). No
          user-facing text talks about keys. The web app and the iOS app use the
-         same name, and point people here. -->
+         same name. One line says what the values are; nothing about comparing. -->
     <string name="my_keys_title">Security details</string>
     <string name="my_keys_button">Security details</string>
-    <string name="my_keys_explainer">Other members can compare these details with what their phone shows for you, to confirm they\'re really talking to you.</string>
-    <!-- Names both comparable values explicitly. Without this the screen reads as
-         a wall of hex that matches nothing: the safety number is pairwise and has
-         no counterpart here, and the keys below only line up against a DIFFERENT
-         screen on someone else's device.
-         Every path here routes through "Security details" — the label on the
-         member's overflow menu (member_security_details, added by
-         CircleMembersAdapter) and the only way into MemberDetailFragment.
-         "Safety number" and "Show technical details" name headings INSIDE that
-         screen, so a path that starts with either one dead-ends: there is
-         nothing by that name to tap. -->
-    <string name="my_keys_compare_heading">What matches what</string>
-    <string name="my_keys_compare_safety_number">To check a security code, open Circles → the circle → that member\'s ⋮ menu → Security details. They should open Security details for you on their phone. The twelve groups of digits will be the same on both phones — there is no security code of your own on this page, because it is always worked out from two people at once.</string>
-    <string name="my_keys_compare_keys">To check the details below, ask that member to open Circles → the circle → your ⋮ menu → Security details → Show technical details. What they see there is exactly what you see here, character for character.</string>
+    <string name="my_keys_explainer">These are the public values other members see for you.</string>
     <string name="my_keys_sharing_label">Encryption ID (X25519)</string>
     <string name="my_keys_signing_label">Signature ID (Ed25519)</string>
     <string name="my_keys_user_id_label">User ID</string>
     <string name="my_keys_copy">Copy</string>
     <string name="my_keys_unavailable">Unavailable</string>
-    <string name="my_keys_footnote">Public values only. Nothing secret leaves this phone or is shown here.</string>
 
     <!-- This phone lost what lets it sign for the account (its key store): the password, typed
          once in place, puts it back on this session. Says what happens; no key talk. -->
@@ -505,13 +489,12 @@
     <string name="password_in_place_wrong">That password isn\'t right.</string>
     <string name="password_in_place_failed">Couldn\'t check your password just now.</string>
 
-    <!-- Member detail (Circles → a member): the other half of the comparison
-         the Security details screen points at. -->
+    <!-- Member detail (Circles → a member → Security details): the security code,
+         one line under it, and the member's technical values. -->
     <string name="member_detail_safety_number">Security code</string>
     <string name="member_detail_show_technical_details">Show technical details</string>
     <string name="member_detail_hide_technical_details">Hide technical details</string>
-    <string name="member_detail_safety_number_hint">Compare these 60 digits with %1$s in person, or on a call you placed yourself. They should open Security details for you on their phone (Circles → the circle → your ⋮ menu); the twelve groups will be the same on both phones.</string>
-    <string name="member_detail_technical_hint">%1$s’s technical details. On their own phone these appear under Settings → Security &amp; Devices → Security details, character for character.</string>
+    <string name="member_detail_safety_number_hint">%1$s sees the same security code for you.</string>
 
     <!-- App Lock -->
     <string name="app_lock_title">App Lock</string>
@@ -540,7 +523,7 @@
     <string name="app_lock_no_hardware">This phone can\'t unlock apps with a fingerprint or face</string>
     <!-- "Use Biometrics" needs a strong biometric enrolled; a screen lock alone isn't one, and many phones'
          face unlock is the weak kind apps can't use. -->
-    <string name="app_lock_none_enrolled">Add a fingerprint in your phone\'s settings to use this; on some phones face unlock works too</string>
+    <string name="app_lock_none_enrolled">Add a fingerprint in your phone\'s settings to use this. On some phones face unlock works too.</string>
     <string name="app_lock_hardware_unavailable">Fingerprint or face unlock isn\'t available right now</string>
     <!-- A biometric lock set up by an earlier version, with no PIN, on a phone where biometrics no
          longer run and that has no screen lock: nothing can check anyone, so it asks for a PIN or
@@ -590,7 +573,7 @@
          filter, so tracking records nothing at all. Say that plainly rather
          than let the user believe sharing is on. -->
     <string name="location_precise_required_title">Precise location needed</string>
-    <string name="location_precise_required_body">Pingolin Track has approximate location only, which is far too rough to share your position — nothing will be recorded.\n\nOpen Settings and turn on <b>Use precise location</b> under Permissions → Location.</string>
+    <string name="location_precise_required_body">Track only has your approximate location, which is too rough, so nothing is recorded.\n\nOpen Settings and turn on <b>Use precise location</b> in the Location permission.</string>
     <string name="location_precise_required_open_settings">Open Settings</string>
     <string name="location_precise_required_dismiss">Not now</string>
 
@@ -666,28 +649,27 @@
     <string name="cancel">Cancel</string>
 
     <!--
-        What a data export is: a JSON file decrypted on this device, which
-        anyone who opens it can read, unless a passphrase seals it. The iPhone's
-        sentence (its Settings export footer), word for word in the export
-        dialog, above its passphrase field; in Settings, where no file exists
-        yet and no field follows, it says "An export file" and how to seal it.
-        The web says the same. Neither place calls a plaintext file encrypted.
+        What a data export is: a file anyone who opens it can read, unless a
+        passphrase protects it. The web's sentence in the export dialog, above its
+        passphrase field; in Settings, where no file exists yet and no field
+        follows, it says "an export file" and "when you export". Neither place
+        calls a readable file encrypted.
     -->
-    <string name="export_readable_notice">The file is written in JSON, decrypted on this device. Anyone who opens it can read it, so keep it somewhere safe — or seal it below.</string>
-    <string name="export_readable_notice_settings">An export file is written in JSON, decrypted on this device. Anyone who opens it can read it, so keep it somewhere safe — or seal it with a passphrase when you export.</string>
-    <!-- The export dialog's passphrase field: what "seal it below" points at. The web's words, all three. -->
+    <string name="export_readable_notice">Anyone who opens the file can read it, so keep it somewhere safe or add a passphrase below.</string>
+    <string name="export_readable_notice_settings">Anyone who opens an export file can read it, so keep it somewhere safe or add a passphrase when you export.</string>
+    <!-- The export dialog's passphrase field: what "add a passphrase below" points at. The web's words, all three. -->
     <string name="export_passphrase_hint">Seal with a passphrase (optional)</string>
     <string name="export_passphrase_placeholder">Leave blank for a readable file</string>
-    <string name="export_passphrase_help">With a passphrase the file is sealed and only that passphrase opens it. Without one it stays readable, which is what you want if another app needs to import it. There is no way to recover a lost passphrase.</string>
+    <string name="export_passphrase_help">With a passphrase, only that passphrase opens the file, and a lost one can\'t be recovered. Leave it blank if another app needs to read the file.</string>
 
     <!--
         Shown before the system file picker opens, so Restore explains itself the
-        way Export does. Names the file the reader accepts and states that
-        restoring adds to what is here rather than replacing it — the question
-        anyone hesitating over this button is actually asking.
+        way Export does. States that restoring adds to what is here rather than
+        replacing it (the question anyone hesitating over this button is asking),
+        and what happens to notification and privacy settings.
     -->
     <string name="restore_data_title">Restore from backup</string>
-    <string name="restore_data_explainer">Pick a Pingolin Track export — a .json file, or the .enc file if you exported with a passphrase. Its places and alerts are added to this account and nothing already here is deleted.\n\nYour notification settings are replaced by the ones in the file. Your privacy settings for each circle stay as they are; the file\'s are used only for a circle that has none yet.\n\nCircle membership can\'t be restored from a file; rejoining needs an invite. If the file is sealed, you\'ll be asked for its passphrase next.</string>
+    <string name="restore_data_explainer">Choose a Track export file. Its places and alerts are added, and nothing already here is deleted. Circle memberships aren\'t restored.\n\nYour notification settings are replaced by the ones in the file. Your privacy settings for each circle stay as they are. The file\'s are used only for a circle that has none yet.</string>
     <string name="restore_data_choose">Choose file</string>
 
     <!--
@@ -709,14 +691,14 @@
     <string name="map_location_approximate_no_circles">Precise location is off for Track. Tap to turn it on.</string>
     <string name="map_location_services_off_no_circles">Location is off on this phone. Tap to turn it on.</string>
     <string name="location_settings_title">Turn on location in Settings</string>
-    <string name="location_settings_body">Android won\'t ask again. To share where you are, open Settings and allow location for Pingolin Track under Permissions → Location.</string>
+    <string name="location_settings_body">Android won\'t ask again. To share where you are, open Settings and allow the Location permission for Track.</string>
     <string name="location_services_off_title">Location is off on this phone</string>
     <string name="location_services_off_body">Track can\'t get your location until Location is turned on.</string>
 
     <!-- Asked once, on phones whose battery manager stops background apps;
          "Continue" opens Android's own question. -->
     <string name="background_exemption_title">Let Track run in the background?</string>
-    <string name="background_exemption_body">This phone can stop apps that run in the background, and then your circles may stop getting your location. Letting Track run in the background helps keep sharing going. Android will ask you to confirm. It can use more battery, and you can change it any time in Track\'s settings.</string>
+    <string name="background_exemption_body">This phone can stop apps that run in the background, and then your circles may stop getting your location. Letting Track run in the background can use more battery, and you can change it in Track\'s settings.</string>
     <string name="background_exemption_continue">Continue</string>
     <string name="background_exemption_not_now">Not now</string>
     <!-- The way back, in Settings, on those phones only. -->
@@ -726,12 +708,12 @@
     <string name="settings_oem_battery_title">This phone\'s own battery settings</string>
     <string name="settings_oem_battery_summary">Some phones have their own setting that can stop Track. Open it and check that Track may run in the background.</string>
     <!--
-        API 29+ grants background location only from the settings app, so this
-        request opens Settings rather than a dialog. The body names the destination
-        and the option to pick, because neither is obvious once you are there.
+        API 30+ grants background location only from the settings app, so this
+        request opens Android's location-permission page rather than a dialog. The
+        body names the one option to pick there, in one sentence.
     -->
     <string name="background_location_rationale_title">Keep sharing when the app is closed</string>
-    <string name="background_location_rationale_body">To keep your circle up to date while Track is in the background, Android needs \"Allow all the time\". The next screen is Android\'s own settings page for this app — choose Location, then \"Allow all the time\".\n\nSkip this and Track still shares your location while the app is open.</string>
+    <string name="background_location_rationale_body">To keep your circle up to date while Track is closed, choose \"Allow all the time\" on the next screen.\n\nIf you skip this, Track still shares your location while it\'s open.</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
@@ -774,15 +756,15 @@
          this block, per Google Play's external-purchase policy. arg 1: the current
          destination's name. -->
     <string name="destination_limit_title">One destination at a time</string>
-    <string name="destination_limit_body">Your plan includes one active destination at a time. Cancel your trip to %1$s to share a new one — Premium includes unlimited destinations.</string>
+    <string name="destination_limit_body">Your plan includes one active destination at a time. Cancel your trip to %1$s to share a new one. Premium includes unlimited destinations.</string>
     <string name="destination_limit_replace">Cancel &amp; share new</string>
     <string name="destination_limit_keep">Keep current</string>
     <string name="premium_history_title">Longer location history</string>
     <string name="premium_history_body">The free plan keeps 2 days of history. Premium keeps 365 days.</string>
 
     <!-- ===== Settings plan / usage card ===== -->
-    <string name="plan_tier_free">Track — Free</string>
-    <string name="plan_tier_premium">Track — Premium</string>
+    <string name="plan_tier_free">Track: Free</string>
+    <string name="plan_tier_premium">Track: Premium</string>
     <!-- No history figure here: tvPlanHistory sits directly above this line and
          states it already, from the server's actual number rather than a
          hardcoded 365. Two adjacent lines both saying "365" read as a mistake,
@@ -791,7 +773,7 @@
     <!-- Premium borrowed from a circle-mate's subscription. Named differently from
          plan_tier_premium because this user did not buy it and can lose it without
          doing anything — the distinction is the whole point of showing it. -->
-    <string name="plan_tier_premium_circle">Track — Premium via your circle</string>
+    <string name="plan_tier_premium_circle">Track: Premium via your circle</string>
     <!-- Headline entitlement on both tiers. %1$d is the day count. -->
     <string name="plan_history_days">%1$d days of location history</string>
     <!-- Grace warning, CIRCLE subject. %1$s = how much history is kept, %2$s = when
@@ -858,7 +840,7 @@
          copy (requestFreshAccess), the server wakes their apps, and each phone posts
          "{name} reset their password. Check it's really them." as a notification. The
          same words as on iPhone. -->
-    <string name="locked_circle_reset_body">You reset your password, so another member of %1$s has been asked to confirm it\'s you. It opens here as soon as one of them does. If you still have your recovery key, you can restore your previous setup instead: Account → Settings → Data from before your password reset.</string>
+    <string name="locked_circle_reset_body">You reset your password, so a member of %1$s has been asked to confirm it\'s you. It opens here once they do. If you still have your recovery key, you can restore access in your account settings instead.</string>
     <string name="locked_circle_restore">Open account settings</string>
     <!-- Owners and admins, while the refresh the server asked for after a removal or a
          departure is still due; any member's app completes it. -->
@@ -881,7 +863,7 @@
     <string name="member_reset_title">Is this really %1$s?</string>
     <string name="member_reset_body">%1$s reset their password, so Pingolin can\'t tell on its own that it\'s still them. If you\'re sure, let them back into %2$s.</string>
     <string name="promote_email_invitee_title">Make %1$s an admin?</string>
-    <string name="promote_email_invitee_body">%1$s joined with an invitation to their email. As an admin they can invite people, and every member\'s app will trust them. If you\'re not sure it\'s them, check with %1$s another way first. Their number: %2$s.</string>
+    <string name="promote_email_invitee_body">%1$s was invited to this circle by email. If you\'re not sure it\'s them, check with %1$s another way first. Their number: %2$s.</string>
     <string name="promote_email_invitee_confirm">Make admin</string>
     <string name="invitee_changed_title">Is this really %1$s?</string>
     <string name="invitee_changed_body">%1$s reset their password, so Pingolin can\'t tell on its own that it\'s still them. If you\'re not sure, check with them another way first.</string>
@@ -940,7 +922,7 @@
     <string name="destination_shared_by">Shared by %1$s</string>
     <string name="destination_shared_by_member">Shared by a circle member</string>
     <string name="destination_hidden_toast">Hidden on this device</string>
-    <string name="signouts_unenforced">Sign-outs may not be taking effect. In the last few minutes we have not been able to confirm that sessions have ended, so a device you sign out here may keep receiving locations for a short time \u2014 up to 15 minutes for a phone, or until the session ends for a browser. To stop sharing immediately, leave the circle instead.</string>
+    <string name="signouts_unenforced">Sign-outs may be delayed. A device you sign out here may keep receiving locations for a while: up to 15 minutes for a phone, or until its session ends for a browser. To stop sharing right away, leave the circle.</string>
     <!-- Just-in-time location notice, shown BEFORE a circle is created or joined:
          agreeing is what creates or joins it. The BODY comes from the server
          (GET /api/v1/consent/location/notice) so that what is rendered is the same text
@@ -981,9 +963,9 @@
     <string name="own_sharing_paused_until">Paused until %1$s. Members see this next to your name.</string>
     <string name="own_sharing_paused">Paused. Members see this next to your name.</string>
     <!-- Once, after the device-wide Pause Tracking switch was moved to each circle's own pause. -->
-    <string name="pause_tracking_moved">Pause Tracking has moved. Your circles are paused; resume each one from its circle. Track records your own location history again; only you can see it.</string>
+    <string name="pause_tracking_moved">Pause Tracking has moved. Your circles are paused, and you resume each one from its circle. Track records your own location history again, and only you can see it.</string>
     <!-- The same, for an install with no circle to pause. -->
-    <string name="pause_tracking_removed_no_circles">Pause Tracking has been removed. Track records your own location history again; only you can see it.</string>
+    <string name="pause_tracking_removed_no_circles">Pause Tracking has been removed. Track records your own location history again, and only you can see it.</string>
     <!--
         Once, after the database on this phone was made again because the key that opened it was
         gone, e.g. a lock-bound key from an earlier version that Android deleted when the screen
@@ -1010,7 +992,7 @@
     <string name="cant_start_reinstall">If it\'s still here after a restart, uninstall and reinstall Track, then sign in. Your circles, places and alert settings come back from your account. What was only on this phone is lost, including anything still waiting to be sent.</string>
     <!-- In place of the app for an assisted-lane account an admin hasn't approved yet: the web's words. -->
     <string name="under_review_title">Your account is under review</string>
-    <string name="under_review_body">Your account request is checked by an admin before access is granted. We\'ll email you the moment it\'s approved — then Track unlocks automatically.</string>
+    <string name="under_review_body">An admin checks each account request. We\'ll email you when yours is approved.</string>
     <string name="under_review_signed_in_as">Signed in as %1$s</string>
     <!-- An account an admin turned down: the under-review screen's shape. The auth server deletes the
          account and its application 30 days after the decision, and sends no e-mail about it; nothing
@@ -1052,7 +1034,7 @@
          they do it. Both periods are named because the client does not know
          which tier this circle is on, and a confident wrong number would be
          worse than an honest pair. -->
-    <string name="invite_history_warning">They will be able to see this circle\'s existing location history, not only what happens from now on — two days of it on a free circle, up to a year on a premium one.</string>
+    <string name="invite_history_warning">They\'ll also see this circle\'s past location history: two days on a free circle, up to a year on a premium one.</string>
     <!-- Shown on the map when a guardian set this account up and holds its
          password. States the CONSEQUENCE rather than the arrangement —
          "managed by a guardian" reads as an administrative fact about who
@@ -1067,8 +1049,8 @@
          wrong - the message is a transfer, not an alarm. -->
     <string name="guardian_handover_line">This account should now be yours</string>
     <string name="guardian_handover_title">This account is yours now</string>
-    <string name="guardian_handover_detail">The day your guardian named as the handover has passed, so this account is yours now. They cannot hand it over themselves and we will not do it silently - write to help@support.pingolin.com and we will walk you through taking it over, including the recovery key and any passkey that would otherwise keep working.</string>
-    <string name="guardian_detail_body">Whoever set this account up knows its password, and the password is what decrypts your data — so they can see where you are now, everywhere you have been for as long as this circle keeps history, and they can set alerts telling them when you arrive somewhere or leave.\n\nNothing tells you when they look. There is no notification, no record you can read, and no way for us to show you one — checking a map leaves no trace.\n\nWhen you turn 18 the account becomes yours and their responsibility for it ends. Changing the password alone does not remove their access, because a recovery key or a passkey they registered keeps working. Section 6 of the Terms has the steps.\n\nIf asking them is not safe, do not ask. You can write to abuse@mail.pingolin.com instead — a minor may report an account held by a guardian, and so may an adult about one a guardian set up for them.</string>
+    <string name="guardian_handover_detail">The handover day your guardian set has passed, so this account is yours now. Write to help@support.pingolin.com and we\'ll help you take it over.</string>
+    <string name="guardian_detail_body">Whoever set this account up knows its password. They can see where you are now and where you have been, for as long as this circle keeps history, and can set alerts for when you arrive somewhere or leave.\n\nYou aren\'t told when they look, and there\'s no record of it.\n\nWhen you turn 18 the account becomes yours. Changing the password alone doesn\'t remove their access. Section 6 of the Terms has the steps.\n\nIf asking them isn\'t safe, don\'t. You can write to abuse@mail.pingolin.com instead.</string>
     <!-- Place-alert consent -->
     <string name="place_alert_button">Create alert</string>
     <string name="place_alert_suppressed_by_target">Alert paused: this person has turned off alerts about themselves in this circle</string>
@@ -1267,7 +1249,7 @@
     <string name="own_sharing_no_push">You\'re not sharing yet: Track needs a notification app first.</string>
     <string name="notification_not_sharing_no_push">Not sharing: Track needs a notification app first</string>
     <string name="push_needed_title">Track can\'t share your location yet</string>
-    <string name="push_needed_body">This build sends notifications through a delivery app of your choice instead of Google\'s, and Track can\'t share your location until one is connected. Circle notifications and place alerts need it too.\n\nntfy is the usual choice and is free. Install and open it, choose it in Push settings, then open ntfy once more so it can listen for alerts.</string>
+    <string name="push_needed_body">Track can\'t share your location until a notification app is connected. Circle notifications and place alerts need one too.\n\nntfy is free and the usual choice. Install and open it, choose it in Push settings, then open ntfy once more so it can listen for alerts.</string>
     <string name="push_needed_install">Install ntfy</string>
     <string name="push_needed_settings">Push settings</string>
     <string name="push_needed_later">Not now</string>

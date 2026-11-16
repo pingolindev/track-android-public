@@ -112,7 +112,7 @@ class PushStatusResolverTest {
             serverRegistrations = emptyList(),
         )
 
-        assertEquals("Status: UnifiedPush — not synced to server", status.text)
+        assertEquals("Status: UnifiedPush · not synced to server", status.text)
         assertTrue(status.isError)
         assertNull(status.restore)
         assertTrue(
@@ -243,7 +243,7 @@ class PushStatusResolverTest {
             serverRegistrations = emptyList(),
         )
 
-        assertEquals("Status: UnifiedPush — registration pending", status.text)
+        assertEquals("Status: UnifiedPush · registration pending", status.text)
         assertFalse(status.isError)
         assertNull(status.restore)
     }
@@ -273,7 +273,7 @@ class PushStatusResolverTest {
             serverRegistrations = listOf(fcm(paused = true)),
         )
 
-        assertEquals("Status: Google FCM — paused", status.text)
+        assertEquals("Status: Google FCM · paused", status.text)
     }
 
     // MARK: - No opinion from the server
@@ -295,7 +295,7 @@ class PushStatusResolverTest {
         val pending = PushStatusResolver.resolve(
             SessionManager.PUSH_TYPE_UNIFIED_PUSH, null, null, null
         )
-        assertEquals("Status: UnifiedPush — registration pending", pending.text)
+        assertEquals("Status: UnifiedPush · registration pending", pending.text)
         assertFalse(pending.isError)
         assertNull(pending.restore)
     }
@@ -329,7 +329,7 @@ class PushStatusResolverTest {
             serverRegistrations = listOf(fcm()),
         )
 
-        assertEquals("Status: UnifiedPush — not synced to server", status.text)
+        assertEquals("Status: UnifiedPush · not synced to server", status.text)
         assertTrue(status.isError)
     }
 

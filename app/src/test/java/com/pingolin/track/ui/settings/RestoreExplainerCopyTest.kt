@@ -38,7 +38,7 @@ import org.robolectric.annotation.Config
  * relies on it. Notification preferences ARE replaced (one PUT over the whole
  * object).
  *
- * The three paragraphs are pinned exactly, breaks included: SettingsFragment
+ * The two paragraphs are pinned exactly, the break included: SettingsFragment
  * shows the string as the dialog's message, and a "\n\n" lost to a space would
  * run them together.
  */
@@ -53,15 +53,13 @@ class RestoreExplainerCopyTest {
         ApplicationProvider.getApplicationContext<Application>().getString(R.string.restore_data_explainer)
 
     @Test
-    fun `the explainer's three paragraphs, word for word`() {
+    fun `the explainer's two paragraphs, word for word`() {
         assertEquals(
             listOf(
-                "Pick a Pingolin Track export — a .json file, or the .enc file if you exported with a passphrase. " +
-                    "Its places and alerts are added to this account and nothing already here is deleted.",
+                "Choose a Track export file. Its places and alerts are added, and nothing already here is deleted. " +
+                    "Circle memberships aren't restored.",
                 "Your notification settings are replaced by the ones in the file. Your privacy settings for each " +
-                    "circle stay as they are; the file's are used only for a circle that has none yet.",
-                "Circle membership can't be restored from a file; rejoining needs an invite. If the file is sealed, " +
-                    "you'll be asked for its passphrase next.",
+                    "circle stay as they are. The file's are used only for a circle that has none yet.",
             ),
             explainer().split("\n\n"),
         )

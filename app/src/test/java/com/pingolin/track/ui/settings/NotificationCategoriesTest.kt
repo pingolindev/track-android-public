@@ -74,7 +74,7 @@ class NotificationCategoriesTest {
     /** The row says what it is where the user is reading, not only if they tap it. */
     @Test
     fun `the locked row says it is always on`() {
-        assertEquals("Circle notifications — always on", emergency().pushRowLabel)
+        assertEquals("Circle notifications: always on", emergency().pushRowLabel)
         assertTrue(NotificationCategories.LOCKED_NOTE.contains("can't be turned off"))
         assertTrue(NotificationCategories.LOCKED_TOAST.contains("can't be turned off"))
     }
@@ -325,7 +325,7 @@ class NotificationCategoriesTest {
      */
     @Test
     fun `the email step says circle notifications are always emailed`() {
-        assertEquals("Circle notifications — always on", NotificationCategories.lockedStatement)
+        assertEquals("Circle notifications: always on", NotificationCategories.lockedStatement)
         assertTrue(NotificationCategories.EMAIL_LOCKED_NOTE.contains("always emailed"))
         assertFalse(NotificationCategories.EMAIL_LOCKED_NOTE.contains("SOS", ignoreCase = true))
     }
@@ -394,7 +394,7 @@ class NotificationCategoriesTest {
      */
     @Test
     fun `the locked statement is the locked row's label`() {
-        assertEquals("Circle notifications — always on", NotificationCategories.lockedStatement)
+        assertEquals("Circle notifications: always on", NotificationCategories.lockedStatement)
     }
 
     /**

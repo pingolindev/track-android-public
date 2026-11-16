@@ -641,8 +641,8 @@ class RestoreRepositoryTest {
         // in the file came back. Each of these is data the user can SEE in
         // their backup and would otherwise expect to find in the account.
         val notes = summary.notes.joinToString("\n")
-        assertTrue(notes.contains("2 condition/inactivity rule(s)"))
-        assertTrue(notes.contains("2 location history point(s)"))
+        assertTrue(notes.contains("2 alert rule(s) in the backup were not restored here"))
+        assertTrue(notes.contains("2 location(s) in the backup were not restored here"))
         assertTrue(notes.contains("Check-ins"))
         assertTrue(notes.contains("Circle membership"))
     }

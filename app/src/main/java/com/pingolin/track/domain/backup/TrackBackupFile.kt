@@ -333,7 +333,7 @@ object TrackBackupFile {
         if (complete) return emptyList()
         return listOf(
             export.stringOrNull("incomplete_reason")
-                ?: "This export is incomplete — it was cut short when it was written, so some data was never in the file."
+                ?: "This export file is incomplete, so some data is missing."
         )
     }
 

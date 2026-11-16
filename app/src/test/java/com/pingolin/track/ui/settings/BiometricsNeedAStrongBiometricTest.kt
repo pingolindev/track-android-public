@@ -60,7 +60,7 @@ class BiometricsNeedAStrongBiometricTest {
         val settings = File("src/main/java/com/pingolin/track/ui/settings/SettingsFragment.kt").readText()
         assertTrue(settings.contains("isBiometricAvailable || sessionManager.getAppLockMethod() == SessionManager.APP_LOCK_BIOMETRICS"))
         assertTrue("looked again after every change", settings.contains("shown = {\n                updateAutoLockVisibility()\n                showBiometricSwitchUsable()\n            },"))
-        assertEquals("Add a fingerprint in your phone's settings to use this; on some phones face unlock works too", context.getString(R.string.app_lock_none_enrolled))
+        assertEquals("Add a fingerprint in your phone's settings to use this. On some phones face unlock works too.", context.getString(R.string.app_lock_none_enrolled))
         assertEquals("This phone can't unlock apps with a fingerprint or face", context.getString(R.string.app_lock_no_hardware))
         assertEquals("Fingerprint or face unlock isn't available right now", context.getString(R.string.app_lock_hardware_unavailable))
     }

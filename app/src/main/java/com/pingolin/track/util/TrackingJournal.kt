@@ -240,12 +240,12 @@ object TrackingJournalFormatter {
     fun describe(entry: TrackingJournalEntry): String {
         val head = when (entry.event) {
             TrackingEvent.STARTED -> "Tracking started"
-            TrackingEvent.STOPPED -> "Tracking stopped — ${reasonText(entry.reason)}"
+            TrackingEvent.STOPPED -> "Tracking stopped: ${reasonText(entry.reason)}"
             TrackingEvent.RESTART_ATTEMPTED -> "Automatic restart attempted"
             TrackingEvent.RESTART_FAILED -> "Automatic restart did not work"
             TrackingEvent.BLIND_SUSPECTED -> "Running but no recent location"
             TrackingEvent.USER_NOTIFIED -> "Asked you to reopen the app"
-            TrackingEvent.SIGNED_OUT -> "Signed out — ${reasonText(entry.reason)}"
+            TrackingEvent.SIGNED_OUT -> "Signed out: ${reasonText(entry.reason)}"
         }
         // No trailing "earlier": relativeAge already reads as a time ("3m ago",
         // "just now"), and appending to it would read "last location just now
@@ -255,7 +255,7 @@ object TrackingJournalFormatter {
             else -> "last location ${relativeAge(entry.lastFixAgeMs)}"
         }
         val note = if (entry.detail.isBlank()) "" else " (${entry.detail})"
-        return "$head; $fix$note"
+        return "$head, $fix$note"
     }
 
     fun reasonText(reason: TrackingStopReason): String = when (reason) {
