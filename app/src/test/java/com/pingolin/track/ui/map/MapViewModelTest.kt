@@ -433,7 +433,7 @@ class MapViewModelTest {
      * connectivity failure. `refreshLatestLocations` returns
      * CircleKeyUnavailableException before it opens a socket; if that set
      * `lastRefreshFailedAt` like an untyped failure, the map would say
-     * "Couldn't reach server, showing last known" on a device with a working
+     * "Couldn't reach Pingolin: showing last known" on a device with a working
      * connection, and point the user at the wrong remedy.
      */
     @Test

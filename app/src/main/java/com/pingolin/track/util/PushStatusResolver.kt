@@ -136,7 +136,7 @@ object PushStatusResolver {
         // Unknown server state: local-only behaviour.
         if (serverRegistrations == null) {
             return if (localOk) Status("Status: $label", isError = false, configured = true)
-            else Status("Status: $label — registration pending", isError = false, configured = true)
+            else Status("Status: $label · registration pending", isError = false, configured = true)
         }
 
         if (server == null) {
@@ -149,18 +149,18 @@ object PushStatusResolver {
                 // Reporting it is not enough: the user has
                 // no button that repairs this.
                 Status(
-                    "Status: $label — not synced to server",
+                    "Status: $label · not synced to server",
                     isError = true,
                     configured = true,
                     needsReregistration = true,
                 )
             } else {
-                Status("Status: $label — registration pending", isError = false, configured = true)
+                Status("Status: $label · registration pending", isError = false, configured = true)
             }
         }
 
         if (server.paused) {
-            return Status("Status: $label — paused", isError = false, configured = true)
+            return Status("Status: $label · paused", isError = false, configured = true)
         }
 
         // Server has a live registration. If this install lost its copy, the

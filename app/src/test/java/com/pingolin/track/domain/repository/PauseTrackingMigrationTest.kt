@@ -344,7 +344,7 @@ class PauseTrackingMigrationTest {
         val moved = text("pause_tracking_moved")
         assertTrue(moved, moved.contains("Your circles are paused"))
         for (note in listOf(moved, text("pause_tracking_removed_no_circles"))) {
-            assertTrue(note, note.contains("your own location history again; only you can see it."))
+            assertTrue(note, note.contains("your own location history again, and only you can see it."))
         }
     }
 }

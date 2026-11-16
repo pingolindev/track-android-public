@@ -28,11 +28,10 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * What a data export is, as the Settings screen and the export dialog say it: a JSON file
- * decrypted on this device, which anyone who opens it can read, unless a passphrase seals it.
- * Never "All exported data remains encrypted", with a lock, over a file that is plaintext without
- * a passphrase (ExportRepository's fileBody is built from the decrypted export). The words are
- * the iPhone app's, from its export footer.
+ * What a data export is, as the Settings screen and the export dialog say it: a file anyone who
+ * opens it can read, unless a passphrase protects it, never "All exported data remains
+ * encrypted", with a lock, over a file that is plaintext without a passphrase (ExportRepository's
+ * fileBody is built from the decrypted export). The words are the web's.
  */
 class ExportReadableCopyTest {
 
@@ -40,15 +39,13 @@ class ExportReadableCopyTest {
         const val ANDROID = "http://schemas.android.com/apk/res/android"
         const val APP = "http://schemas.android.com/apk/res-auto"
 
-        /** The iPhone's sentence, word for word, where a passphrase field follows it. */
+        /** The web's sentence, word for word, where a passphrase field follows it. */
         const val BESIDE_THE_FIELD =
-            "The file is written in JSON, decrypted on this device. Anyone who opens it can read it, so keep it " +
-                "somewhere safe — or seal it below."
+            "Anyone who opens the file can read it, so keep it somewhere safe or add a passphrase below."
 
         /** The same, where no file exists yet and no passphrase field follows: Settings, before the export starts. */
         const val IN_SETTINGS =
-            "An export file is written in JSON, decrypted on this device. Anyone who opens it can read it, so keep it " +
-                "somewhere safe — or seal it with a passphrase when you export."
+            "Anyone who opens an export file can read it, so keep it somewhere safe or add a passphrase when you export."
     }
 
     private fun parse(path: String): Element =
@@ -90,15 +87,15 @@ class ExportReadableCopyTest {
         val all = layout("dialog_export_data").all()
         val notice = all.single { it.attr("text") == BESIDE_THE_FIELD }
         val field = all.single { it.attr("id") == "@+id/exportPassphraseLayout" }
-        assertTrue("\"seal it below\" points at the passphrase", all.indexOf(notice) < all.indexOf(field))
+        assertTrue("\"add a passphrase below\" points at the passphrase", all.indexOf(notice) < all.indexOf(field))
         assertNull("no lock: the file is not locked unless a passphrase seals it", notice.attr("drawableStart"))
         // The web's words for the field, word for word, so the two read alike.
         assertEquals("Seal with a passphrase (optional)", field.attr("hint"))
         assertEquals("Leave blank for a readable file", field.getAttributeNS(APP, "placeholderText").let { strings.getValue(it.removePrefix("@string/")) })
-        val help = all.single { it.attr("text")?.startsWith("With a passphrase the file is sealed") == true }
+        val help = all.single { it.attr("text")?.startsWith("With a passphrase, only that passphrase opens the file") == true }
         assertEquals(
-            "With a passphrase the file is sealed and only that passphrase opens it. Without one it stays readable, " +
-                "which is what you want if another app needs to import it. There is no way to recover a lost passphrase.",
+            "With a passphrase, only that passphrase opens the file, and a lost one can't be recovered. " +
+                "Leave it blank if another app needs to read the file.",
             help.attr("text"),
         )
         assertTrue("the help sits under the field", all.indexOf(field) < all.indexOf(help))
@@ -153,7 +150,7 @@ class ExportReadableCopyTest {
 
     @Test
     fun `with a passphrase the file written is the sealed one, and a seal that fails writes nothing`() {
-        // The help under the field: "With a passphrase the file is sealed". The seal is the SDK's,
+        // The help under the field: "With a passphrase, only that passphrase opens the file". The seal is the SDK's,
         // called inline where the export lands, so this reads the source.
         val onSuccess = fragment.substringAfter("result.onSuccess { export ->").substringBefore("}.onFailure")
         assertTrue(onSuccess, onSuccess.contains(

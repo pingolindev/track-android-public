@@ -87,7 +87,7 @@ class PushRouteSharingTest {
     fun `nothing promises sharing goes on without a notification app`() {
         assertFalse("sharing keeps working" in source("ui/main/MainActivity.kt"))
         assertFalse("sharing keeps working" in english)
-        assertTrue("can\\'t share your location until one is connected" in english)
+        assertTrue("can\\'t share your location until a notification app is connected" in english)
     }
 
     @Test

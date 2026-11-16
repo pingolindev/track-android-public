@@ -120,9 +120,11 @@ class LockedCircleTest {
         assertEquals("Waiting for your circle", title(Cause.OWN_RESET, isOwner = true))
         val text = body(Cause.OWN_RESET, isOwner = true)
         // What happens: the members' phones already have the question.
-        assertTrue(text, text.contains("another member of Family has been asked to confirm it's you"))
-        assertTrue(text, text.contains("It opens here as soon as one of them does."))
-        assertTrue(text, text.contains("Data from before your password reset"))
+        assertTrue(text, text.contains("a member of Family has been asked to confirm it's you"))
+        assertTrue(text, text.contains("It opens here once they do."))
+        // One place, in plain words: the button under it opens the account settings.
+        assertTrue(text, text.contains("you can restore access in your account settings instead"))
+        assertFalse("no path of arrows", text.contains("→"))
         assertTrue(text, text.contains("recovery key"))
         // A member after their own reset gets the same pointer.
         assertTrue(LockedCircle.explanationFor(Cause.OWN_RESET, isOwner = false).offersRestore)

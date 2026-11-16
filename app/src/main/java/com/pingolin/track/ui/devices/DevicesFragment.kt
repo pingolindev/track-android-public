@@ -133,11 +133,11 @@ class DevicesFragment : Fragment() {
             // Those are push registrations with no sign-in behind them: there is
             // no session to end, so signing out cannot reach them.
             DevicesEvent.NoOthersToRevoke ->
-                "Nothing to sign out — those devices have no linked sign-in"
+                "Nothing to sign out: those devices have no linked sign-in"
             is DevicesEvent.BulkRevoked -> when {
                 event.failed == 0 -> "Signed out ${event.ok} device${if (event.ok == 1) "" else "s"}"
                 event.ok == 0 -> "Sign-out failed for all ${event.failed}"
-                else -> "Signed out ${event.ok}; ${event.failed} failed"
+                else -> "Signed out ${event.ok}, ${event.failed} failed"
             }
         }
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
@@ -198,7 +198,7 @@ class DevicesFragment : Fragment() {
             // path got here.
             Toast.makeText(
                 requireContext(),
-                "Nothing to sign out — those devices have no linked sign-in",
+                "Nothing to sign out: those devices have no linked sign-in",
                 Toast.LENGTH_SHORT
             ).show()
             return

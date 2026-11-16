@@ -112,7 +112,7 @@ class AuthViewModelTest {
 
         val state = viewModel.uiState.value
         assertTrue("State should be Error", state is AuthUiState.Error)
-        assertEquals("Please enter email and password", (state as AuthUiState.Error).message)
+        assertEquals("Enter your email and password", (state as AuthUiState.Error).message)
     }
 
     @Test
@@ -124,7 +124,7 @@ class AuthViewModelTest {
 
         val state = viewModel.uiState.value
         assertTrue("State should be Error", state is AuthUiState.Error)
-        assertEquals("Please enter email and password", (state as AuthUiState.Error).message)
+        assertEquals("Enter your email and password", (state as AuthUiState.Error).message)
     }
 
     @Test
@@ -238,7 +238,7 @@ class AuthViewModelTest {
 
         val state = viewModel.uiState.value
         assertTrue("State should be Error", state is AuthUiState.Error)
-        assertEquals("Please enter the verification code", (state as AuthUiState.Error).message)
+        assertEquals("Enter the verification code", (state as AuthUiState.Error).message)
     }
 
     @Test

@@ -110,8 +110,8 @@ class BatteryExemptionTest {
         assertEquals("Let Track run in the background?", context.getString(R.string.background_exemption_title))
         assertEquals(
             "This phone can stop apps that run in the background, and then your circles may stop getting your " +
-                "location. Letting Track run in the background helps keep sharing going. Android will ask you to " +
-                "confirm. It can use more battery, and you can change it any time in Track's settings.",
+                "location. Letting Track run in the background can use more battery, and you can change it in " +
+                "Track's settings.",
             context.getString(R.string.background_exemption_body),
         )
         assertEquals("Continue", context.getString(R.string.background_exemption_continue))

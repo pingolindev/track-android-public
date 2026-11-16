@@ -524,7 +524,7 @@ class SettingsFragment : Fragment() {
                 ).show()
             } catch (e: Exception) {
                 android.util.Log.w("SettingsFragment", "Export not saved: ${e.javaClass.simpleName}: ${e.message}")
-                Toast.makeText(requireContext(), "Couldn't save the file there. Please try another place.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Couldn't save the file there. Try another place.", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -580,7 +580,7 @@ class SettingsFragment : Fragment() {
         if (summary.privacyRestored > 0) lines.add("${summary.privacyRestored} circle privacy setting(s) applied")
         if (summary.preferencesRestored) lines.add("Notification preferences applied")
         if (summary.alertsRestored > 0) lines.add("${summary.alertsRestored} place alert(s) restored")
-        if (lines.isEmpty()) lines.add("Nothing new to restore — everything in that backup is already here.")
+        if (lines.isEmpty()) lines.add("Nothing new to restore: everything in that backup is already here.")
         if (summary.notes.isNotEmpty()) {
             lines.add("")
             lines.addAll(summary.notes)
@@ -1567,9 +1567,9 @@ class SettingsFragment : Fragment() {
      */
     private fun showNotificationDetailDialog() {
         val labels = arrayOf(
-            "Names and places — “Alice arrived at Home”",
-            "Names only — “Alice arrived at a place”",
-            "Generic — “Tap to view”",
+            "Names and places: “Alice arrived at Home”",
+            "Names only: “Alice arrived at a place”",
+            "Generic: “Tap to view”",
         )
         val values = arrayOf(
             SessionManager.NOTIF_DETAIL_FULL,
@@ -2184,7 +2184,7 @@ class SettingsFragment : Fragment() {
                                 .setPositiveButton("OK") { _, _ -> navigateToAuth() }
                                 .show()
                         } else {
-                            Toast.makeText(requireContext(), "Account deleted successfully", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), "Account deleted", Toast.LENGTH_LONG).show()
                             navigateToAuth()
                         }
                     }
@@ -2238,13 +2238,13 @@ class SettingsFragment : Fragment() {
                     // and deleting it cascades into every app that hangs off it (Track
                     // and Note). Someone deleting from Track has no way to know their
                     // notes go with it unless this says so, before the button.
-                    "\n\nThis is your Pingolin account, which every Pingolin app shares. Deleting it deletes " +
-                    "your data in all of them - Pingolin Track and Pingolin Note - not just this app." +
+                    "\n\nThis is your Pingolin account for every Pingolin app. Deleting it deletes " +
+                    "your data in both Pingolin Track and Pingolin Note." +
                     // Stated before the button, because afterwards there is no account
                     // left to read it in. We cancel what we can; an App Store
                     // subscription only Apple can stop, at the customer's request.
-                    "\n\nThis also cancels your subscription. If you bought it through the App Store on an " +
-                    "iPhone or iPad, only you can cancel that - in your Apple account settings."
+                    "\n\nDeleting your account cancels any subscription you pay for through us. An App Store " +
+                    "subscription is different: only you can cancel it, in your Apple account settings."
             )
             .setPositiveButton("Delete") { _, _ ->
                 showPasswordDialogForDeletion(forfeitCredit)
@@ -2339,7 +2339,7 @@ class SettingsFragment : Fragment() {
         // they render empty.
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Encrypted backup")
-            .setMessage("This backup is sealed. Enter the passphrase it was exported with.")
+            .setMessage("Enter the passphrase it was exported with.")
             .setView(container)
             .setPositiveButton("Restore") { _, _ ->
                 restoreWithPassphraseIfNeeded(text, input.text.toString())

@@ -234,7 +234,7 @@ class CheckInFragment : Fragment() {
                     is CheckInUiState.Sent -> {
                         binding.progressBar.visibility = View.GONE
                         setQuickButtonsEnabled(true)
-                        Toast.makeText(requireContext(), "Check-in sent!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Check-in sent", Toast.LENGTH_SHORT).show()
                         viewModel.resetState()
                         // The new row is already inserted locally and surfaces via the
                         // observeByCircle Flow; no immediate network refresh needed
@@ -267,13 +267,13 @@ class CheckInFragment : Fragment() {
 
     private fun sendCustomMessage() {
         if (viewModel.selectedCircleId.value == null) {
-            Toast.makeText(requireContext(), "Please select a circle first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Choose a circle first", Toast.LENGTH_SHORT).show()
             return
         }
 
         val message = binding.etCustomMessage.text?.toString()?.trim() ?: ""
         if (message.isBlank()) {
-            Toast.makeText(requireContext(), "Please type a message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Type a message", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -283,7 +283,7 @@ class CheckInFragment : Fragment() {
 
     private fun sendQuickCheckIn(type: String) {
         if (viewModel.selectedCircleId.value == null) {
-            Toast.makeText(requireContext(), "Please select a circle first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Choose a circle first", Toast.LENGTH_SHORT).show()
             return
         }
         viewModel.checkInWithLocation(type)
@@ -291,7 +291,7 @@ class CheckInFragment : Fragment() {
 
     private fun showCheckInWithMessageDialog() {
         if (viewModel.selectedCircleId.value == null) {
-            Toast.makeText(requireContext(), "Please select a circle first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Choose a circle first", Toast.LENGTH_SHORT).show()
             return
         }
 

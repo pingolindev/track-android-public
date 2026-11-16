@@ -63,7 +63,7 @@ object NotificationCategories {
         val isLocked: Boolean get() = pushKey == null
 
         /** What the push list shows. A locked row says so where the user is reading. */
-        val pushRowLabel: String get() = if (isLocked) "$label — always on" else label
+        val pushRowLabel: String get() = if (isLocked) "$label: always on" else label
     }
 
     /**
@@ -93,8 +93,8 @@ object NotificationCategories {
      * about DELIVERY, not about rescue. See [BANNED_COPY].
      */
     const val LOCKED_NOTE: String =
-        "Circle notifications can't be turned off. They ignore quiet hours and every " +
-            "switch here, so you always see when someone in your circle asks for attention."
+        "Circle notifications can't be turned off and ignore quiet hours, so you always " +
+            "see when someone in your circle asks for attention."
 
     /**
      * The e-mail step's line beside the locked row. Circle notifications are e-mailed to every

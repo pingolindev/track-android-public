@@ -61,7 +61,7 @@ class NoRepairButtonTest {
         activity.setTheme(R.style.Theme_Track)
         val page = LayoutInflater.from(activity).inflate(R.layout.fragment_my_keys, null)
         assertFalse(texts(page).any { it.contains("repair", ignoreCase = true) })
-        assertEquals("What other members compare to confirm it's you", context.getString(R.string.my_keys_row_description))
+        assertEquals("The public values other members see for you", context.getString(R.string.my_keys_row_description))
 
         val words = File("src/main/res/values/strings.xml").readText() + File("src/main/res/layout/fragment_my_keys.xml").readText()
         for (gone in listOf("Repair my other devices", "repair your other devices", "my_keys_personal_", "btnRepublishSelfKey")) {

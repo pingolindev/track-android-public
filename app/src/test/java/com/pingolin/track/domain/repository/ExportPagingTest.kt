@@ -234,7 +234,7 @@ class ExportPagingTest {
         // Returning what it had would be a file that looks whole and is not:
         // the exact failure the paging exists to prevent.
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull()?.message?.contains("incomplete") == true)
+        assertTrue(result.exceptionOrNull()?.message?.contains("The export couldn't be completed") == true)
     }
 
     @Test

@@ -210,9 +210,8 @@ fun AccountDeletionOutcome.deletionNotice(): String {
  */
 internal fun erasureNotice(dataErasure: String): String? = when (dataErasure) {
     "queued" ->
-        "Your locations and notes could not be erased at that moment — one of the services " +
-            "was unreachable. The erasure is recorded and will be retried until it goes " +
-            "through. If you want to know that it has, write to privacy@mail.pingolin.com."
+        "Your locations and notes couldn't be erased just now. It will be retried until it goes " +
+            "through. To check that it has, write to privacy@mail.pingolin.com."
     "failed" ->
         "We could not record the erasure of your locations and notes, so it may not have " +
             "happened. Write to privacy@mail.pingolin.com and we will complete it."
@@ -278,7 +277,7 @@ class AuthRepository @Inject constructor(
 
         /** A sign-in refused because the address was never verified (auth's 403 `email_not_verified`). */
         internal const val EMAIL_NOT_VERIFIED =
-            "Please verify your email address first. Open the link we sent you, then sign in again."
+            "Verify your email address first. Open the link we sent you, then sign in again."
 
         /**
          * SRP step 1's 429 with no code: the auth server's per-network or per-(address, network)
@@ -309,8 +308,7 @@ class AuthRepository @Inject constructor(
 
         /** The unspent-credit question (this app's words; the same as on iPhone). */
         internal const val UNSPENT_CREDIT_TEXT = "Deleting your account destroys the credit on it, and it can't be " +
-            "returned afterwards because the record goes with the account. Write to help@support.pingolin.com " +
-            "to have it refunded first, or delete anyway."
+            "returned afterwards. Write to help@support.pingolin.com to have it refunded first, or delete anyway."
 
         /** How long a sign-out waits for the server to end the session. */
         internal const val LOGOUT_CAP_MS = 4_000L
@@ -726,7 +724,7 @@ class AuthRepository @Inject constructor(
                 rateLimiter.recordFailedAttempt(email)
                 return LoginResult.Error(
                     "Couldn't open your data on this phone. If you changed your password " +
-                        "recently, sign in with the new one; otherwise, use account recovery.",
+                        "recently, sign in with the new one. Otherwise, use account recovery.",
                     e
                 )
             }

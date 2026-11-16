@@ -416,8 +416,7 @@ class ExportRepository @Inject constructor(
 
             if (truncated) {
                 return Result.failure(Exception(
-                    "Export incomplete: stopped after $MAX_EXPORT_PAGES pages while the server " +
-                    "still reported more data. Try a shorter date range."
+                    "The export couldn't be completed. Try a shorter date range."
                 ))
             }
             onPages(pages)

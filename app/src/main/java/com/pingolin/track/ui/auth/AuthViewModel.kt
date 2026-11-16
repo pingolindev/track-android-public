@@ -68,7 +68,7 @@ class AuthViewModel @Inject constructor(
     fun login(email: String, password: CharArray) {
         if (email.isBlank() || password.isEmpty()) {
             SrpClient.clearCharArray(password)
-            _uiState.value = AuthUiState.Error("Please enter email and password")
+            _uiState.value = AuthUiState.Error("Enter your email and password")
             return
         }
 
@@ -127,7 +127,7 @@ class AuthViewModel @Inject constructor(
         }
 
         if (code.isBlank()) {
-            _uiState.value = AuthUiState.Error("Please enter the verification code")
+            _uiState.value = AuthUiState.Error("Enter the verification code")
             return
         }
 

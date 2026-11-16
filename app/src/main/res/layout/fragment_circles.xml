@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="start"
-                    android:text="1. Create a circle for your group\n2. Invite family or friends\n3. Share locations securely"
+                    android:text="1. Create a circle for your group\n2. Invite family or friends\n3. Share your locations"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />

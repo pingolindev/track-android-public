@@ -307,15 +307,11 @@ blocked_people_unblock_cd
 my_keys_title
 my_keys_button
 my_keys_explainer
-my_keys_compare_heading
-my_keys_compare_safety_number
-my_keys_compare_keys
 my_keys_sharing_label
 my_keys_signing_label
 my_keys_user_id_label
 my_keys_copy
 my_keys_unavailable
-my_keys_footnote
 password_in_place_title
 password_in_place_body
 password_in_place_hint
@@ -327,7 +323,6 @@ member_detail_safety_number
 member_detail_show_technical_details
 member_detail_hide_technical_details
 member_detail_safety_number_hint
-member_detail_technical_hint
 app_lock_title
 app_lock_pin
 app_lock_pin_description

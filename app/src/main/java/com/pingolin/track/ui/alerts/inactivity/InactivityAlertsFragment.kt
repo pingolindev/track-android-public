@@ -115,7 +115,7 @@ class InactivityAlertsFragment : Fragment() {
                     }
                     is InactivityAlertsUiState.AlertCreated -> {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Inactivity rule created!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Inactivity rule created", Toast.LENGTH_SHORT).show()
                         viewModel.resetState()
                     }
                     is InactivityAlertsUiState.AlertUpdated -> {
