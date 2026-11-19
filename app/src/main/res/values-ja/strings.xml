@@ -64,7 +64,8 @@
     <string name="check_in_screen_entry">位置情報を付けて…</string>
     <string name="place_needs_a_position">先に場所の住所を検索してください。Trackはまだあなたの位置情報を取得していません。</string>
     <string name="sos_title">アラート</string>
-    <string name="sos_button">サークルに通知（緊急通報ではありません）</string>
+    <string name="sos_button">サークルに通知</string>
+    <string name="sos_button_caveat">緊急通報ではありません</string>
     <string name="sos_tap_hint">タップすると、このサークルのアクティブなメンバーに通知して、あなたの居場所を伝えます。短いカウントダウンの間はキャンセルできます。</string>
     <string name="sos_reach_explanation">あなたの位置情報は、このサークルのアクティブなメンバーにだけ送信されます。届くことは保証されません。差し迫った危険がある場合は、地域の緊急通報サービスに連絡してください。</string>
     <string name="sos_sending">サークルに通知しています…</string>

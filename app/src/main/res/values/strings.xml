@@ -106,7 +106,13 @@
         Key stays `sos_title` — a wire/resource name, never shown.
     -->
     <string name="sos_title">Alerts</string>
-    <string name="sos_button">Notify my circle - not emergency services</string>
+    <!--
+        The notify button's two lines (SosFragment's sosButtonLabel): the action in bold, then,
+        smaller, what it is not. The caveat is part of the button's own text, so it is read and
+        announced with the action every time.
+    -->
+    <string name="sos_button">Notify my circle</string>
+    <string name="sos_button_caveat">Not emergency services</string>
     <string name="sos_tap_hint">Tap to notify the active members of this circle and show them where you are. A short countdown lets you cancel.</string>
     <!--
         What notifying actually does, shown while the countdown is running —

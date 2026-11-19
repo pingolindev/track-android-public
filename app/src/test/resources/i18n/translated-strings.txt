@@ -63,6 +63,7 @@ check_in_screen_entry
 place_needs_a_position
 sos_title
 sos_button
+sos_button_caveat
 sos_tap_hint
 sos_reach_explanation
 sos_sending

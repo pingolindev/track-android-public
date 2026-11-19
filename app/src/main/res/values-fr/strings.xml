@@ -64,7 +64,8 @@
     <string name="check_in_screen_entry">Avec ma position…</string>
     <string name="place_needs_a_position">Recherchez d\'abord l\'adresse du lieu : Track ne connaît pas encore votre position.</string>
     <string name="sos_title">Alertes</string>
-    <string name="sos_button">Prévenir mon cercle — pas les services d\'urgence</string>
+    <string name="sos_button">Prévenir mon cercle</string>
+    <string name="sos_button_caveat">Pas les services d\'urgence</string>
     <string name="sos_tap_hint">Appuyez pour prévenir les membres actifs de ce cercle et leur montrer où vous êtes. Un court compte à rebours vous permet d\'annuler.</string>
     <string name="sos_reach_explanation">Votre position est envoyée uniquement aux membres actifs de ce cercle. La réception n\'est pas garantie. Si vous êtes en danger immédiat, contactez les services d\'urgence locaux.</string>
     <string name="sos_sending">Envoi de la notification à votre cercle…</string>

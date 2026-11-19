@@ -64,7 +64,8 @@
     <string name="check_in_screen_entry">Mit meinem Standort…</string>
     <string name="place_needs_a_position">Suche zuerst nach der Adresse des Orts: Track kennt deinen Standort noch nicht.</string>
     <string name="sos_title">Meldungen</string>
-    <string name="sos_button">Meinen Kreis benachrichtigen – kein Notruf</string>
+    <string name="sos_button">Meinen Kreis benachrichtigen</string>
+    <string name="sos_button_caveat">Kein Notruf</string>
     <string name="sos_tap_hint">Tippe, um die aktiven Mitglieder dieses Kreises zu benachrichtigen und ihnen zu zeigen, wo du bist. Ein kurzer Countdown lässt dich noch abbrechen.</string>
     <string name="sos_reach_explanation">Dadurch wird dein Standort nur an aktive Mitglieder dieses Kreises gesendet. Die Zustellung ist nicht garantiert. Wenn du in unmittelbarer Gefahr bist, wende dich an den örtlichen Notruf.</string>
     <string name="sos_sending">Dein Kreis wird benachrichtigt…</string>

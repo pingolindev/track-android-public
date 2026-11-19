@@ -45,13 +45,15 @@
                         android:gravity="center"
                         android:padding="32dp">
 
-                        <!-- The label is a phrase, which does not fit a disc,
-                             so this is a full-width action of the same height
-                             as the iOS button it is meant to match. -->
-                        <!-- minHeight, not a fixed height: the label is a
-                             sentence, and a fixed 96dp would clip it, dropping
-                             the "not emergency services" half — the one part
-                             that must not be lost. -->
+                        <!-- The label does not fit a disc, so this is a
+                             full-width action of the same height as the iOS
+                             button it is meant to match. -->
+                        <!-- Two lines, set in code by sosButtonLabel: "Notify
+                             my circle" in bold, then "Not emergency services"
+                             smaller. No textStyle here: the bold is on the
+                             first line only. minHeight, not a fixed height: a
+                             fixed 96dp would clip the second line, the one
+                             part that must not be lost. -->
                         <Button
                             android:id="@+id/btnSos"
                             android:layout_width="match_parent"
@@ -59,7 +61,6 @@
                             android:minHeight="96dp"
                             android:text="@string/sos_button"
                             android:textSize="22sp"
-                            android:textStyle="bold"
                             android:backgroundTint="@color/sos_notify_green"
                             app:cornerRadius="20dp" />
 
