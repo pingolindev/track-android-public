@@ -64,7 +64,8 @@
     <string name="check_in_screen_entry">附上我的位置…</string>
     <string name="place_needs_a_position">请先搜索该地点的地址：Track 还没有获取到你的位置。</string>
     <string name="sos_title">提醒</string>
-    <string name="sos_button">通知我的圈子（并非紧急服务）</string>
+    <string name="sos_button">通知我的圈子</string>
+    <string name="sos_button_caveat">并非紧急服务</string>
     <string name="sos_tap_hint">点按即可通知这个圈子中已加入的成员，并向他们显示你所在的位置。在短暂的倒计时内，你可以取消。</string>
     <string name="sos_reach_explanation">此操作只会将你的位置发送给这个圈子中已加入的成员。无法保证送达。如果你正面临迫在眉睫的危险，请联系当地的紧急服务。</string>
     <string name="sos_sending">正在通知你的圈子…</string>

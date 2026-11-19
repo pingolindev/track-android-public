@@ -122,6 +122,7 @@ class SosFragment : Fragment() {
     }
 
     private fun setupUI() {
+        binding.btnSos.text = sosButtonLabel(requireContext())
         binding.btnSos.setOnClickListener {
             showCircleSelectionDialog()
         }
@@ -418,6 +419,28 @@ class SosFragment : Fragment() {
         _binding = null
     }
 }
+
+/**
+ * The notify button's label, on two lines: the action in bold, then, smaller, that it does not
+ * reach emergency services. Both lines are the button's own text, so the caveat is read and
+ * announced with the action every time and cannot be laid out where a person in trouble misses it.
+ */
+internal fun sosButtonLabel(context: android.content.Context): CharSequence =
+    android.text.SpannableStringBuilder()
+        .append(
+            context.getString(R.string.sos_button),
+            android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+            android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        .append("\n")
+        .append(
+            context.getString(R.string.sos_button_caveat),
+            android.text.style.RelativeSizeSpan(SOS_CAVEAT_SIZE),
+            android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+
+/** The caveat line's size against the button's 22sp: about 15sp. */
+internal const val SOS_CAVEAT_SIZE = 0.68f
 
 /**
  * The delivery dialog's text: one sentence per state, plus the caveats that apply to it. Checks that

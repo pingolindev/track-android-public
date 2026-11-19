@@ -64,7 +64,8 @@
     <string name="check_in_screen_entry">Con mi ubicación…</string>
     <string name="place_needs_a_position">Busca primero la dirección del lugar: Track aún no tiene tu ubicación.</string>
     <string name="sos_title">Alertas</string>
-    <string name="sos_button">Avisar a mi círculo — no es un servicio de emergencias</string>
+    <string name="sos_button">Avisar a mi círculo</string>
+    <string name="sos_button_caveat">No es un servicio de emergencias</string>
     <string name="sos_tap_hint">Toca para avisar a los miembros activos de este círculo y mostrarles dónde estás. Una breve cuenta regresiva te permite cancelar.</string>
     <string name="sos_reach_explanation">Esto envía tu ubicación solo a los miembros activos de este círculo. La entrega no está garantizada. Si estás en peligro inmediato, contacta con los servicios de emergencia de tu zona.</string>
     <string name="sos_sending">Avisando a tu círculo…</string>
