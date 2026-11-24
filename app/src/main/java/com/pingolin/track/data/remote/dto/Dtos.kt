@@ -2643,7 +2643,27 @@ data class CreateInactivityAlertRequest(
      * A change waiting to sync sends its own id: the server answers a resend with the first
      * row, or 409 `request_already_done`, and creates nothing. A tap sends none.
      */
-    @SerializedName("client_request_id") val clientRequestId: String? = null
+    @SerializedName("client_request_id") val clientRequestId: String? = null,
+    /**
+     * "check_in" for a check-in rule (InactivityWatches); null for a location rule, which goes
+     * without it, as from every older app. A check-in rule needs [targetUserPseudonym].
+     */
+    @SerializedName("watches") val watches: String? = null,
+    /**
+     * A check-in rule's kind (CheckInModes): "once" or "scheduled". Null on a location rule. A
+     * scheduled rule sends its schedule below, and timeout_minutes 60, which the server ignores.
+     */
+    @SerializedName("check_in_mode") val checkInMode: String? = null,
+    /** A scheduled rule's local weekdays: bit 0 = Monday ... bit 6 = Sunday (CheckInSchedule). */
+    @SerializedName("schedule_days") val scheduleDays: Int? = null,
+    /** Its deadline, in minutes after local midnight. */
+    @SerializedName("schedule_due_minute") val scheduleDueMinute: Int? = null,
+    /** When a day's check-ins start counting, in minutes after local midnight; absent: the start of the day. */
+    @SerializedName("schedule_from_minute") val scheduleFromMinute: Int? = null,
+    /** The IANA zone its times are in. */
+    @SerializedName("schedule_tz") val scheduleTz: String? = null,
+    /** An about-me rule whose zone this account's phone keeps at its own (CheckInZoneFollower). */
+    @SerializedName("schedule_tz_follows_phone") val scheduleTzFollowsPhone: Boolean? = null,
 )
 
 /**
@@ -2671,11 +2691,34 @@ data class InactivityAlertResponse(
     /** E2EE: Encrypted alert conditions for client-side evaluation */
     @SerializedName("encrypted_conditions") val encryptedConditions: EncryptedPayload?,
     /** If true, this alert requires client-side evaluation */
-    @SerializedName("client_only") val clientOnly: Boolean
+    @SerializedName("client_only") val clientOnly: Boolean,
+    /**
+     * What the rule watches: "location" or "check_in" (InactivityWatches). Absent from an older
+     * server, whose every rule is a location rule. Nullable: Gson fills no Kotlin default.
+     */
+    @SerializedName("watches") val watches: String? = null,
+    /**
+     * A check-in rule's start, RFC 3339: when it was made or last turned back on. Absent on a
+     * location rule.
+     */
+    @SerializedName("armed_at") val armedAt: String? = null,
+    /** A check-in rule's kind (CheckInModes); absent from an older server, and on a location rule. */
+    @SerializedName("check_in_mode") val checkInMode: String? = null,
+    /** A scheduled rule's schedule, as [CreateInactivityAlertRequest] sends it; absent on any other rule. */
+    @SerializedName("schedule_days") val scheduleDays: Int? = null,
+    @SerializedName("schedule_due_minute") val scheduleDueMinute: Int? = null,
+    @SerializedName("schedule_from_minute") val scheduleFromMinute: Int? = null,
+    @SerializedName("schedule_tz") val scheduleTz: String? = null,
+    @SerializedName("schedule_tz_follows_phone") val scheduleTzFollowsPhone: Boolean? = null,
 )
 
 /**
  * Request to update an inactivity alert.
+ *
+ * A scheduled check-in rule's schedule: with [scheduleDays], the server replaces it whole (an
+ * absent [scheduleFromMinute] is the start of the day, an absent [scheduleTzFollowsPhone] false,
+ * so an edit sends both as they are); with only [scheduleTz], only the zone changes (a phone
+ * following its owner). Plain Gson leaves every null field out.
  */
 data class UpdateInactivityAlertRequest(
     @SerializedName("timeout_minutes") val timeoutMinutes: Int?,
@@ -2685,7 +2728,12 @@ data class UpdateInactivityAlertRequest(
     @SerializedName("notify_on_return") val notifyOnReturn: Boolean?,
     @SerializedName("cooldown_minutes") val cooldownMinutes: Int?,
     /** E2EE: Encrypted alert conditions for client-side evaluation */
-    @SerializedName("encrypted_conditions") val encryptedConditions: EncryptedPayload?
+    @SerializedName("encrypted_conditions") val encryptedConditions: EncryptedPayload?,
+    @SerializedName("schedule_days") val scheduleDays: Int? = null,
+    @SerializedName("schedule_due_minute") val scheduleDueMinute: Int? = null,
+    @SerializedName("schedule_from_minute") val scheduleFromMinute: Int? = null,
+    @SerializedName("schedule_tz") val scheduleTz: String? = null,
+    @SerializedName("schedule_tz_follows_phone") val scheduleTzFollowsPhone: Boolean? = null,
 )
 
 /**
@@ -2813,8 +2861,25 @@ data class CircleSelfAlertDto(
     @SerializedName("user_id") val userId: String,
     @SerializedName("circle_id") val circleId: String,
     @SerializedName("timeout_hours") val timeoutHours: Int,
-    @SerializedName("notify_on_return") val notifyOnReturn: Boolean = false
-)
+    @SerializedName("notify_on_return") val notifyOnReturn: Boolean = false,
+    /** "location" or "check_in" (InactivityWatches); absent from an older server: location. */
+    @SerializedName("watches") val watches: String? = null,
+    /** A check-in request's start, RFC 3339: when it was made or last turned back on. */
+    @SerializedName("armed_at") val armedAt: String? = null,
+    /** A check-in request's kind (CheckInModes); absent from an older server: once. */
+    @SerializedName("check_in_mode") val checkInMode: String? = null,
+    /** A scheduled request's schedule (CheckInSchedule); absent on any other. */
+    @SerializedName("schedule_days") val scheduleDays: Int? = null,
+    @SerializedName("schedule_due_minute") val scheduleDueMinute: Int? = null,
+    @SerializedName("schedule_from_minute") val scheduleFromMinute: Int? = null,
+    @SerializedName("schedule_tz") val scheduleTz: String? = null,
+) {
+    /** Judged by location updates (MonitoringManager.evaluateCircleSelfAlerts). */
+    val watchesLocation: Boolean get() = com.pingolin.track.util.InactivityWatches.isLocation(watches)
+
+    /** Judged by check-ins (MonitoringManager.evaluateCheckInRules). */
+    val watchesCheckIns: Boolean get() = com.pingolin.track.util.InactivityWatches.isCheckIn(watches)
+}
 
 /**
  * Ask the server to wake the people holding alert rules in one circle.
@@ -2867,7 +2932,8 @@ data class AlertEventResponse(
     @SerializedName("alert_type_hash") val alertTypeHash: String,
     /** E2EE: Encrypted alert type, only circle members can decrypt */
     @SerializedName("encrypted_alert_type") val encryptedAlertType: EncryptedPayload,
-    val message: String,
+    /** None on a firing a device reported (MonitoringManager.reportAlertEvent): its words are sealed. */
+    val message: String?,
     val metadata: Map<String, Any>?,
     /** E2EE: Day bucket for coarse timing (days since Unix epoch) */
     @SerializedName("day_bucket") val dayBucket: Int,

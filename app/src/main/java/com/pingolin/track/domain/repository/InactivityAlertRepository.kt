@@ -29,6 +29,10 @@ import com.pingolin.track.domain.pending.PendingChanges
 import com.pingolin.track.domain.pending.PendingInputs
 import com.pingolin.track.domain.pending.PendingRun
 import com.pingolin.track.util.AccountIds
+import com.pingolin.track.util.CheckInModes
+import com.pingolin.track.util.CheckInScheduleSetting
+import com.pingolin.track.util.InactivityWatches
+import com.pingolin.track.util.ServerTime
 import com.pingolin.track.util.SessionManager
 import com.pingolin.track.util.orWhenUnopenable
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +71,21 @@ class InactivityAlertRepository @Inject constructor(
          */
         internal fun rowRequestId(changeId: String, memberId: String): String =
             java.util.UUID.nameUUIDFromBytes("$changeId:$memberId".toByteArray(Charsets.UTF_8)).toString()
+
+        /**
+         * [read] with every check-in rule's start: the server's `armed_at`, else the one this
+         * phone stored ([here]), else [nowMs], when it first stores the rule. Never earlier: a
+         * rule counted from before it existed would go off about a check-in missed before anyone
+         * asked for one.
+         */
+        internal fun withStart(
+            read: List<InactivityAlertEntity>,
+            here: Map<String, InactivityAlertEntity>,
+            nowMs: Long,
+        ): List<InactivityAlertEntity> = read.map { alert ->
+            if (!InactivityWatches.isCheckIn(alert.watches) || alert.armedAt != null) alert
+            else alert.copy(armedAt = here[alert.id]?.armedAt ?: nowMs)
+        }
     }
 
     /**
@@ -133,14 +152,18 @@ class InactivityAlertRepository @Inject constructor(
      * Each row targets exactly ONE member and carries that member's per-circle pseudonym, so the
      * server can notice that member going quiet without learning the real user ID; what it does
      * then is send a contentless wake-up. The rule itself is judged on the watcher's device
-     * (MonitoringManager.evaluateInactivity judges every watch-someone-else rule), from the rows
-     * [AlertRulesReload] keeps here. A self-alert is the exception: the devices that would raise
+     * (MonitoringManager.evaluateInactivity judges every watch-someone-else location rule,
+     * evaluateCheckInRules every check-in rule), from the rows [AlertRulesReload] keeps here. A self-alert is the exception: the devices that would raise
      * it are the other members', and they don't hold it, so it is still decided server-side. A
      * "watch everyone/members" request EXPANDS into one create call per watched member (self
      * excluded). Rows are created with clientOnly=false and no encrypted_conditions.
      *
      * @param watchedUserIds explicit members to watch; empty = everyone in the circle (minus
      * self).
+     * @param watches what the rule watches ([InactivityWatches]): location updates, or check-ins.
+     * A check-in rule never alerts "back online": a check-in already tells the circle.
+     * @param schedule a check-in rule's schedule: a scheduled rule ("check in by 9:00 PM"), whose
+     * [timeoutMinutes] the server ignores. None: a one-time rule ("check in within N hours").
      */
     suspend fun createInactivityAlert(
         circleId: String,
@@ -154,8 +177,14 @@ class InactivityAlertRepository @Inject constructor(
         watchedUserIds: List<String> = emptyList(),
         keepIfBehind: Boolean = false,
         pendingRun: PendingRun? = null,
+        watches: String = InactivityWatches.LOCATION,
+        schedule: CheckInScheduleSetting? = null,
     ): Result<String> {
         return try {
+            val checkIns = InactivityWatches.isCheckIn(watches)
+            // A schedule makes sense on a check-in rule alone.
+            val scheduled = schedule?.takeIf { checkIns }
+            val checkInMode = if (!checkIns) null else if (scheduled != null) CheckInModes.SCHEDULED else CheckInModes.ONCE
             // Nothing is sealed under a key a removed member may hold. The person's new
             // alert ([keepIfBehind]) is kept while this phone is behind.
             try {
@@ -166,8 +195,10 @@ class InactivityAlertRepository @Inject constructor(
                     circleId,
                     PendingInputs.InactivityAlert(
                         pendingChanges.circleName(circleId), targetUserId, timeoutMinutes, isSelfAlert, notifyPush,
-                        notifyEmail, notifyOnReturn, cooldownMinutes, watchedUserIds,
+                        notifyEmail, notifyOnReturn && !checkIns, cooldownMinutes, watchedUserIds,
                         watchedUserIds.mapNotNull { id -> pendingChanges.memberName(circleId, id)?.let { id to it } }.toMap(),
+                        watches = watches,
+                        schedule = scheduled,
                     ),
                 )
             }
@@ -221,15 +252,27 @@ class InactivityAlertRepository @Inject constructor(
                                     isSelfAlert = isSelfAlert,
                                     notifyPush = notifyPush,
                                     notifyEmail = notifyEmail,
-                                    notifyOnReturn = notifyOnReturn,
+                                    notifyOnReturn = notifyOnReturn && !checkIns,
                                     cooldownMinutes = cooldownMinutes,
                                     // No sealed conditions: the row names its one member (see above).
                                     encryptedConditions = null,
                                     clientOnly = false,
+                                    // A check-in rule needs it: the server finds the member's
+                                    // check-ins by it alone.
                                     targetUserPseudonym = targetPseudonym,
                                     encryptedTargetUserId = encryptedTargetUserId,
                                     dayBucket = dayBucket,
                                     clientRequestId = pendingRun?.let { rowRequestId(it.requestId, memberId) },
+                                    // A location rule says nothing, as every older app's.
+                                    watches = InactivityWatches.CHECK_IN.takeIf { checkIns },
+                                    checkInMode = checkInMode,
+                                    scheduleDays = scheduled?.days,
+                                    scheduleDueMinute = scheduled?.dueMinute,
+                                    // Absent: the start of the day.
+                                    scheduleFromMinute = scheduled?.fromMinute,
+                                    scheduleTz = scheduled?.tz,
+                                    // Only about yourself: the server refuses it on a rule about someone else.
+                                    scheduleTzFollowsPhone = scheduled?.let { it.followsPhone && isSelfAlert },
                                 )
                             )
 
@@ -293,6 +336,9 @@ class InactivityAlertRepository @Inject constructor(
      * creates them with `encryptedConditions = null, clientOnly = false`. A conditions
      * blob written by an edit could only contradict the row it was attached to. The iOS
      * app's update path passes no `encryptedConditions` for the same reason.
+     *
+     * [schedule]: a scheduled check-in rule's new schedule, sent whole (the server replaces it
+     * whole: a from time or a follow-the-phone left out would be dropped). Its kind never changes.
      */
     suspend fun updateInactivityAlert(
         alertId: String,
@@ -301,7 +347,8 @@ class InactivityAlertRepository @Inject constructor(
         notifyPush: Boolean? = null,
         notifyEmail: Boolean? = null,
         notifyOnReturn: Boolean? = null,
-        cooldownMinutes: Int? = null
+        cooldownMinutes: Int? = null,
+        schedule: CheckInScheduleSetting? = null,
     ): Result<Unit> {
         return try {
             val response = tracksApi.updateInactivityAlert(
@@ -313,19 +360,36 @@ class InactivityAlertRepository @Inject constructor(
                     notifyEmail = notifyEmail,
                     notifyOnReturn = notifyOnReturn,
                     cooldownMinutes = cooldownMinutes,
-                    encryptedConditions = null
+                    encryptedConditions = null,
+                    scheduleDays = schedule?.days,
+                    scheduleDueMinute = schedule?.dueMinute,
+                    scheduleFromMinute = schedule?.fromMinute,
+                    scheduleTz = schedule?.tz,
+                    scheduleTzFollowsPhone = schedule?.followsPhone,
                 )
             )
 
             if (response.isSuccessful) {
                 // Update local cache
                 inactivityAlertDao.getById(alertId)?.let { existing ->
+                    // Turned back on: the server starts a check-in rule's clock again (armed_at),
+                    // so a rule off for a week doesn't go off the moment it's back. So does this
+                    // phone, from a moment no earlier than the server's, until a refresh brings it.
+                    val rearmed = isActive == true && !existing.isActive && InactivityWatches.isCheckIn(existing.watches)
+                    // A new schedule, on a scheduled rule only, as the server takes it.
+                    val newSchedule = schedule?.takeIf { CheckInModes.isScheduled(existing.checkInMode) }
                     val updated = existing.copy(
                         isActive = isActive ?: existing.isActive,
                         notifyPush = notifyPush ?: existing.notifyPush,
                         notifyEmail = notifyEmail ?: existing.notifyEmail,
                         notifyOnReturn = notifyOnReturn ?: existing.notifyOnReturn,
-                        cooldownMinutes = cooldownMinutes ?: existing.cooldownMinutes
+                        cooldownMinutes = cooldownMinutes ?: existing.cooldownMinutes,
+                        armedAt = if (rearmed) System.currentTimeMillis() else existing.armedAt,
+                        scheduleDays = newSchedule?.days ?: existing.scheduleDays,
+                        scheduleDueMinute = newSchedule?.dueMinute ?: existing.scheduleDueMinute,
+                        scheduleFromMinute = if (newSchedule != null) newSchedule.fromMinute else existing.scheduleFromMinute,
+                        scheduleTz = newSchedule?.tz ?: existing.scheduleTz,
+                        scheduleTzFollowsPhone = newSchedule?.followsPhone ?: existing.scheduleTzFollowsPhone,
                     )
                     inactivityAlertDao.update(updated)
                 }
@@ -333,6 +397,36 @@ class InactivityAlertRepository @Inject constructor(
             } else {
                 Result.failure(Exception("Failed to update inactivity alert"))
             }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Move a scheduled rule that follows this phone to the phone's zone ([tz]): the zone alone, as
+     * the server takes it, so nothing else about the rule changes (CheckInZoneFollower).
+     */
+    suspend fun updateScheduleZone(alertId: String, tz: String): Result<Unit> {
+        return try {
+            val response = tracksApi.updateInactivityAlert(
+                alertId,
+                UpdateInactivityAlertRequest(
+                    timeoutMinutes = null,
+                    isActive = null,
+                    notifyPush = null,
+                    notifyEmail = null,
+                    notifyOnReturn = null,
+                    cooldownMinutes = null,
+                    encryptedConditions = null,
+                    scheduleTz = tz,
+                ),
+            )
+            // Refused (a 4xx): asking again changes nothing. Otherwise worth another try.
+            if (!response.isSuccessful) {
+                return Result.failure(RefusedException("Failed to update the alert's time zone", response.code(), ApiErrors.codeOf(response)))
+            }
+            inactivityAlertDao.getById(alertId)?.let { inactivityAlertDao.update(it.copy(scheduleTz = tz)) }
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -409,9 +503,10 @@ class InactivityAlertRepository @Inject constructor(
             }
             // Per-alert decrypt is pure CPU (UniFFI); move it off the Main
             // thread so a large alert set can't jank the caller.
-            val alerts = withContext(Dispatchers.Default) { dtos.mapNotNull { readAlert(it) } }
+            val read = withContext(Dispatchers.Default) { dtos.mapNotNull { readAlert(it) } }
             val listed = dtos.mapTo(mutableSetOf()) { it.id }
             val here = inactivityAlertDao.getAll().associateBy { it.id }
+            val alerts = withStart(read, here, System.currentTimeMillis())
             val changed = alerts.filter { here[it.id] != it }
             // A new alert waiting to sync has no row here yet, so nothing waiting can be lost.
             val gone = if (whole) here.keys.filter { it !in listed } else emptyList()
@@ -445,8 +540,35 @@ class InactivityAlertRepository @Inject constructor(
             lastTriggeredDayBucket = dto.lastTriggeredDayBucket,
             dayBucket = dto.dayBucket,
             clientOnly = dto.clientOnly,
-            targetUserIds = decodeWatchSpec(watchSpec)
+            targetUserIds = decodeWatchSpec(watchSpec),
+            // An older server's row says nothing: a location rule, as all of them were.
+            watches = dto.watches ?: InactivityWatches.LOCATION,
+            // Fractions of a second vary, and the offset may be "+00:00" (ServerTime).
+            armedAt = ServerTime.epochMs(dto.armedAt),
+            // A check-in rule's kind, and a scheduled one's schedule; none on a location rule.
+            checkInMode = dto.checkInMode,
+            scheduleDays = dto.scheduleDays,
+            scheduleDueMinute = dto.scheduleDueMinute,
+            scheduleFromMinute = dto.scheduleFromMinute,
+            scheduleTz = dto.scheduleTz,
+            scheduleTzFollowsPhone = dto.scheduleTzFollowsPhone ?: false,
         )
+    }
+
+    /**
+     * The check-in requests circle-mates have made of this account's circles ("Notify my circle
+     * if I don't check in"), from the server. A failure is a failure, never "nobody asked": the
+     * alert history then says the check-ins couldn't be loaded (HistoryCheckIns).
+     */
+    suspend fun circleCheckInRequests(): Result<List<CircleSelfAlertDto>> {
+        return try {
+            val response = tracksApi.getCircleSelfAlerts()
+            val requests = response.body()?.takeIf { response.isSuccessful && it.success }?.data
+                ?: return Result.failure(Exception("Failed to fetch circle self-alerts"))
+            Result.success(requests.filter { it.watchesCheckIns })
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     /**

@@ -988,6 +988,102 @@
     <string name="inactivity_no_time">%1$s hasn\'t shared their location for a while.</string>
     <!-- The alert editor, for a rule about others. The same words on web and iPhone. -->
     <string name="inactivity_not_while_not_sharing">Doesn\'t go off while they\'ve paused or turned off location sharing in this circle.</string>
+    <!-- Check-in rules: an alert when a member hasn't checked in (the "Check in" button), of two
+         kinds: within a time (1 to 24 hours, ending at the next check-in), or by a time of day on
+         chosen days. The same words on web and iPhone. -->
+    <!-- The rule's kind in the alert list. -->
+    <string name="check_in_rule_type">Check-in</string>
+    <!-- The kind in the alert editor's chooser, under "🔋 Battery" and "⏰ Inactivity". -->
+    <string name="check_in_rule_choice">✅ Check-in</string>
+    <!-- The alert editor's box that makes the rule about yourself. -->
+    <string name="check_in_rule_self">Notify my circle if I don\'t check in</string>
+    <!-- The check-in type's line in the alert editor, either kind: about someone else, and about
+         yourself (the other members' phones raise it). -->
+    <string name="check_in_rule_help">Get notified when this person doesn\'t check in on time.</string>
+    <string name="check_in_rule_help_self">Your circle is notified if you don\'t check in on time.</string>
+    <!-- The alert editor's two kinds of check-in rule, under "✅ Check-in". -->
+    <string name="check_in_kind_once">Within a time</string>
+    <string name="check_in_kind_scheduled">By a time of day</string>
+    <!-- Within a time: the label over the hours, 1 to 24. -->
+    <string name="check_in_within">Check in within</string>
+    <!-- Within a time: the line under the hours, for a rule about yourself and about someone else. -->
+    <string name="check_in_once_help_self">Ends when you check in.</string>
+    <string name="check_in_once_help">Ends when they check in.</string>
+    <!-- By a time of day: the label over the time. -->
+    <string name="check_in_by">Check in by</string>
+    <!-- By a time of day: the label over the days of the week. -->
+    <string name="check_in_days">Days</string>
+    <!-- By a time of day: the label over when each day's check-ins start to count. -->
+    <string name="check_in_counting_from">Counting from</string>
+    <!-- Its first choice; the second is a time. -->
+    <string name="check_in_start_of_day">Start of day</string>
+    <!-- By a time of day: the label over the time zone, and the zone list's title. -->
+    <string name="check_in_time_zone">Time zone</string>
+    <!-- A rule about yourself whose time zone follows your phone's. -->
+    <string name="check_in_phone_time_zone">Phone\'s time zone</string>
+    <!-- The zone list's search box. -->
+    <string name="check_in_zone_search">Search for a city</string>
+    <!-- The editor, when no day is picked. -->
+    <string name="check_in_pick_a_day">Pick at least one day.</string>
+    <!-- The editor, when "Counting from" isn't before the check-in time. %1$s: the check-in time. -->
+    <string name="check_in_from_before_due">Pick a time before %1$s.</string>
+    <!-- A rule's line in the alert list, within a time. %d: its hours. -->
+    <plurals name="check_in_rule_summary_once">
+        <item quantity="one">Check in within %d hour</item>
+        <item quantity="other">Check in within %d hours</item>
+    </plurals>
+    <!-- A rule's line in the alert list, by a time of day. %1$s: the time ("9:00 PM"); %2$s: the
+         days ("every day", "weekdays", "weekends", or "Mon, Wed, Fri"); %3$s: the time zone's city
+         ("New York"). -->
+    <string name="check_in_rule_summary_scheduled">Check in by %1$s, %2$s (%3$s)</string>
+    <!-- The same for a rule whose time zone follows the phone's. -->
+    <string name="check_in_rule_summary_scheduled_phone">Check in by %1$s, %2$s (phone\'s time zone)</string>
+    <!-- The days in those lines, lower case: they come after a comma. -->
+    <string name="check_in_days_every_day">every day</string>
+    <string name="check_in_days_weekdays">weekdays</string>
+    <string name="check_in_days_weekends">weekends</string>
+    <!-- Between short day names: "Mon, Wed, Fri". -->
+    <string name="check_in_days_separator">", "</string>
+    <!-- A missed check-in: the notification's title, and the bell's and the history's. -->
+    <string name="missed_check_in_title">Missed check-in</string>
+    <!-- Its words. %1$s: the member's name; %2$d: the rule's limit in hours. -->
+    <plurals name="missed_check_in_body">
+        <item quantity="one">%1$s hasn\'t checked in for %2$d hour.</item>
+        <item quantity="other">%1$s hasn\'t checked in for %2$d hours.</item>
+    </plurals>
+    <!-- Its words for a rule by a time of day. %1$s: the member's name; %2$s: the rule's time as set ("9:00 PM"). -->
+    <string name="missed_check_in_by">%1$s hasn\'t checked in by %2$s.</string>
+    <!-- A check-in rule about yourself: when your circle is alerted, in its row in Alerts and on the
+         check-in screen. Whole sentences, the same words as on the web. The time left is in whole
+         minutes, rounded down. %1$d: hours; %2$d: minutes. -->
+    <string name="check_in_countdown_in_hours_minutes">Your circle is alerted in %1$d h %2$d min</string>
+    <!-- Whole hours: "3 h", never "3 h 0 min". %1$d: hours. -->
+    <string name="check_in_countdown_in_hours">Your circle is alerted in %1$d h</string>
+    <!-- Under an hour. %1$d: minutes, 1 to 59. -->
+    <string name="check_in_countdown_in_minutes">Your circle is alerted in %1$d min</string>
+    <!-- Less than a minute left. -->
+    <string name="check_in_countdown_soon">Your circle is alerted in less than a minute</string>
+    <!-- Once the time has come. %1$s: the clock time, in this phone's format. -->
+    <string name="check_in_countdown_due">Your circle was alerted at %1$s. Check in to clear it.</string>
+    <!-- The same when it wasn't today. %1$s: the date ("Nov 21"); %2$s: the clock time. -->
+    <string name="check_in_countdown_due_on">Your circle was alerted on %1$s at %2$s. Check in to clear it.</string>
+    <!-- A rule by a time of day, before its time with no check-in for it yet. %1$s: its time as set. -->
+    <string name="check_in_countdown_by">Your circle is alerted at %1$s unless you check in.</string>
+    <!-- Checked in for it: the next time it is due, later today, tomorrow, or on a day of the week
+         (%1$s: the day's name, "Monday"). The time is the rule's as set. -->
+    <string name="check_in_countdown_checked_in_next_today">Checked in. Next due today by %1$s.</string>
+    <string name="check_in_countdown_checked_in_next_tomorrow">Checked in. Next due tomorrow by %1$s.</string>
+    <string name="check_in_countdown_checked_in_next_on">Checked in. Next due %1$s by %2$s.</string>
+    <!-- The same when nothing was due yet for it to check in for (the rule was made after its time). -->
+    <string name="check_in_countdown_next_today">Next due today by %1$s.</string>
+    <string name="check_in_countdown_next_tomorrow">Next due tomorrow by %1$s.</string>
+    <string name="check_in_countdown_next_on">Next due %1$s by %2$s.</string>
+    <!-- Alerts > History: a past check-in of someone a check-in rule is about. %1$s: the member's name. -->
+    <string name="history_checked_in">%1$s checked in</string>
+    <!-- The same for your own, with a check-in rule about yourself. -->
+    <string name="history_you_checked_in">You checked in</string>
+    <!-- Alerts > History, when those check-ins couldn't be read: the alerts still show. -->
+    <string name="history_check_ins_failed">Check-ins couldn\'t be loaded.</string>
     <string name="database_rebuilt_note">Track couldn\'t open what it had saved on this phone, so it started over. Any locations it hadn\'t sent yet were lost, and so were any changes marked “Waiting to sync”. Some earlier entries may also be missing from Notifications. Your circles, places and alert settings come back from your account.</string>
     <!-- While the database can't be opened: the screens look again by themselves, so no "try again". -->
     <string name="database_unavailable_note">Track couldn\'t open what it had saved on this phone. It keeps trying by itself.</string>

@@ -318,4 +318,45 @@ class AlertWaitingTest {
         assertEquals(PendingOutcome.Transient(maybeSent = false), outcome)
         coVerify(exactly = 0) { repository.createLowBatteryAlert(any(), any(), any(), any(), any(), any(), any()) }
     }
+
+    @Test
+    fun `a scheduled check-in alert made while behind keeps its schedule, and goes out with it unless one like it is there`() = runTest {
+        val schedule = com.pingolin.track.util.CheckInScheduleSetting(
+            com.pingolin.track.util.CheckInSchedule.WEEKDAYS, 21 * 60, null, "Europe/Berlin", followsPhone = true,
+        )
+        inactivity.createInactivityAlert(
+            "c-1", "me", 60, isSelfAlert = true, watches = com.pingolin.track.util.InactivityWatches.CHECK_IN,
+            schedule = schedule, keepIfBehind = true,
+        )
+        val kept = dao.changes.value.single()
+        val inputs = PendingInputs.read(kept) as PendingInputs.InactivityAlert
+        assertEquals(schedule, inputs.schedule)
+
+        val circles = mockk<CircleRepository> { coEvery { memberIdsWhole("c-1") } returns setOf("me", "sam") }
+        val there = com.pingolin.track.data.local.entity.InactivityAlertEntity(
+            id = "a-1", userId = "me", circleId = "c-1", targetUserId = "me", timeoutHours = 1, isSelfAlert = true, dayBucket = 0,
+            watches = com.pingolin.track.util.InactivityWatches.CHECK_IN, armedAt = 0L,
+            checkInMode = com.pingolin.track.util.CheckInModes.SCHEDULED, scheduleDays = schedule.days,
+            scheduleDueMinute = schedule.dueMinute, scheduleTz = schedule.tz, scheduleTzFollowsPhone = true,
+        )
+        val repository = mockk<InactivityAlertRepository> {
+            coEvery { refreshInactivityAlerts() } returns Result.success(listOf(there))
+            coEvery { createInactivityAlert(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns
+                Result.success("a-2")
+        }
+        val executors = PendingExecutors(mockk(), mockk(), mockk(), mockk(), { repository }, { circles }, mockk(), mockk(), sessionManager, mockk(relaxed = true))
+        val run = PendingRun(kept.id, kept.id)
+
+        assertEquals("one like it is there", PendingOutcome.Done(), executors.forKind(PendingKind.INACTIVITY_ALERT)!!.run(kept, inputs, run))
+        coVerify(exactly = 0) { repository.createInactivityAlert(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) }
+
+        // Another time is another alert, and so is a one-time rule about the same member.
+        for (other in listOf(there.copy(scheduleDueMinute = 20 * 60), there.copy(checkInMode = com.pingolin.track.util.CheckInModes.ONCE))) {
+            coEvery { repository.refreshInactivityAlerts() } returns Result.success(listOf(other))
+            executors.forKind(PendingKind.INACTIVITY_ALERT)!!.run(kept, inputs, run)
+        }
+        coVerify(exactly = 2) {
+            repository.createInactivityAlert("c-1", "me", 60, true, any(), any(), any(), any(), emptyList(), false, run, com.pingolin.track.util.InactivityWatches.CHECK_IN, schedule)
+        }
+    }
 }

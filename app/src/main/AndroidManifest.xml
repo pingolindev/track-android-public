@@ -169,6 +169,16 @@
         </receiver>
 
 
+        <!-- The phone's time zone changed: check-in rules that follow the phone move with it
+             (TimeZoneChangedReceiver). -->
+        <receiver
+            android:name=".receiver.TimeZoneChangedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <!-- Boot Receiver to restart location service -->
         <receiver
             android:name=".receiver.BootReceiver"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -18,27 +19,33 @@
             android:textSize="12sp"
             android:textColor="?android:attr/textColorSecondary" />
 
+        <!-- Stacked: three side by side wrap their words on a phone. -->
         <RadioGroup
             android:id="@+id/rgType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="4dp">
 
             <RadioButton
                 android:id="@+id/rbBattery"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="🔋 Battery"
                 android:checked="true" />
 
             <RadioButton
                 android:id="@+id/rbInactivity"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="⏰ Inactivity" />
+
+            <!-- An inactivity rule that watches check-ins instead of location updates. -->
+            <RadioButton
+                android:id="@+id/rbCheckIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/check_in_rule_choice" />
         </RadioGroup>
 
         <!-- Circle (create mode only) -->
@@ -116,37 +123,260 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Inactivity timeout"
-                android:textSize="12sp"
-                android:textColor="?android:attr/textColorSecondary" />
-
-            <LinearLayout
+            <!-- A check-in rule's two kinds, under "✅ Check-in" (create only):
+                 AlertsFragment.showEditor. -->
+            <RadioGroup
+                android:id="@+id/rgCheckInKind"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="8dp">
+                android:layout_marginStart="32dp"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <SeekBar
-                    android:id="@+id/seekbarTimeout"
-                    android:layout_width="0dp"
+                <RadioButton
+                    android:id="@+id/rbCheckInOnce"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:min="0"
-                    android:max="23"
-                    android:progress="3" />
+                    android:checked="true"
+                    android:text="@string/check_in_kind_once" />
+
+                <RadioButton
+                    android:id="@+id/rbCheckInScheduled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/check_in_kind_scheduled" />
+            </RadioGroup>
+
+            <!-- A check-in rule's line, either kind, about others or about yourself; on an edit
+                 too (AlertsFragment.showEditor). -->
+            <TextView
+                android:id="@+id/tvCheckInAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/check_in_rule_help"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:visibility="gone" />
+
+            <!-- The hours: a location rule's, and a one-time check-in rule's ("Check in within"). -->
+            <LinearLayout
+                android:id="@+id/layoutTimeout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- A check-in rule's words in place of these: AlertsFragment.showEditor. -->
+                <TextView
+                    android:id="@+id/labelTimeout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Inactivity timeout"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp">
+
+                    <SeekBar
+                        android:id="@+id/seekbarTimeout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:min="0"
+                        android:max="23"
+                        android:progress="3" />
+
+                    <TextView
+                        android:id="@+id/tvTimeoutValue"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="4 hours"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <!-- A one-time check-in rule's line under its hours, about others or about
+                     yourself (AlertsFragment.showEditor). -->
+                <TextView
+                    android:id="@+id/tvCheckInHelp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/check_in_once_help"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- A scheduled check-in rule: by a time, on chosen days, counting from the start of
+                 the day or a time, in a time zone (AlertsFragment.showEditor). -->
+            <LinearLayout
+                android:id="@+id/layoutSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tvTimeoutValue"
-                    android:layout_width="64dp"
+                    android:id="@+id/labelDueTime"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="4 hours"
-                    android:textAlignment="center" />
+                    android:layout_marginTop="16dp"
+                    android:labelFor="@id/btnDueTime"
+                    android:text="@string/check_in_by"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDueTime"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    tools:text="9:00 PM" />
+
+                <TextView
+                    android:id="@+id/labelDays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/check_in_days"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipMonday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Mon" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipTuesday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Tue" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipWednesday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Wed" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipThursday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Thu" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFriday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Fri" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSaturday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Sat" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSunday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        tools:text="Sun" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/labelCountingFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/check_in_counting_from"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <RadioGroup
+                    android:id="@+id/rgCountingFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rbFromStartOfDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/check_in_start_of_day" />
+
+                    <!-- Says its time; a tap opens the time picker. -->
+                    <RadioButton
+                        android:id="@+id/rbFromTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="6:00 PM" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/labelTimeZone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:labelFor="@id/btnTimeZone"
+                    android:text="@string/check_in_time_zone"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTimeZone"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    tools:text="Phone's time zone" />
+
+                <!-- No day, or a "Counting from" time not before the check-in time. -->
+                <TextView
+                    android:id="@+id/tvScheduleError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:accessibilityLiveRegion="polite"
+                    android:textColor="?attr/colorError"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- A rule about others never goes off while they aren't sharing; hidden

@@ -28,6 +28,8 @@ import com.pingolin.track.data.remote.dto.*
 import com.pingolin.track.domain.pending.PendingChanges
 import com.pingolin.track.domain.pending.PendingInputs
 import com.pingolin.track.domain.pending.PendingRun
+import com.pingolin.track.util.AccountIds
+import com.pingolin.track.util.LiveTime
 import com.pingolin.track.util.SessionManager
 import com.pingolin.track.util.orWhenUnopenable
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +69,18 @@ class CheckInRepository @Inject constructor(
 
         /** Milliseconds per day for day bucket calculation */
         private const val MS_PER_DAY = 86400000L
+
+        /** The most the server lists at once: the check-in rules' refresh reads pages of it. */
+        internal const val CHECK_IN_PAGE = 100
+
+        /** How far back the check-in rules' refresh reads: past the longest limit (24 hours), and the day bucket's edge. */
+        internal const val RECENT_MS = 26L * 3_600_000L
+
+        /** A bound on the pages one check-in rules' refresh follows. */
+        internal const val MAX_RECENT_PAGES = 5
+
+        /** A bound on the pages one read of this account's newest check-in follows (1,000 check-ins). */
+        internal const val MAX_OWN_PAGES = 10
     }
 
     fun observeCheckInsByCircle(circleId: String): Flow<List<CheckInEntity>> =
@@ -461,61 +475,7 @@ class CheckInRepository @Inject constructor(
                 // Per-check-in decrypt is pure CPU (UniFFI); move it off the Main
                 // thread so a large check-in set can't jank the caller.
                 val checkIns = withContext(Dispatchers.Default) {
-                    response.body()!!.data!!.mapNotNull { dto ->
-                    // E2EE: Decrypt user ID
-                    val decryptedUserId = decryptUserId(circleId, dto.encryptedUserId)
-                        ?: return@mapNotNull null
-
-                    // E2EE: Decrypt timestamp. The sealed time is required: one that doesn't open is
-                    // tampering or a key not held, never "no time", and the server's day bucket would
-                    // date the row at its will. Dropped, as an unopenable user id is.
-                    val timestamp = decryptTimestamp(circleId, dto.encryptedTimestamp)
-                        ?: return@mapNotNull null
-
-                    // SECURITY: Decrypt message with circle key
-                    val decryptedMessage = dto.encryptedMessage?.let { encrypted ->
-                        try {
-                            cryptoManager.decryptDataV2(
-                                circleId,
-                                uniffi.pingolin_mobile.EncryptedData(
-                                    nonce = encrypted.nonce,
-                                    ciphertext = encrypted.ciphertext
-                                ),
-                                "message"
-                            )
-                        } catch (e: Exception) {
-                            null // Decryption failed, message unavailable
-                        }
-                    }
-
-                    // Decrypt location if present
-                    val location = dto.encryptedLocation?.let { encrypted ->
-                        try {
-                            cryptoManager.decryptLocation(
-                                circleId,
-                                uniffi.pingolin_mobile.EncryptedData(
-                                    nonce = encrypted.nonce,
-                                    ciphertext = encrypted.ciphertext
-                                )
-                            )
-                        } catch (e: Exception) {
-                            null
-                        }
-                    }
-
-                    CheckInEntity(
-                        id = dto.id,
-                        circleId = dto.circleId ?: circleId,
-                        userId = decryptedUserId,
-                        type = dto.checkInType,
-                        message = decryptedMessage,
-                        latitude = location?.latitude,
-                        longitude = location?.longitude,
-                        placeId = dto.placeId,
-                        timestamp = timestamp,
-                        isSynced = true
-                    )
-                }
+                    response.body()!!.data!!.mapNotNull { dto -> open(circleId, dto) }
                 }
                 checkIns.forEach { checkInDao.insert(it) }
                 Result.success(checkIns)
@@ -526,6 +486,168 @@ class CheckInRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    /** A listed check-in as this phone reads it, or null when its sealed user id or time doesn't open here. */
+    private fun open(circleId: String, dto: CheckInResponse): CheckInEntity? {
+        // E2EE: Decrypt user ID
+        val decryptedUserId = decryptUserId(circleId, dto.encryptedUserId) ?: return null
+
+        // E2EE: Decrypt timestamp. The sealed time is required: one that doesn't open is
+        // tampering or a key not held, never "no time", and the server's day bucket would
+        // date the row at its will. Dropped, as an unopenable user id is.
+        val timestamp = decryptTimestamp(circleId, dto.encryptedTimestamp) ?: return null
+
+        // SECURITY: Decrypt message with circle key
+        val decryptedMessage = dto.encryptedMessage?.let { encrypted ->
+            try {
+                cryptoManager.decryptDataV2(
+                    circleId,
+                    uniffi.pingolin_mobile.EncryptedData(
+                        nonce = encrypted.nonce,
+                        ciphertext = encrypted.ciphertext
+                    ),
+                    "message"
+                )
+            } catch (e: Exception) {
+                null // Decryption failed, message unavailable
+            }
+        }
+
+        // Decrypt location if present
+        val location = dto.encryptedLocation?.let { encrypted ->
+            try {
+                cryptoManager.decryptLocation(
+                    circleId,
+                    uniffi.pingolin_mobile.EncryptedData(
+                        nonce = encrypted.nonce,
+                        ciphertext = encrypted.ciphertext
+                    )
+                )
+            } catch (e: Exception) {
+                null
+            }
+        }
+
+        return CheckInEntity(
+            id = dto.id,
+            circleId = dto.circleId ?: circleId,
+            userId = decryptedUserId,
+            type = dto.checkInType,
+            message = decryptedMessage,
+            latitude = location?.latitude,
+            longitude = location?.longitude,
+            placeId = dto.placeId,
+            timestamp = timestamp,
+            isSynced = true
+        )
+    }
+
+    /**
+     * What [refreshRecentCheckIns] read: the check-ins that opened here, and how many within its
+     * reach didn't.
+     */
+    data class RecentCheckIns(val read: List<CheckInEntity>, val unopened: Int) {
+        /**
+         * Every check-in within reach opened here. A member's silence says something only then:
+         * one that didn't open (a key this phone doesn't hold yet, say) may be exactly their
+         * check-in, and the location refresh holds its own alerts to the same rule (isComplete).
+         */
+        val whole: Boolean get() = unopened == 0
+    }
+
+    /**
+     * [circleId]'s check-ins of about the last day, for the check-in rules
+     * (MonitoringManager.evaluateCheckInRules), each read as [refreshCheckIns] reads it and kept
+     * here. Pages of [CHECK_IN_PAGE], newest first, until a page comes back short, one reaches
+     * back past the day of [nowMs] minus [windowMs] ([RECENT_MS]: longer than any rule's limit),
+     * or [MAX_RECENT_PAGES]. A page that fails fails the whole read: a read cut short can be
+     * missing exactly the check-in that matters, and a failed read is never "no check-in". A
+     * check-in older than that reach doesn't count against [RecentCheckIns.whole]: no rule's
+     * verdict turns on it. The alert history reads further back the same way (HistoryCheckIns).
+     */
+    suspend fun refreshRecentCheckIns(
+        circleId: String,
+        nowMs: Long = System.currentTimeMillis(),
+        windowMs: Long = RECENT_MS,
+    ): Result<RecentCheckIns> {
+        return try {
+            val floorDay = Math.floorDiv(nowMs - windowMs, MS_PER_DAY).toInt()
+            val read = mutableListOf<CheckInEntity>()
+            var unopened = 0
+            var last: CheckInResponse? = null
+            for (page in 1..MAX_RECENT_PAGES) {
+                val response = tracksApi.getCircleCheckIns(circleId, CHECK_IN_PAGE, last?.dayBucket, last?.id)
+                val rows = response.body()?.takeIf { response.isSuccessful && it.success }?.data
+                    ?: return Result.failure(Exception("Failed to fetch check-ins"))
+                val opened = withContext(Dispatchers.Default) { rows.map { it to open(circleId, it) } }
+                for ((dto, checkIn) in opened) {
+                    if (checkIn != null) read += checkIn else if (dto.dayBucket >= floorDay) unopened++
+                }
+                if (rows.size < CHECK_IN_PAGE || rows.minOf { it.dayBucket } < floorDay) break
+                last = rows.last()
+            }
+            read.forEach { checkInDao.insert(it) }
+            Result.success(RecentCheckIns(read, unopened))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * This account's newest check-in in [circleId] that the server has (epoch ms), for the countdown
+     * on its own check-in rules (CheckInCountdown); null when it has none from [sinceMs]'s day on.
+     *
+     * Read from the server, newest first, so a check-in from another of this account's phones
+     * counts and one still waiting on this phone doesn't: the circle's phones see only the
+     * server's. Only one from a rule's start ([sinceMs]) on can move a deadline, so the read stops
+     * once a page goes back past that day, or past the day of the newest found (a day's check-ins
+     * come in no order of time). Each check-in read is kept here, as [refreshCheckIns] keeps them.
+     * A failed page, a check-in in that range that doesn't open (it may be this account's newest),
+     * or more than [MAX_OWN_PAGES] pages: a failure, so no time is shown rather than a wrong one. A
+     * check-in sealed further ahead of [nowMs] than a clock may be off (LiveTime) isn't counted, as
+     * the circle's phones don't count it.
+     */
+    suspend fun newestOwnCheckIn(circleId: String, sinceMs: Long, nowMs: Long = System.currentTimeMillis()): Result<Long?> {
+        return try {
+            val self = sessionManager.getUserId()?.let { AccountIds.storeKey(it) }
+                ?: return Result.failure(IllegalStateException("Not signed in"))
+            // Day buckets below this hold nothing that can move the deadline.
+            var floorDay = Math.floorDiv(sinceMs, MS_PER_DAY).toInt()
+            var newest: Long? = null
+            var last: CheckInResponse? = null
+            for (page in 1..MAX_OWN_PAGES) {
+                val response = tracksApi.getCircleCheckIns(circleId, CHECK_IN_PAGE, last?.dayBucket, last?.id)
+                val rows = response.body()?.takeIf { response.isSuccessful && it.success }?.data
+                    ?: return Result.failure(Exception("Failed to fetch check-ins"))
+                val opened = withContext(Dispatchers.Default) { rows.map { it to open(circleId, it) } }
+                for ((dto, checkIn) in opened) {
+                    if (dto.dayBucket < floorDay) continue
+                    checkIn ?: return Result.failure(Exception("A check-in that may be this account's doesn't open here"))
+                    checkInDao.insert(checkIn)
+                    if (AccountIds.storeKey(checkIn.userId) != self || !LiveTime.plausible(checkIn.timestamp, nowMs)) continue
+                    if (newest == null || checkIn.timestamp > newest) newest = checkIn.timestamp
+                    // A newer one would be on this day or a later one.
+                    floorDay = maxOf(floorDay, dto.dayBucket)
+                }
+                if (rows.size < CHECK_IN_PAGE || rows.minOf { it.dayBucket } < floorDay) return Result.success(newest)
+                last = rows.last()
+            }
+            Result.failure(Exception("Too many check-ins to settle the newest"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Each member's newest check-in held here for [circleId] (epoch ms), any type, keyed by
+     * [AccountIds.storeKey] of the id it was sealed with. Any key version that opened counts. One
+     * sealed further ahead of [nowMs] than a clock may be off (LiveTime) doesn't: it would keep
+     * the member's rules quiet until that date.
+     */
+    suspend fun lastCheckIns(circleId: String, nowMs: Long = System.currentTimeMillis()): Map<String, Long> =
+        checkInDao.lastByUser(circleId, nowMs + LiveTime.MAX_FUTURE_SKEW_MS)
+            .groupBy({ AccountIds.storeKey(it.userId) }, { it.lastAt })
+            .mapValues { (_, times) -> times.max() }
 
     suspend fun syncPendingCheckIns(): Result<Int> {
         return try {

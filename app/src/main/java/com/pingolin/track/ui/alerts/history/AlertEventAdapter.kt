@@ -19,12 +19,18 @@
 package com.pingolin.track.ui.alerts.history
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pingolin.track.R
 import com.pingolin.track.databinding.ItemAlertEventBinding
+import com.pingolin.track.ui.checkin.CheckInChoices
 import com.pingolin.track.ui.notifications.notificationRelativeLabel
+import com.pingolin.track.util.AlertHandler
+import com.pingolin.track.util.missedCheckInByWords
+import com.pingolin.track.util.missedCheckInWords
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -40,7 +46,18 @@ data class AlertEventItem(
     /** Optional status label override ("Resolved", …); falls back to Triggered/Acknowledged. */
     val statusOverride: String? = null,
     /** Exact firing time (epoch millis) when known (local events); null → use [dayBucket]. */
-    val timestampMillis: Long? = null
+    val timestampMillis: Long? = null,
+    /**
+     * A missed check-in recorded here: whom it was about and the rule's limit, for its
+     * notification's words (missedCheckInWords), said with this phone's language; a scheduled
+     * rule's by its time as set ([dueMinute], missedCheckInByWords).
+     */
+    val memberName: String? = null,
+    val timeoutHours: Int? = null,
+    val dueMinute: Int? = null,
+    /** A past check-in ([type] "check_in", HistoryCheckIns): its type, and whether it is this account's. */
+    val checkInType: String? = null,
+    val ownCheckIn: Boolean = false,
 )
 
 class AlertEventAdapter(
@@ -65,11 +82,14 @@ class AlertEventAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(event: AlertEventItem) {
+            if (event.type == AlertHandler.TYPE_CHECK_IN) return bindCheckIn(event)
+            binding.tvStatus.visibility = View.VISIBLE
+            val context = binding.root.context
             // Icon based on type
             val icon = when (event.type) {
                 "low_battery" -> "🔋"
                 "offline" -> "📡"
-                "inactivity" -> "⏰"
+                "inactivity", AlertHandler.TYPE_MISSED_CHECK_IN -> "⏰"
                 else -> "⚠️"
             }
             binding.tvIcon.text = icon
@@ -79,12 +99,20 @@ class AlertEventAdapter(
                 "low_battery" -> "Low Battery Alert"
                 "offline" -> "Offline Alert"
                 "inactivity" -> "Inactivity Alert"
+                AlertHandler.TYPE_MISSED_CHECK_IN -> context.getString(R.string.missed_check_in_title)
                 else -> "Alert"
             }
             binding.tvTitle.text = title
 
-            // Message (append the circle name to disambiguate across circles)
-            binding.tvMessage.text = event.circleName?.let { "${event.message} · $it" } ?: event.message
+            // A missed check-in recorded here says its notification's words.
+            val message = when {
+                event.memberName != null && event.dueMinute != null -> missedCheckInByWords(context, event.memberName, event.dueMinute)
+                event.memberName != null && event.timeoutHours != null -> missedCheckInWords(context, event.memberName, event.timeoutHours)
+                else -> event.message
+            }
+            // Message (append the circle name to disambiguate across circles); a firing whose
+            // words are sealed has none, and shows its circle alone.
+            binding.tvMessage.text = listOfNotNull(message.takeIf { it.isNotBlank() }, event.circleName).joinToString(" · ")
 
             // Status
             binding.tvStatus.text = event.statusOverride
@@ -94,6 +122,28 @@ class AlertEventAdapter(
             // When it fired: exact local time when we have it (local events), else the day label.
             binding.tvTime.text = formatWhen(event)
 
+            binding.root.setOnClickListener { onEventClick(event) }
+        }
+
+        /**
+         * A past check-in of someone a check-in rule is about (HistoryCheckIns): "{name} checked in"
+         * or "You checked in", with the check-in screen's icon for its type, the type's name when it
+         * isn't the plain one, its circle and its time. No status: nothing was triggered.
+         */
+        private fun bindCheckIn(event: AlertEventItem) {
+            val context = binding.root.context
+            val type = event.checkInType.orEmpty()
+            val (icon, label) = CheckInChoices.label(type)
+            binding.tvIcon.text = icon
+            binding.tvTitle.text = if (event.ownCheckIn) {
+                context.getString(R.string.history_you_checked_in)
+            } else {
+                context.getString(R.string.history_checked_in, event.memberName?.takeIf { it.isNotBlank() } ?: "A member")
+            }
+            binding.tvMessage.text = listOfNotNull(label.takeIf { type in HistoryCheckIns.NAMED_TYPES }, event.circleName).joinToString(" · ")
+            binding.tvStatus.visibility = View.GONE
+            binding.tvStatus.alpha = 1.0f
+            binding.tvTime.text = formatWhen(event)
             binding.root.setOnClickListener { onEventClick(event) }
         }
     }

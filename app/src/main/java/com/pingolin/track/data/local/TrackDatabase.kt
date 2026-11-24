@@ -55,7 +55,7 @@ import com.pingolin.track.data.local.entity.*
         MemberNotSharingSeenEntity::class,
         PlaceAlertShownEntity::class
     ],
-    version = 49,
+    version = 51,
     exportSchema = false
 )
 abstract class TrackDatabase : RoomDatabase() {
@@ -990,6 +990,39 @@ abstract class TrackDatabase : RoomDatabase() {
                     "CREATE INDEX IF NOT EXISTS `index_place_alert_shown_placeId_userId` " +
                         "ON `place_alert_shown` (`placeId`, `userId`)"
                 )
+            }
+        }
+
+        /**
+         * Check-in rules: an inactivity rule says what it watches, location updates or check-ins,
+         * and a check-in rule when its clock starts; a lapse says which kind it is and what its
+         * silence counted from. `watches` is NOT NULL DEFAULT 'location', as the entities declare
+         * it (@ColumnInfo defaultValue): every rule and lapse kept from before is a location one.
+         * The two times are nullable with no default, as Room makes them (see MIGRATION_36_37).
+         */
+        val MIGRATION_49_50 = object : Migration(49, 50) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `watches` TEXT NOT NULL DEFAULT 'location'")
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `armedAt` INTEGER")
+                db.execSQL("ALTER TABLE `local_inactivity_events` ADD COLUMN `watches` TEXT NOT NULL DEFAULT 'location'")
+                db.execSQL("ALTER TABLE `local_inactivity_events` ADD COLUMN `silentSince` INTEGER")
+            }
+        }
+
+        /**
+         * One-time and scheduled check-in rules (track migration 197): a check-in rule's kind and a
+         * scheduled one's schedule, and a missed check-in's deadline for its words. A check-in rule
+         * kept from before says no kind: one-time, the server's reading of the rolling rules it had.
+         */
+        val MIGRATION_50_51 = object : Migration(50, 51) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `checkInMode` TEXT")
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `scheduleDays` INTEGER")
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `scheduleDueMinute` INTEGER")
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `scheduleFromMinute` INTEGER")
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `scheduleTz` TEXT")
+                db.execSQL("ALTER TABLE `inactivity_alerts` ADD COLUMN `scheduleTzFollowsPhone` INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE `local_inactivity_events` ADD COLUMN `dueMinute` INTEGER")
             }
         }
     }

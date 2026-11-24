@@ -31,6 +31,8 @@ import com.pingolin.track.data.local.entity.PlaceAlertShownEntity
 import com.pingolin.track.data.local.entity.SosAlertEntity
 import com.pingolin.track.data.local.entity.sendsBatteryLevel
 import com.pingolin.track.data.local.entity.sendsBubble
+import com.pingolin.track.util.CheckInModes
+import com.pingolin.track.util.InactivityWatches
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -47,7 +49,7 @@ import org.robolectric.annotation.Config
 /**
  * A phone with a version 38 database updates to this build: MIGRATION_38_39, MIGRATION_39_40,
  * MIGRATION_40_41, MIGRATION_41_42, MIGRATION_42_43, MIGRATION_43_44, MIGRATION_44_45,
- * MIGRATION_45_46, MIGRATION_46_47, MIGRATION_47_48 and MIGRATION_48_49 open the database it
+ * MIGRATION_45_46, MIGRATION_46_47, MIGRATION_47_48, MIGRATION_48_49, MIGRATION_49_50 and MIGRATION_50_51 open the database it
  * already has, data and all, the way the app opens it (AppModule: the migrations, and a
  * destructive fallback that would wipe everything without a word if the path were missing).
  * After migrating, Room checks every table against this build's entities and refuses to open on
@@ -119,6 +121,16 @@ class TrackDatabaseUpgradeTest {
                     "resolvedAt, acknowledgedByMe, dismissedByMe, dismissedAt, acknowledgmentCount) " +
                     "VALUES ('s-1', 'c-1', '$ME', 'active', 37.3349, -122.009, '', 7000, NULL, 0, 0, NULL, 1)"
             )
+            execSQL(
+                "INSERT INTO inactivity_alerts (id, userId, circleId, targetUserId, timeoutHours, isSelfAlert, notifyPush, " +
+                    "notifyEmail, notifyOnReturn, cooldownMinutes, isActive, lastTriggeredDayBucket, dayBucket, clientOnly, targetUserIds) " +
+                    "VALUES ('ia-1', '$ME', 'c-1', '$OTHER', 4, 0, 1, 0, 1, 60, 1, NULL, 20000, 0, NULL)"
+            )
+            execSQL(
+                "INSERT INTO local_inactivity_events (id, inactivityAlertId, circleId, targetUserId, targetDisplayName, timeoutHours, " +
+                    "inactiveSeconds, triggeredAt, triggeredDayBucket, resolvedAt) " +
+                    "VALUES ('local-inact:ia-1:$OTHER:9000', 'ia-1', 'c-1', '$OTHER', 'Bo', 4, 18000, 9000, 0, NULL)"
+            )
         }
         helper.close()
     }
@@ -139,13 +151,14 @@ class TrackDatabaseUpgradeTest {
                 TrackDatabase.MIGRATION_38_39, TrackDatabase.MIGRATION_39_40, TrackDatabase.MIGRATION_40_41,
                 TrackDatabase.MIGRATION_41_42, TrackDatabase.MIGRATION_42_43, TrackDatabase.MIGRATION_43_44,
                 TrackDatabase.MIGRATION_44_45, TrackDatabase.MIGRATION_45_46, TrackDatabase.MIGRATION_46_47,
-                TrackDatabase.MIGRATION_47_48, TrackDatabase.MIGRATION_48_49,
+                TrackDatabase.MIGRATION_47_48, TrackDatabase.MIGRATION_48_49, TrackDatabase.MIGRATION_49_50,
+                TrackDatabase.MIGRATION_50_51,
             )
             .allowMainThreadQueries()
             .build()
         try {
             // Opening migrates and validates: a table Room doesn't expect throws here.
-            assertEquals(49, db.openHelper.readableDatabase.version)
+            assertEquals(51, db.openHelper.readableDatabase.version)
             assertNotEquals("the schema is this build's now", "d0d02e95edc05ee70458dffa98010ebc", identityHash(db))
 
             // What the version 38 database kept is still there (a destructive
@@ -252,6 +265,50 @@ class TrackDatabaseUpgradeTest {
             assertEquals(listOf(shown), db.placeAlertShownDao().unpaired(PlaceAlertShownEntity.KIND_SERVER, "p-1", ME))
             db.placeAlertShownDao().consume("n-1")
             assertEquals(emptyList<PlaceAlertShownEntity>(), db.placeAlertShownDao().unpaired(PlaceAlertShownEntity.KIND_SERVER, "p-1", ME))
+
+            // An inactivity alert kept from before v50 watches location updates, as every one did
+            // then, and has no start; a check-in rule is kept with both.
+            val rule = db.inactivityAlertDao().getById("ia-1")!!
+            assertEquals(4, rule.timeoutHours)
+            assertTrue(rule.notifyOnReturn)
+            assertEquals(InactivityWatches.LOCATION, rule.watches)
+            assertNull(rule.armedAt)
+            db.inactivityAlertDao().insert(rule.copy(id = "ia-2", watches = InactivityWatches.CHECK_IN, armedAt = 8000L, notifyOnReturn = false))
+            val checkIn = db.inactivityAlertDao().getById("ia-2")!!
+            assertEquals(InactivityWatches.CHECK_IN, checkIn.watches)
+            assertEquals(8000L, checkIn.armedAt)
+            // And its lapse is a location one, still open; a missed check-in's is kept with its start.
+            val lapse = db.localInactivityEventDao().getOpen("ia-1", OTHER)!!
+            assertEquals(InactivityWatches.LOCATION, lapse.watches)
+            assertNull(lapse.silentSince)
+            db.localInactivityEventDao().insert(lapse.copy(id = "l-2", inactivityAlertId = "ia-2", watches = InactivityWatches.CHECK_IN, silentSince = 7000L))
+            assertEquals(7000L, db.localInactivityEventDao().getOpen("ia-2", OTHER)!!.silentSince)
+
+            // v51: a check-in rule kept from before says no kind (one-time) and has no schedule, and
+            // doesn't follow the phone; a scheduled one is kept with its schedule, and a missed
+            // check-in with its time as set.
+            assertNull(checkIn.checkInMode)
+            assertNull(checkIn.scheduleDays)
+            assertNull(checkIn.scheduleTz)
+            assertTrue(!checkIn.scheduleTzFollowsPhone)
+            db.inactivityAlertDao().insert(
+                checkIn.copy(
+                    id = "ia-3", checkInMode = CheckInModes.SCHEDULED, scheduleDays = 0b001_1111, scheduleDueMinute = 21 * 60,
+                    scheduleFromMinute = 18 * 60, scheduleTz = "America/New_York", scheduleTzFollowsPhone = true,
+                )
+            )
+            val scheduled = db.inactivityAlertDao().getById("ia-3")!!
+            assertEquals(CheckInModes.SCHEDULED, scheduled.checkInMode)
+            assertEquals(0b001_1111, scheduled.scheduleDays)
+            assertEquals(21 * 60, scheduled.scheduleDueMinute)
+            assertEquals(18 * 60, scheduled.scheduleFromMinute)
+            assertEquals("America/New_York", scheduled.scheduleTz)
+            assertTrue(scheduled.scheduleTzFollowsPhone)
+            assertNull(db.localInactivityEventDao().getOpen("ia-2", OTHER)!!.dueMinute)
+            db.localInactivityEventDao().insert(lapse.copy(id = "l-3", inactivityAlertId = "ia-3", watches = InactivityWatches.CHECK_IN, silentSince = 7000L, dueMinute = 21 * 60))
+            assertEquals(21 * 60, db.localInactivityEventDao().getOpen("ia-3", OTHER)!!.dueMinute)
+            // The check-in rules' clean-up finds every open missed check-in, and no location lapse.
+            assertEquals(setOf("l-2", "l-3"), db.localInactivityEventDao().getOpenByWatches(InactivityWatches.CHECK_IN).map { it.id }.toSet())
         } finally {
             db.close()
         }
@@ -262,14 +319,15 @@ class TrackDatabaseUpgradeTest {
         // AppModule's list, read from its source: a migration left out of it is the destructive
         // fallback on every phone that updates.
         val module = java.io.File("src/main/java/com/pingolin/track/di/AppModule.kt").readText()
-        for (from in 38 until 49) {
+        for (from in 38 until 51) {
             assertTrue("MIGRATION_${from}_${from + 1}", module.contains("TrackDatabase.MIGRATION_${from}_${from + 1}"))
         }
         val database = java.io.File("src/main/java/com/pingolin/track/data/local/TrackDatabase.kt").readText()
-        assertTrue(database.contains("    version = 49,"))
+        assertTrue(database.contains("    version = 51,"))
     }
 
     private companion object {
         const val ME = "a1b2c3d4-0000-4000-8000-00000000000e"
+        const val OTHER = "b0b00000-0000-4000-8000-00000000b0b0"
     }
 }

@@ -231,6 +231,7 @@ class MonitoringManagerTest {
         localBatteryEventDao = localBatteryEventDao,
         privacySettingDao = privacySettingDao,
         cryptoManager = cryptoManager,
+        checkInRepository = dagger.Lazy { mockk(relaxed = true) },
     )
 
     // ── fixtures ────────────────────────────────────────────────────────────

@@ -124,6 +124,12 @@ class AlertHandler @Inject constructor(
          */
         internal const val KEY_INACTIVE_SINCE = "inactive_since"
 
+        /**
+         * A missed check-in's words as this phone's evaluator made them (missedCheckInWords).
+         * Set only there, and never carried by a row (SERVER_METADATA_KEYS).
+         */
+        internal const val KEY_MISSED_CHECK_IN = "missed_check_in_words"
+
         /** The raiser's and circle's names as this device opened them, for an alarming SOS only. */
         internal const val KEY_SOS_RAISER_NAME = "sos_raiser_name"
         internal const val KEY_SOS_CIRCLE_NAME = "sos_circle_name"
@@ -178,6 +184,12 @@ class AlertHandler @Inject constructor(
         const val TYPE_OFFLINE = "offline"
         const val TYPE_INACTIVITY = "inactivity" // Alias for offline alerts from backend
         const val TYPE_BACK_ONLINE = "inactivity_recovered" // "back online", inverse of offline
+        /**
+         * A check-in rule's member hasn't checked in for its limit: this phone's evaluator's own
+         * (MonitoringManager.evaluateCheckInRules), never a server row's. Also the sealed type of
+         * the copy for the account's other devices (reportAlertEvent).
+         */
+        const val TYPE_MISSED_CHECK_IN = "missed_check_in"
         const val TYPE_DESTINATION_SHARED = "destination_shared"
         const val TYPE_DESTINATION_ARRIVAL = "destination_arrival"
         /** The dead man's switch for an unreachable circle owner. */
@@ -288,6 +300,7 @@ class AlertHandler @Inject constructor(
             TYPE_LOW_BATTERY -> handleLowBattery(data, alertId)
             TYPE_OFFLINE, TYPE_INACTIVITY -> handleOffline(data, alertId)
             TYPE_BACK_ONLINE -> handleBackOnline(data, alertId)
+            TYPE_MISSED_CHECK_IN -> handleMissedCheckIn(data, alertId)
             TYPE_DESTINATION_SHARED -> handleDestinationShared(data, alertId)
             TYPE_DESTINATION_ARRIVAL -> handleDestinationArrival(data, alertId)
             TYPE_CIRCLE_OWNERSHIP_CLAIM -> handleOwnershipClaim(data, alertId)
@@ -1265,6 +1278,23 @@ class AlertHandler @Inject constructor(
             // As the bell, the list and the history name it: what was seen, not a cause.
             title = "Inactivity",
             message = inactivityMessage(context, data),
+            group = statusGroup(),
+            dedupeKey = dedupeKey,
+        )
+    }
+
+    /**
+     * "Missed check-in": a check-in rule's member hasn't checked in for its limit, in the words
+     * this phone's evaluator made ([KEY_MISSED_CHECK_IN]). No place in them, so they stand at the
+     * names-only level too. Its member's check-in takes it back (cancelInactivity): no "back"
+     * notice, the check-in itself tells the circle.
+     */
+    private fun handleMissedCheckIn(data: Map<String, String>, dedupeKey: String?) {
+        val title = context.getString(R.string.missed_check_in_title)
+        showNotification(
+            channelId = TrackApplication.ALERTS_CHANNEL_ID,
+            title = title,
+            message = data[KEY_MISSED_CHECK_IN]?.takeIf { it.isNotBlank() } ?: title,
             group = statusGroup(),
             dedupeKey = dedupeKey,
         )

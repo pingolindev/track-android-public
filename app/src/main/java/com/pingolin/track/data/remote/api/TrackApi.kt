@@ -558,10 +558,16 @@ interface TrackApi {
     @GET("api/v1/check-ins")
     suspend fun getMyCheckIns(@Query("limit") limit: Int = 50): Response<ApiResponse<List<CheckInResponse>>>
 
+    /**
+     * Newest first (`day_bucket DESC, id DESC`), at most 100 a page. The next page starts after the
+     * [cursorDayBucket] and [cursorId] of the previous page's last check-in.
+     */
     @GET("api/v1/circles/{circleId}/check-ins")
     suspend fun getCircleCheckIns(
         @Path("circleId") circleId: String,
-        @Query("limit") limit: Int = 50
+        @Query("limit") limit: Int = 50,
+        @Query("cursor_day_bucket") cursorDayBucket: Int? = null,
+        @Query("cursor_id") cursorId: String? = null,
     ): Response<ApiResponse<List<CheckInResponse>>>
 
     // ===== SOS =====
@@ -919,6 +925,11 @@ interface TrackApi {
      * Only alerts this user created, not alerts others set targeting them. A page holds at most
      * 100. The next page starts after the [cursorDayBucket] and [cursorId] of the previous page's
      * last alert, ordered `day_bucket DESC, id DESC`; given those, the server ignores [offset].
+     *
+     * [includeCheckIn]: check-in rules too. Without it the server lists location rules only, for
+     * the older apps, which judge every rule they get by location updates. [checkInModes]: the
+     * check-in kinds this app judges (CheckInModes.JUDGED); without it, one-time rules only, for the
+     * apps that would judge a scheduled rule by its hours. Both, on every page.
      */
     @GET("api/v1/inactivity-alerts")
     suspend fun getInactivityAlerts(
@@ -926,6 +937,8 @@ interface TrackApi {
         @Query("offset") offset: Int = 0,
         @Query("cursor_day_bucket") cursorDayBucket: Int? = null,
         @Query("cursor_id") cursorId: String? = null,
+        @Query("include_check_in") includeCheckIn: Boolean = true,
+        @Query("check_in_modes") checkInModes: String = com.pingolin.track.util.CheckInModes.JUDGED,
     ): Response<ApiResponse<List<InactivityAlertResponse>>>
 
     @GET("api/v1/inactivity-alerts/{id}")
@@ -946,9 +959,14 @@ interface TrackApi {
      * Their devices cannot raise these, a phone that has gone quiet cannot
      * report itself, and the server does not decide them, so without this
      * nothing fires them at all.
+     *
+     * [includeCheckIn] and [checkInModes]: check-in requests too, of both kinds, as [getInactivityAlerts].
      */
     @GET("api/v1/inactivity-alerts/circle-self-alerts")
-    suspend fun getCircleSelfAlerts(): Response<ApiResponse<List<CircleSelfAlertDto>>>
+    suspend fun getCircleSelfAlerts(
+        @Query("include_check_in") includeCheckIn: Boolean = true,
+        @Query("check_in_modes") checkInModes: String = com.pingolin.track.util.CheckInModes.JUDGED,
+    ): Response<ApiResponse<List<CircleSelfAlertDto>>>
 
     /** Firings, not definitions. */
     @GET("api/v1/inactivity-events")

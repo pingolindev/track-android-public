@@ -29,12 +29,15 @@ import com.pingolin.track.domain.pending.PendingChanges
 import com.pingolin.track.domain.pending.PendingKind
 import com.pingolin.track.domain.repository.CheckInRepository
 import com.pingolin.track.domain.repository.CircleRepository
+import com.pingolin.track.domain.repository.InactivityAlertRepository
 import com.pingolin.track.domain.repository.LocationRepository
 import com.pingolin.track.domain.repository.PlaceRepository
 import com.pingolin.track.ui.pending.PendingListModel
+import com.pingolin.track.util.CheckInCountdown
 import com.pingolin.track.util.plainText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,6 +50,8 @@ class CheckInViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
     private val sessionManager: com.pingolin.track.util.SessionManager,
     private val pendingChanges: PendingChanges,
+    /** This account's check-in rules about itself, for the countdown to its circle's next alert. */
+    private val inactivityAlertRepository: InactivityAlertRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -77,6 +82,19 @@ class CheckInViewModel @Inject constructor(
 
     /** Whether the screen has made its opening choice: the circle it was opened for, or the only one. */
     private var opened = false
+
+    /**
+     * A read of this account's newest check-in that the server has in [circleId], from the read's
+     * start on (CheckInCountdown.readFrom; null: none).
+     */
+    private data class OwnCheckIns(val circleId: String, val newest: Long?)
+
+    /**
+     * The chosen circle's last read ([readCountdown]); null before one answered, or when it failed.
+     * Before init, which can choose the first circle, and read for it, as it runs.
+     */
+    private val ownCheckIns = MutableStateFlow<OwnCheckIns?>(null)
+    private var countdownRead: Job? = null
 
     init {
         // The table itself, not [circles]: its first value is the store's, never stateIn's empty start.
@@ -140,6 +158,53 @@ class CheckInViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<CheckInUiState>(CheckInUiState.Idle)
     val uiState: StateFlow<CheckInUiState> = _uiState.asStateFlow()
 
+    /**
+     * The countdown of this account's own active check-in rules about itself in the chosen circle:
+     * with several, the one whose circle is alerted soonest (CheckInCountdown.alertAt; a missed one
+     * first). Null without such a rule, and until a read of the circle's check-ins answers: no line
+     * rather than a wrong one.
+     */
+    val countdown: StateFlow<CheckInCountdown.Countdown?> =
+        combine(inactivityAlertRepository.observeActive(), _selectedCircleId, ownCheckIns) { rules, circleId, read ->
+            if (circleId == null || read?.circleId != circleId) return@combine null
+            val now = System.currentTimeMillis()
+            CheckInCountdown.countdowns(rules.filter { it.circleId == circleId }, mapOf(circleId to read.newest)).values
+                .minByOrNull { CheckInCountdown.alertAt(it, now) ?: Long.MAX_VALUE }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    /**
+     * Read, from the server, this account's newest check-in in the chosen circle, where it has an
+     * active check-in rule about itself: when the screen opens, the circle changes or the list is
+     * refreshed, and after a check-in is accepted (the countdown starts again). A failed read
+     * shows nothing.
+     */
+    fun readCountdown() {
+        val circleId = _selectedCircleId.value ?: return
+        countdownRead?.cancel()
+        countdownRead = viewModelScope.launch {
+            val now = System.currentTimeMillis()
+            // From the earliest start among the circle's rules: an older check-in changes no line.
+            val since = inactivityAlertRepository.observeActive().first()
+                .filter { CheckInCountdown.appliesTo(it) && it.circleId == circleId }
+                .mapNotNull { CheckInCountdown.readFrom(it, now) }.minOrNull()
+            if (since == null) {
+                ownCheckIns.value = null
+                return@launch
+            }
+            val read = checkInRepository.newestOwnCheckIn(circleId, since, now)
+            ownCheckIns.value = if (read.isSuccess) OwnCheckIns(circleId, read.getOrNull()) else null
+        }
+    }
+
+    /** A check-in's outcome on screen; an accepted one starts the countdown again. */
+    private fun outcome(result: Result<CheckInEntity>): CheckInUiState = result.fold(
+        onSuccess = {
+            readCountdown()
+            CheckInUiState.Sent(it)
+        },
+        onFailure = { CheckInUiState.Error(it.plainText("Failed to send check-in")) }
+    )
+
     fun setSelectedCircle(circleId: String) {
         opened = true
         chosenName = circles.value.firstOrNull { it.id == circleId }?.name
@@ -157,6 +222,7 @@ class CheckInViewModel @Inject constructor(
         viewModelScope.launch {
             checkInRepository.refreshCheckIns(circleId)
         }
+        readCountdown()
     }
 
     fun quickCheckIn(type: String) {
@@ -165,10 +231,7 @@ class CheckInViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = CheckInUiState.Sending
             val result = checkInRepository.createQuickCheckIn(circleId, type, keepIfBehind = true)
-            _uiState.value = result.fold(
-                onSuccess = { CheckInUiState.Sent(it) },
-                onFailure = { CheckInUiState.Error(it.plainText("Failed to send check-in")) }
-            )
+            _uiState.value = outcome(result)
         }
     }
 
@@ -191,10 +254,7 @@ class CheckInViewModel @Inject constructor(
                 longitude = location.longitude,
                 keepIfBehind = true,
             )
-            _uiState.value = result.fold(
-                onSuccess = { CheckInUiState.Sent(it) },
-                onFailure = { CheckInUiState.Error(it.plainText("Failed to send check-in")) }
-            )
+            _uiState.value = outcome(result)
         }
     }
 
@@ -209,10 +269,7 @@ class CheckInViewModel @Inject constructor(
                 message = message,
                 keepIfBehind = true,
             )
-            _uiState.value = result.fold(
-                onSuccess = { CheckInUiState.Sent(it) },
-                onFailure = { CheckInUiState.Error(it.plainText("Failed to send check-in")) }
-            )
+            _uiState.value = outcome(result)
         }
     }
 
@@ -232,10 +289,7 @@ class CheckInViewModel @Inject constructor(
                 longitude = location?.longitude,
                 keepIfBehind = true,
             )
-            _uiState.value = result.fold(
-                onSuccess = { CheckInUiState.Sent(it) },
-                onFailure = { CheckInUiState.Error(it.plainText("Failed to send check-in")) }
-            )
+            _uiState.value = outcome(result)
         }
     }
 

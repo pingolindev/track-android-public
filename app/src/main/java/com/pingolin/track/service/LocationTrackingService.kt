@@ -1217,8 +1217,14 @@ class LocationTrackingService : Service() {
             // desk twelve requests an hour. The alerts_check push path
             // (AlertsCheckWorker) still fetches fresh, and refreshes this cache as
             // it does.
-            val selfAlerts = monitoringManager.fetchCircleSelfAlertsCached()
-            val selfAlertCircles = selfAlerts.map { it.circleId }.toSet()
+            // Null when the read failed (MonitoringManager.readCircleSelfAlerts).
+            val selfAlertsRead = monitoringManager.readCircleSelfAlertsCached()
+            val selfAlerts = selfAlertsRead.orEmpty()
+            // Check-in rules read the circles' check-ins, not their locations: judged on their
+            // own, from what this phone holds, with a read only when one would go off or a
+            // missed check-in is open (MonitoringManager.evaluateCheckInRules).
+            monitoringManager.evaluateCheckInRules(selfAlertsRead, wake = false)
+            val selfAlertCircles = MonitoringManager.locationSelfAlerts(selfAlerts).map { it.circleId }.toSet()
             // A "Just me" alert carries a null circle and needs no member fetch; its own
             // fixes already flow through sendLocation. Only alerts homed to a real circle
             // require somebody else's location to evaluate.

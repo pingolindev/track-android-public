@@ -1370,6 +1370,9 @@ class MainActivity : AppCompatActivity() {
         }
         // Changes waiting to sync look again when the app comes back.
         if (sessionManager.isLoggedIn()) com.pingolin.track.worker.PendingChangesWorker.kick(this)
+        // Check-in rules about yourself that follow the phone's time zone: moved to it, should it
+        // have changed while the app was away (CheckInZoneWorker; the zone-change broadcast too).
+        if (sessionManager.isLoggedIn()) com.pingolin.track.worker.CheckInZoneWorker.kick(this)
         // The database's key moves off the old one tied to the screen lock: the open does it, and
         // this tries again should that have failed. A database made again because its key was
         // gone says so, once.

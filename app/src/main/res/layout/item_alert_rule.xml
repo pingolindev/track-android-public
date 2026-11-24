@@ -50,6 +50,16 @@
                 android:textSize="14sp"
                 android:textColor="?android:attr/textColorSecondary" />
 
+            <!-- A check-in rule about yourself: when your circle is alerted (UnifiedAlertAdapter).
+                 Read with the row; no live region, so a minute's change isn't announced. -->
+            <TextView
+                android:id="@+id/tvCountdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:visibility="gone" />
+
         </LinearLayout>
 
         <com.google.android.material.materialswitch.MaterialSwitch

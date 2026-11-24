@@ -288,10 +288,11 @@ class ColdStartUnopenableDatabaseTest {
             alertRuleRepository = alertRules, circleRepository = circles, pendingChanges = pending,
         )
         val inactive = com.pingolin.track.ui.alerts.inactivity.InactivityAlertsViewModel(
-            inactivityAlertRepository = inactivity, circleRepository = circles,
+            inactivityAlertRepository = inactivity, circleRepository = circles, checkInRepository = mockk(relaxed = true),
         )
         val history = com.pingolin.track.ui.alerts.history.AlertEventsViewModel(
             alertRuleRepository = alertRules, inactivityAlertRepository = inactivity, circleRepository = circles,
+            checkInRepository = mockk(relaxed = true), sessionManager = session,
         )
         try {
             val lists = listOf(
@@ -301,6 +302,7 @@ class ColdStartUnopenableDatabaseTest {
                 rules.alertRules, rules.pending.items, rules.circles,
                 inactive.inactivityAlerts, inactive.circles,
                 history.alertRules, history.inactivityAlerts, history.localEventItems, history.circles,
+                history.checkInItems,
             )
             (lists + listOf(circlesTab.rekeyWarnings, circlesTab.pendingLines, circlesTab.showEmptyState)).forEach { shown ->
                 backgroundScope.launch { shown.collect {} }

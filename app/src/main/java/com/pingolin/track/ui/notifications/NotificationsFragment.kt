@@ -133,8 +133,8 @@ class NotificationsFragment : Fragment() {
                 navController.navigate(R.id.mapFragment)
             }
 
-            // Inactivity alerts → Alerts screen
-            "inactivity", "inactivity_alert" -> {
+            // Inactivity alerts and missed check-ins → Alerts screen
+            "inactivity", "inactivity_alert", "missed_check_in" -> {
                 navController.navigate(R.id.alertsContainerFragment)
             }
 

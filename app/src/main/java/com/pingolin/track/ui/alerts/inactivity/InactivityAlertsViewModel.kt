@@ -24,8 +24,10 @@ import com.pingolin.track.data.local.entity.CircleEntity
 import com.pingolin.track.data.local.entity.CircleMemberEntity
 import com.pingolin.track.data.local.entity.InactivityAlertEntity
 import com.pingolin.track.data.remote.dto.InactivityEventResponse
+import com.pingolin.track.domain.repository.CheckInRepository
 import com.pingolin.track.domain.repository.CircleRepository
 import com.pingolin.track.domain.repository.InactivityAlertRepository
+import com.pingolin.track.util.CheckInCountdown
 import com.pingolin.track.util.plainText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -33,19 +35,57 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class InactivityAlertsViewModel @Inject constructor(
     private val inactivityAlertRepository: InactivityAlertRepository,
-    private val circleRepository: CircleRepository
+    private val circleRepository: CircleRepository,
+    /** This account's newest check-ins, for the countdown on its check-in rules about itself. */
+    private val checkInRepository: CheckInRepository,
 ) : ViewModel() {
 
     val inactivityAlerts: StateFlow<List<InactivityAlertEntity>> = inactivityAlertRepository.observeAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    /**
+     * This account's newest check-in that the server has, in each circle where it has a check-in
+     * rule about itself, from the read's start on (CheckInCountdown.readFrom), as this screen last
+     * read it (null: none). A circle whose read failed is left out: its rules show no countdown
+     * rather than a wrong one.
+     */
+    private val newestCheckIns = MutableStateFlow<Map<String, Long?>>(emptyMap())
+
+    /** Each of this account's active check-in rules about itself, by id, to its countdown (CheckInCountdown). */
+    val selfCheckInCountdowns: StateFlow<Map<String, CheckInCountdown.Countdown>> =
+        combine(inactivityAlerts, newestCheckIns) { rules, newest -> CheckInCountdown.countdowns(rules, newest) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyMap())
+
+    private var selfCheckInRead: Job? = null
+
+    /**
+     * Read, from the server, this account's newest check-in in each circle where it has an active
+     * check-in rule about itself: when the screen opens, and when the rules change. A read under way
+     * gives way to the newer one.
+     */
+    fun readSelfCheckIns() {
+        selfCheckInRead?.cancel()
+        selfCheckInRead = viewModelScope.launch {
+            val rules = inactivityAlertRepository.observeAll().first().filter(CheckInCountdown::appliesTo)
+            val now = System.currentTimeMillis()
+            for ((circleId, inCircle) in rules.groupBy { it.circleId }) {
+                // From the earliest start among them: an older check-in changes no line.
+                val since = inCircle.mapNotNull { CheckInCountdown.readFrom(it, now) }.minOrNull() ?: continue
+                val read = checkInRepository.newestOwnCheckIn(circleId, since, now)
+                newestCheckIns.update { known -> if (read.isSuccess) known + (circleId to read.getOrNull()) else known - circleId }
+            }
+        }
+    }
 
     val circles: StateFlow<List<CircleEntity>> = circleRepository.observeCircles()
         // Eagerly, not WhileSubscribed: the create dialog reads circles.value on demand at
@@ -72,6 +112,8 @@ class InactivityAlertsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = InactivityAlertsUiState.Loading
             val result = inactivityAlertRepository.refreshInactivityAlerts()
+            // The rules as the server has them may count down differently.
+            if (result.isSuccess) readSelfCheckIns()
             _uiState.value = result.fold(
                 onSuccess = { InactivityAlertsUiState.Idle },
                 onFailure = { InactivityAlertsUiState.Error(it.plainText("Failed to load inactivity alerts")) }
@@ -103,7 +145,11 @@ class InactivityAlertsViewModel @Inject constructor(
         notifyPush: Boolean = true,
         notifyOnReturn: Boolean = false,
         cooldownMinutes: Int = 60,
-        watchedUserIds: List<String> = emptyList()
+        watchedUserIds: List<String> = emptyList(),
+        /** Location updates or check-ins (InactivityWatches). */
+        watches: String = com.pingolin.track.util.InactivityWatches.LOCATION,
+        /** A scheduled check-in rule's schedule; none: one-time. */
+        schedule: com.pingolin.track.util.CheckInScheduleSetting? = null,
     ) {
         viewModelScope.launch {
             _uiState.value = InactivityAlertsUiState.Loading
@@ -120,7 +166,10 @@ class InactivityAlertsViewModel @Inject constructor(
                 cooldownMinutes = cooldownMinutes,
                 watchedUserIds = watchedUserIds,
                 keepIfBehind = true,
+                watches = watches,
+                schedule = schedule,
             )
+            if (result.isSuccess) readSelfCheckIns()
             _uiState.value = result.fold(
                 onSuccess = { InactivityAlertsUiState.AlertCreated(it) },
                 onFailure = { InactivityAlertsUiState.Error(it.plainText("Failed to create inactivity alert")) }
@@ -132,6 +181,8 @@ class InactivityAlertsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = InactivityAlertsUiState.Loading
             val result = inactivityAlertRepository.updateInactivityAlert(alertId, isActive = isActive)
+            // Turned back on, a check-in rule counts from now; its circle may not have been read.
+            if (result.isSuccess) readSelfCheckIns()
             _uiState.value = result.fold(
                 onSuccess = { InactivityAlertsUiState.AlertUpdated },
                 onFailure = { InactivityAlertsUiState.Error(it.plainText("Failed to update inactivity alert")) }
@@ -140,7 +191,8 @@ class InactivityAlertsViewModel @Inject constructor(
     }
 
     /**
-     * Edit an existing rule's timeout and notification channels.
+     * Edit an existing rule's timeout (null: none, a scheduled check-in rule's), a scheduled
+     * check-in rule's [schedule], and the notification channels.
      *
      * Takes no watcher set on purpose: a rule's target is structural (one row per watched
      * member) and an update that carries a watcher blob latches `client_only` server-side,
@@ -149,8 +201,9 @@ class InactivityAlertsViewModel @Inject constructor(
      */
     fun updateInactivityRule(
         alertId: String,
-        timeoutMinutes: Int,
+        timeoutMinutes: Int?,
         notifyPush: Boolean,
+        schedule: com.pingolin.track.util.CheckInScheduleSetting? = null,
     ) {
         viewModelScope.launch {
             _uiState.value = InactivityAlertsUiState.Loading
@@ -159,10 +212,12 @@ class InactivityAlertsViewModel @Inject constructor(
                 timeoutMinutes = timeoutMinutes,
                 notifyPush = notifyPush,
                 // Push only; an edit also clears an e-mail flag left by an older app version.
-                notifyEmail = false
+                notifyEmail = false,
+                schedule = schedule,
             )
             // Resync so the new timeout shows (repo cache-copy doesn't update timeoutHours).
             if (result.isSuccess) inactivityAlertRepository.refreshInactivityAlerts()
+            if (result.isSuccess) readSelfCheckIns()
             _uiState.value = result.fold(
                 onSuccess = { InactivityAlertsUiState.AlertUpdated },
                 onFailure = { InactivityAlertsUiState.Error(it.plainText("Failed to update inactivity alert")) }

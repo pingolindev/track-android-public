@@ -27,14 +27,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.pingolin.track.R
 import com.pingolin.track.databinding.FragmentCheckInBinding
 import com.pingolin.track.ui.start.UnreadableEmptyState
+import com.pingolin.track.util.CheckInCountdown
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -50,6 +54,9 @@ class CheckInFragment : Fragment() {
     private lateinit var pendingAdapter: com.pingolin.track.ui.pending.PendingChangesAdapter
     private var shownCheckIns = 0
     private var shownPending = 0
+
+    /** The chosen circle's countdown (CheckInViewModel.countdown); null shows no line. */
+    private var countdown: CheckInCountdown.Countdown? = null
 
     /** The circles the spinner shows, and where they start in it: after the placeholder while none is chosen. */
     private var shownCircles: List<com.pingolin.track.data.local.entity.CircleEntity> = emptyList()
@@ -195,6 +202,26 @@ class CheckInFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.countdown.collectLatest {
+                countdown = it
+                showCountdown()
+            }
+        }
+
+        // The countdown on a check-in rule about yourself in the chosen circle: your check-ins read
+        // from the server each time the screen opens, and the line redrawn as its minutes go by while
+        // it shows.
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.readCountdown()
+                while (true) {
+                    showCountdown()
+                    delay(countdown?.let { CheckInCountdown.nextChangeIn(it, System.currentTimeMillis()) } ?: COUNTDOWN_IDLE_MS)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.checkIns.collectLatest { checkIns ->
                 binding.swipeRefresh.isRefreshing = false
                 adapter.submitList(checkIns)
@@ -249,6 +276,17 @@ class CheckInFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /**
+     * "Your circle is alerted in 3 h 12 min" (or a scheduled rule's line, "Your circle is alerted at
+     * 9:00 PM unless you check in.") near the check-in buttons, with an active check-in rule about
+     * yourself in the chosen circle; nothing otherwise.
+     */
+    private fun showCountdown() {
+        val text = countdown?.let { CheckInCountdown.text(requireContext(), it, System.currentTimeMillis()) }
+        binding.tvSelfCountdown.visibility = if (text != null) View.VISIBLE else View.GONE
+        binding.tvSelfCountdown.text = text
     }
 
     private fun showListOrEmpty() {
@@ -323,5 +361,10 @@ class CheckInFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private companion object {
+        /** How often a screen with no countdown on it looks again. */
+        const val COUNTDOWN_IDLE_MS = 60_000L
     }
 }

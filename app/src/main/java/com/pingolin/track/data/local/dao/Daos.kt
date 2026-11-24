@@ -532,7 +532,17 @@ interface CheckInDao {
 
     @Query("UPDATE check_ins SET isSynced = 1 WHERE id = :id")
     suspend fun markSynced(id: String)
+
+    /**
+     * Each user's newest check-in held here for [circleId], any type, at [maxAt] or before: the
+     * check-in rules' "last check-in".
+     */
+    @Query("SELECT userId, MAX(timestamp) AS lastAt FROM check_ins WHERE circleId = :circleId AND timestamp <= :maxAt GROUP BY userId")
+    suspend fun lastByUser(circleId: String, maxAt: Long): List<UserLastCheckIn>
 }
+
+/** A row of [CheckInDao.lastByUser]: [userId] as it opened, and their newest check-in's time (epoch ms). */
+data class UserLastCheckIn(val userId: String, val lastAt: Long)
 
 @Dao
 interface SosAlertDao {
@@ -1088,6 +1098,10 @@ interface LocalInactivityEventDao {
     /** The still-open (unresolved) firing for a (rule, member), if any, the fire-once marker. */
     @Query("SELECT * FROM local_inactivity_events WHERE inactivityAlertId = :ruleId AND targetUserId = :userId AND resolvedAt IS NULL LIMIT 1")
     suspend fun getOpen(ruleId: String, userId: String): LocalInactivityEventEntity?
+
+    /** Every open lapse of one kind ([com.pingolin.track.util.InactivityWatches]): the check-in rules' clean-up. */
+    @Query("SELECT * FROM local_inactivity_events WHERE watches = :watches AND resolvedAt IS NULL")
+    suspend fun getOpenByWatches(watches: String): List<LocalInactivityEventEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(event: LocalInactivityEventEntity)

@@ -96,7 +96,7 @@ class CheckInViewModelTest {
 
         viewModel = CheckInViewModel(
             checkInRepository, circleRepository, placeRepository, locationRepository, sessionManager,
-            com.pingolin.track.testutil.quietPendingChanges(), androidx.lifecycle.SavedStateHandle(),
+            com.pingolin.track.testutil.quietPendingChanges(), noSelfCheckInRules(), androidx.lifecycle.SavedStateHandle(),
         )
     }
 
@@ -113,9 +113,14 @@ class CheckInViewModelTest {
         coEvery { circleRepository.refreshMembers(any()) } returns Result.success(emptyList())
         return CheckInViewModel(
             checkInRepository, circleRepository, placeRepository, locationRepository, sessionManager,
-            com.pingolin.track.testutil.quietPendingChanges(),
+            com.pingolin.track.testutil.quietPendingChanges(), noSelfCheckInRules(),
             androidx.lifecycle.SavedStateHandle(openedFor?.let { mapOf(CheckInViewModel.ARG_CIRCLE_ID to it) } ?: emptyMap()),
         )
+    }
+
+    /** No check-in rule about this account: no countdown, and nothing read for one (CheckInCountdownScreenTest). */
+    private fun noSelfCheckInRules() = io.mockk.mockk<com.pingolin.track.domain.repository.InactivityAlertRepository>().also {
+        every { it.observeActive() } returns flowOf(emptyList())
     }
 
     @Test

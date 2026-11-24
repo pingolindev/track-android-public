@@ -170,6 +170,7 @@ class LowBatteryWireTest {
             localBatteryEventDao = db.localBatteryEventDao(),
             privacySettingDao = db.privacySettingDao(),
             cryptoManager = cryptoManager,
+            checkInRepository = dagger.Lazy { mockk(relaxed = true) },
         )
     }
 

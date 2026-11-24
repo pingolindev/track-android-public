@@ -24,14 +24,19 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pingolin.track.R
 import com.pingolin.track.data.local.entity.AlertRuleEntity
 import com.pingolin.track.data.local.entity.InactivityAlertEntity
 import com.pingolin.track.databinding.ItemAlertRuleBinding
 import com.pingolin.track.domain.repository.AlertRuleRepository
+import com.pingolin.track.util.CheckInCountdown
+import com.pingolin.track.util.CheckInRuleText
+import com.pingolin.track.util.InactivityWatches
 
 /**
  * A battery/offline alert rule or an inactivity alert, unified so both kinds render
@@ -48,7 +53,16 @@ sealed class UnifiedAlert {
         override val isActive: Boolean get() = rule.isActive
     }
 
-    data class Inactivity(val alert: InactivityAlertEntity, override val circleName: String?) : UnifiedAlert() {
+    /**
+     * An inactivity alert: one that watches location updates, or a check-in rule (its `watches`).
+     * [countdown]: for this account's own active check-in rule about itself, what its countdown line
+     * is about (CheckInCountdown), once read; null shows no countdown.
+     */
+    data class Inactivity(
+        val alert: InactivityAlertEntity,
+        override val circleName: String?,
+        val countdown: CheckInCountdown.Countdown? = null,
+    ) : UnifiedAlert() {
         override val id: String get() = alert.id
         override val isActive: Boolean get() = alert.isActive
     }
@@ -67,6 +81,23 @@ class UnifiedAlertAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(getItem(position))
 
+    /** A [COUNTDOWN] tick redraws the countdown line alone: the row and its focus stay as they are. */
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isNotEmpty() && payloads.all { it == COUNTDOWN }) holder.bindCountdown(getItem(position))
+        else onBindViewHolder(holder, position)
+    }
+
+    /**
+     * Redraw every countdown line for the time now. Returns how long until one reads differently
+     * (CheckInCountdown.nextChangeIn), or null when no row has one.
+     */
+    fun tickCountdowns(now: Long = System.currentTimeMillis()): Long? {
+        val countdowns = currentList.mapNotNull { (it as? UnifiedAlert.Inactivity)?.countdown }
+        if (countdowns.isEmpty()) return null
+        notifyItemRangeChanged(0, itemCount, COUNTDOWN)
+        return countdowns.minOf { CheckInCountdown.nextChangeIn(it, now) }
+    }
+
     inner class VH(private val binding: ItemAlertRuleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UnifiedAlert) {
             val title: String = when (item) {
@@ -80,7 +111,14 @@ class UnifiedAlertAdapter(
                     binding.tvDescription.text = desc
                     t
                 }
-                is UnifiedAlert.Inactivity -> {
+                is UnifiedAlert.Inactivity -> if (InactivityWatches.isCheckIn(item.alert.watches)) {
+                    // A check-in rule: "Check in within 6 hours", or "Check in by 9:00 PM, every day"
+                    // with its time zone.
+                    val context = binding.root.context
+                    binding.tvIcon.text = if (item.alert.isSelfAlert) "🔔" else "✅"
+                    binding.tvDescription.text = CheckInRuleText.summary(context, item.alert)
+                    context.getString(R.string.check_in_rule_type)
+                } else {
                     val hrs = item.alert.timeoutHours
                     val timeDesc = if (hrs == 1) "1 hour" else "$hrs hours"
                     binding.tvIcon.text = if (item.alert.isSelfAlert) "🔔" else "⏰"
@@ -110,6 +148,21 @@ class UnifiedAlertAdapter(
             }
             binding.root.setOnClickListener { onClick(item) }
             binding.btnDelete.setOnClickListener { onDelete(item) }
+            bindCountdown(item)
+        }
+
+        /**
+         * "Your circle is alerted in 3 h 12 min" (or a scheduled rule's line, "Your circle is alerted
+         * at 9:00 PM unless you check in.") under this account's own check-in rule about itself, once
+         * its circle has been read; nothing on any other row. Read with the rest of the row, and no
+         * live region: a minute's change is not an announcement.
+         */
+        fun bindCountdown(item: UnifiedAlert) {
+            val text = (item as? UnifiedAlert.Inactivity)?.countdown?.let {
+                CheckInCountdown.text(binding.root.context, it, System.currentTimeMillis())
+            }
+            binding.tvCountdown.visibility = if (text != null) View.VISIBLE else View.GONE
+            binding.tvCountdown.text = text
         }
 
         /**
@@ -129,6 +182,11 @@ class UnifiedAlertAdapter(
             }
             return sb
         }
+    }
+
+    companion object {
+        /** The payload of a countdown tick ([tickCountdowns]). */
+        const val COUNTDOWN = "countdown"
     }
 
     class Diff : DiffUtil.ItemCallback<UnifiedAlert>() {

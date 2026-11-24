@@ -168,7 +168,9 @@ object AppModule {
                 TrackDatabase.MIGRATION_45_46,
                 TrackDatabase.MIGRATION_46_47,
                 TrackDatabase.MIGRATION_47_48,
-                TrackDatabase.MIGRATION_48_49
+                TrackDatabase.MIGRATION_48_49,
+                TrackDatabase.MIGRATION_49_50,
+                TrackDatabase.MIGRATION_50_51
             )
             .build()
     }

@@ -29,6 +29,9 @@ import com.pingolin.track.domain.repository.DestinationRepository
 import com.pingolin.track.domain.repository.InactivityAlertRepository
 import com.pingolin.track.domain.placealerts.PlaceAlertRules
 import com.pingolin.track.domain.repository.PlaceRepository
+import com.pingolin.track.util.CheckInModes
+import com.pingolin.track.util.CheckInScheduleSetting
+import com.pingolin.track.util.InactivityWatches
 import com.pingolin.track.util.SessionManager
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -340,16 +343,22 @@ class PendingExecutors @Inject constructor(
                 watched.isNotEmpty() -> watched
                 else -> members.filter { it != self }
             }
+            // A check-in rule and a location rule about the same member are two alerts, and so are
+            // a one-time and a scheduled check-in rule: a scheduled one is the same by its schedule.
+            val watches = i.watches ?: InactivityWatches.LOCATION
+            val schedule = i.schedule?.takeIf { InactivityWatches.isCheckIn(watches) }
             val identical = targets.isNotEmpty() && targets.all { target ->
                 existing.any {
                     it.circleId == change.circleId && it.targetUserId == target && it.isSelfAlert == i.isSelfAlert &&
-                        it.isActive && it.timeoutHours * 60 == i.timeoutMinutes
+                        it.isActive && it.watches == watches &&
+                        if (schedule != null) CheckInScheduleSetting.of(it) == schedule.copy(followsPhone = schedule.followsPhone && i.isSelfAlert)
+                        else !CheckInModes.isScheduled(it.checkInMode) && it.timeoutHours * 60 == i.timeoutMinutes
                 }
             }
             if (identical) return PendingOutcome.Done()
             return inactivityAlerts.get().createInactivityAlert(
                 change.circleId, i.targetUserId, i.timeoutMinutes, i.isSelfAlert, i.notifyPush, i.notifyEmail,
-                i.notifyOnReturn, i.cooldownMinutes, watched, pendingRun = run,
+                i.notifyOnReturn, i.cooldownMinutes, watched, pendingRun = run, watches = watches, schedule = schedule,
             ).toOutcome(i)
         }
     }

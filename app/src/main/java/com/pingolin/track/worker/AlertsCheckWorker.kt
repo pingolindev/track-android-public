@@ -98,8 +98,15 @@ class AlertsCheckWorker @AssistedInject constructor(
             val inactivityCircles = monitoringManager.inactivityCircleIds()
             // Fetched, not stored: these are other people's rules and they
             // change without us. See MonitoringManager.fetchCircleSelfAlerts.
-            val selfAlerts = monitoringManager.fetchCircleSelfAlerts()
-            val selfAlertCircles = selfAlerts.map { it.circleId }.toSet()
+            // Null when the read failed: the check-in rules then take back no missed check-in
+            // whose request seems gone (a failed read isn't "the request is gone").
+            val selfAlertsRead = monitoringManager.readCircleSelfAlerts()
+            val selfAlerts = selfAlertsRead.orEmpty()
+            // Check-in rules read the circles' check-ins, not their locations: judged on their
+            // own, and on a wake-up always from a fresh read (a check-in that just arrived takes
+            // back a "hasn't checked in" this phone showed).
+            monitoringManager.evaluateCheckInRules(selfAlertsRead, wake = true)
+            val selfAlertCircles = MonitoringManager.locationSelfAlerts(selfAlerts).map { it.circleId }.toSet()
             val circleIds = batteryCircles + inactivityCircles + selfAlertCircles
             if (circleIds.isEmpty()) return Result.success()
 

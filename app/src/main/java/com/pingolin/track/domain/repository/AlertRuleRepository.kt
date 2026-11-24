@@ -494,6 +494,30 @@ class AlertRuleRepository @Inject constructor(
     }
 
     /**
+     * What a firing this account's devices reported says it was, sealed under this account's own
+     * key (MonitoringManager.reportAlertEvent): "low_battery", "inactivity", "missed_check_in", or
+     * another app's word. Null when it doesn't open here.
+     */
+    fun alertTypeOf(event: AlertEventResponse): String? = runCatching {
+        cryptoManager.decryptData(
+            LocationRepository.SELF_CIRCLE_UUID,
+            uniffi.pingolin_mobile.EncryptedData(nonce = event.encryptedAlertType.nonce, ciphertext = event.encryptedAlertType.ciphertext),
+        )
+    }.getOrNull()
+
+    /**
+     * When a firing this account's devices reported happened (epoch ms), sealed with its type
+     * under this account's own key, ISO-8601. Null when it doesn't open here or doesn't read: the
+     * history then has its day alone.
+     */
+    fun triggeredAtOf(event: AlertEventResponse): Long? = runCatching {
+        cryptoManager.decryptData(
+            LocationRepository.SELF_CIRCLE_UUID,
+            uniffi.pingolin_mobile.EncryptedData(nonce = event.encryptedTriggeredAt.nonce, ciphertext = event.encryptedTriggeredAt.ciphertext),
+        )
+    }.getOrNull()?.let { com.pingolin.track.util.ServerTime.epochMs(it) }
+
+    /**
      * Get alert events.
      */
     suspend fun getAlertEvents(ruleId: String? = null): Result<List<AlertEventResponse>> {

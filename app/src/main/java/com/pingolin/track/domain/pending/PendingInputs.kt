@@ -212,6 +212,16 @@ sealed interface PendingInputs {
          * [PendingLines.memberLeft] after they left.
          */
         @SerializedName("watched_names") val watchedNames: Map<String, String> = emptyMap(),
+        /**
+         * What the rule watches (InactivityWatches). Null, as in a change kept from before
+         * check-in rules: location updates.
+         */
+        @SerializedName("watches") val watches: String? = null,
+        /**
+         * A scheduled check-in rule's schedule; null, as in a change kept from before scheduled
+         * rules, a one-time one (or a location rule).
+         */
+        @SerializedName("check_in_schedule") val schedule: com.pingolin.track.util.CheckInScheduleSetting? = null,
     ) : PendingInputs
 
     companion object {

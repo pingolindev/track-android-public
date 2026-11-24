@@ -24,6 +24,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.pingolin.track.util.AccountIds
+import com.pingolin.track.util.InactivityWatches
 
 @Entity(tableName = "users")
 data class UserEntity(
@@ -672,7 +673,36 @@ data class InactivityAlertEntity(
     val clientOnly: Boolean = false,
     /** Whom this alert watches, for client-side evaluation. NULL = everyone in the circle;
      *  a comma-joined list of user IDs = those specific members. Decoded from encrypted_conditions. */
-    val targetUserIds: String? = null
+    val targetUserIds: String? = null,
+    /**
+     * What the rule counts as a sign of life: location updates or check-ins
+     * ([com.pingolin.track.util.InactivityWatches]). Fixed when the rule is made. A row kept from
+     * before Room v50 is a location rule, as every rule was then.
+     */
+    @ColumnInfo(defaultValue = InactivityWatches.LOCATION) val watches: String = InactivityWatches.LOCATION,
+    /**
+     * A check-in rule's start (epoch ms): when it was made or last turned back on, as the server
+     * says (`armed_at`), else when this phone first stored it, never earlier. A member who hasn't
+     * checked in since counts from here. Null on a location rule.
+     */
+    val armedAt: Long? = null,
+    /**
+     * A check-in rule's kind ([com.pingolin.track.util.CheckInModes]): one-time or scheduled. Fixed
+     * when the rule is made. Null on a location rule, and on a check-in rule kept from before Room
+     * v51: one-time, as the server reads it.
+     */
+    val checkInMode: String? = null,
+    /**
+     * A scheduled rule's schedule ([com.pingolin.track.util.CheckInSchedule]): its local weekdays
+     * (bit 0 = Monday), its deadline and from time in minutes after local midnight (null from: the
+     * start of the day), and the IANA zone they are in. Null on any other rule.
+     */
+    val scheduleDays: Int? = null,
+    val scheduleDueMinute: Int? = null,
+    val scheduleFromMinute: Int? = null,
+    val scheduleTz: String? = null,
+    /** An about-me scheduled rule whose zone this phone keeps at its own (CheckInZoneFollower). */
+    @ColumnInfo(defaultValue = "0") val scheduleTzFollowsPhone: Boolean = false,
 )
 
 @Entity(
@@ -790,7 +820,22 @@ data class LocalInactivityEventEntity(
     /** UTC day bucket of [triggeredAt], for ordering alongside server events. */
     val triggeredDayBucket: Int,
     /** Set when the member shared location again (lapse auto-resolved); null = still open. */
-    val resolvedAt: Long? = null
+    val resolvedAt: Long? = null,
+    /**
+     * The rule's kind ([com.pingolin.track.util.InactivityWatches]): a missed check-in, or no
+     * location. A row kept from before Room v50 is a location one.
+     */
+    @ColumnInfo(defaultValue = InactivityWatches.LOCATION) val watches: String = InactivityWatches.LOCATION,
+    /**
+     * A missed check-in's start (epoch ms): the member's last check-in, or the rule's start when
+     * later, as this fired on. A check-in after it ends the lapse. Null on a location one.
+     */
+    val silentSince: Long? = null,
+    /**
+     * A scheduled rule's missed check-in: the rule's deadline as set, in minutes after local
+     * midnight, for its words ("hasn't checked in by 9:00 PM"). Null on any other.
+     */
+    val dueMinute: Int? = null,
 )
 
 /**

@@ -23,7 +23,8 @@ package com.pingolin.track.util
  * constant as the web app's and iOS's). A time beyond it is no fix of now: the replay guard
  * doesn't take or keep it, and the place alerts neither judge it nor keep it as their watermark.
  * Without the bound, one far-future time would drop every genuine fix after it, and silence a
- * member's alerts for good.
+ * member's alerts for good. The check-in rules don't take a check-in beyond it as a member's last
+ * (CheckInRepository.lastCheckIns), for the same reason.
  */
 object LiveTime {
     /** Ten minutes. */

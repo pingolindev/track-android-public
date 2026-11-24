@@ -155,8 +155,10 @@ class CanonicalIdsTrackApi(
     override suspend fun getMyCheckIns(limit: Int) =
         api.getMyCheckIns(limit).canonical("check-ins") { list, refused -> list.mapNotNull { checkIn(it, refused) } }
 
-    override suspend fun getCircleCheckIns(circleId: String, limit: Int) =
-        api.getCircleCheckIns(circleId, limit).canonical("check-ins") { list, refused -> list.mapNotNull { checkIn(it, refused) } }
+    override suspend fun getCircleCheckIns(circleId: String, limit: Int, cursorDayBucket: Int?, cursorId: String?) =
+        api.getCircleCheckIns(circleId, limit, cursorDayBucket, cursorId).canonical("check-ins") { list, refused ->
+            list.mapNotNull { checkIn(it, refused) }
+        }
 
     override suspend fun triggerSos(request: com.pingolin.track.data.remote.dto.TriggerSosRequest) = api.triggerSos(request).oneSos()
     override suspend fun getActiveSosAlerts() =
@@ -220,8 +222,8 @@ class CanonicalIdsTrackApi(
         return if (creator == raw) named else named.copy(userId = creator)
     }
 
-    override suspend fun getInactivityAlerts(limit: Int, offset: Int, cursorDayBucket: Int?, cursorId: String?) =
-        api.getInactivityAlerts(limit, offset, cursorDayBucket, cursorId).canonical("inactivity alerts") { list, refused ->
+    override suspend fun getInactivityAlerts(limit: Int, offset: Int, cursorDayBucket: Int?, cursorId: String?, includeCheckIn: Boolean, checkInModes: String) =
+        api.getInactivityAlerts(limit, offset, cursorDayBucket, cursorId, includeCheckIn, checkInModes).canonical("inactivity alerts") { list, refused ->
             list.mapNotNull { a -> a.inCircle(a.circleId, refused) { copy(circleId = it) } }
                 // A page every entry of which is refused is no answer, not an empty
                 // page: the refresh reads to an empty page and takes the list for
@@ -232,8 +234,8 @@ class CanonicalIdsTrackApi(
     override suspend fun getInactivityAlert(id: String) =
         api.getInactivityAlert(id).canonical("inactivity alert") { a, refused -> a.inCircle(a.circleId, refused) { copy(circleId = it) } ?: throw Refused() }
 
-    override suspend fun getCircleSelfAlerts() =
-        api.getCircleSelfAlerts().canonical("circle self alerts") { list, refused ->
+    override suspend fun getCircleSelfAlerts(includeCheckIn: Boolean, checkInModes: String) =
+        api.getCircleSelfAlerts(includeCheckIn, checkInModes).canonical("circle self alerts") { list, refused ->
             list.mapNotNull { a -> a.inCircle(a.circleId, refused) { copy(circleId = it) } }
         }
 

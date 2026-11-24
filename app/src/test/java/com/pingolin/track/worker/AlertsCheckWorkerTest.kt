@@ -130,7 +130,7 @@ class AlertsCheckWorkerTest {
     private fun worker(h: TrustHarness): AlertsCheckWorker {
         coEvery { monitoring.batteryAlertCircleIds() } returns emptySet()
         coEvery { monitoring.inactivityCircleIds() } returns emptySet()
-        coEvery { monitoring.fetchCircleSelfAlerts() } returns emptyList()
+        coEvery { monitoring.readCircleSelfAlerts() } returns emptyList()
         return AlertsCheckWorker(
             context = mockk<Context>(relaxed = true),
             params = params(),

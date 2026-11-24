@@ -40,6 +40,7 @@ import com.pingolin.track.data.remote.dto.CreateAlertEventRequest
 import com.pingolin.track.data.remote.dto.EncryptedPayload
 import com.pingolin.track.data.remote.dto.WakeWatchersRequest
 import com.pingolin.track.domain.repository.AlertRuleRepository
+import com.pingolin.track.domain.repository.CheckInRepository
 import com.pingolin.track.ui.circles.MemberSharing
 import com.pingolin.track.ui.circles.SharingStatus
 import com.pingolin.track.ui.sos.SosPositionText
@@ -54,7 +55,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Manages client-side battery and inactivity monitoring.
+ * Manages client-side battery and inactivity monitoring, and the check-in rules (an inactivity
+ * alert that watches check-ins: [evaluateCheckInRules]).
  *
  * Both are client-side because they have to be: a battery level and a
  * last-seen time both live inside the encrypted location payload, and the
@@ -81,13 +83,84 @@ class MonitoringManager @Inject constructor(
     private val alertRuleDao: com.pingolin.track.data.local.dao.AlertRuleDao,
     private val localBatteryEventDao: LocalBatteryEventDao,
     private val privacySettingDao: com.pingolin.track.data.local.dao.PrivacySettingDao,
-    private val cryptoManager: uniffi.pingolin_mobile.CryptoManager
+    private val cryptoManager: uniffi.pingolin_mobile.CryptoManager,
+    // The check-ins the check-in rules are judged by ([evaluateCheckInRules]).
+    private val checkInRepository: dagger.Lazy<CheckInRepository>,
 ) {
     companion object {
         private const val TAG = "MonitoringManager"
 
         /** How long the background pass reuses the circle-self-alerts list. */
         const val SELF_ALERTS_CACHE_MS = 30L * 60L * 1000L
+
+        /**
+         * While a missed check-in is open, how often the background pass reads the circle's
+         * check-ins for the one that ends it. The server's wake-up on that check-in is the timely
+         * path; this is what catches it when the wake-up didn't come.
+         */
+        const val CHECK_IN_LAPSE_REFRESH_MS = 30L * 60L * 1000L
+
+        /**
+         * What one pass decides about one member of a check-in rule ([checkInVerdict]): whether to
+         * end their open lapse, whether to raise the alert, and when their silence counts from.
+         */
+        internal data class CheckInVerdict(val resolve: Boolean, val fire: Boolean, val since: Long)
+
+        /**
+         * A check-in rule's verdict on one member at [nowMs]: [last] is their newest check-in this
+         * phone could read in the circle (null: none), [armedAt] the rule's start, [openSince] the
+         * start of their open lapse, the silence it fired on (null: none open), [timeoutMs] the
+         * rule's limit.
+         *
+         * Their silence counts from their last check-in, or the rule's start when that is later
+         * (or they have none): a check-in from before the rule says nothing about now. A silence
+         * that counts from after the open lapse's start ends the lapse: a check-in since, or the
+         * rule turned off and back on, its clock started again. With no lapse open, or one this
+         * verdict ends, a silence longer than the limit raises the alert: a member who checked in
+         * and went quiet again is reported again.
+         */
+        internal fun checkInVerdict(last: Long?, armedAt: Long, openSince: Long?, timeoutMs: Long, nowMs: Long): CheckInVerdict {
+            val since = if (last == null) armedAt else maxOf(last, armedAt)
+            val resolve = openSince != null && since > openSince
+            val stillOpen = openSince != null && !resolve
+            return CheckInVerdict(resolve = resolve, fire = !stillOpen && nowMs - since > timeoutMs, since = since)
+        }
+
+        /**
+         * A one-time rule's verdict ("check in within N hours"): [checkInVerdict], except that the
+         * rule has ended once its member has checked in after its start ([last] > [armedAt]), so it
+         * never goes off again. The server turns it off then and wakes the phones that hold it;
+         * this is what holds when that wake-up is late or lost. Its open lapse, which counted from
+         * the start, ends by [checkInVerdict]'s own rule.
+         */
+        internal fun onceVerdict(last: Long?, armedAt: Long, openSince: Long?, timeoutMs: Long, nowMs: Long): CheckInVerdict {
+            val verdict = checkInVerdict(last, armedAt, openSince, timeoutMs, nowMs)
+            val ended = last != null && last > armedAt
+            return if (ended) verdict.copy(fire = false) else verdict
+        }
+
+        /**
+         * A scheduled rule's verdict on one member ("check in by 9:00 PM on these days"): [latest]
+         * is the rule's latest occurrence at or before now (CheckInSchedule.latest; null: none),
+         * [last] the member's newest check-in here, [armedAt] the rule's start, [openSince] the
+         * start of their open lapse (null: none open).
+         *
+         * An open lapse ends when they've checked in since it started, or when a newer occurrence
+         * took over (its deadline is after the lapse's start). With no lapse open, or one this ends,
+         * the latest occurrence goes off when the rule was started before its deadline and they
+         * haven't checked in since its window opened: once per occurrence, its deadline the lapse's
+         * start ([CheckInVerdict.since]).
+         */
+        internal fun scheduledVerdict(last: Long?, armedAt: Long, openSince: Long?, latest: CheckInSchedule.Occurrence?): CheckInVerdict {
+            val resolve = openSince != null &&
+                ((last != null && last > openSince) || (latest != null && latest.due > openSince))
+            val stillOpen = openSince != null && !resolve
+            val missed = latest != null && armedAt < latest.due && (last == null || last < latest.windowStart)
+            return CheckInVerdict(resolve = resolve, fire = !stillOpen && missed, since = latest?.due ?: armedAt)
+        }
+
+        /** The circle-mates' "watch me" requests judged by location updates ([evaluateCircleSelfAlerts]). */
+        fun locationSelfAlerts(alerts: List<CircleSelfAlertDto>): List<CircleSelfAlertDto> = alerts.filter { it.watchesLocation }
 
         /** Pure freshness rule for [fetchCircleSelfAlertsCached]. */
         internal fun selfAlertsCacheFresh(cachedAtMs: Long, nowMs: Long, maxAgeMs: Long): Boolean =
@@ -374,6 +447,10 @@ class MonitoringManager @Inject constructor(
      * Should be called on logout.
      */
     suspend fun clear() {
+        // The check-in rules' memory of reads and starts is this account's, whatever the SDK
+        // monitor below does.
+        checkInsReadAt.clear()
+        selfAlertsFirstSeen.clear()
         try {
             inactivityMonitor.clear()
             // Otherwise the next account inherits account A's "already reported
@@ -615,10 +692,14 @@ class MonitoringManager @Inject constructor(
         )
     }
 
-    /** Circle IDs that have at least one active inactivity rule (so the caller knows what to refresh). */
+    /**
+     * Circle IDs that have at least one active location inactivity rule (so the caller knows what
+     * to refresh). A check-in rule reads the circle's check-ins, not its locations
+     * ([evaluateCheckInRules]).
+     */
     suspend fun inactivityCircleIds(): Set<String> =
         try {
-            inactivityAlertDao.getActive().map { it.circleId }.toSet()
+            inactivityAlertDao.getActive().filter { InactivityWatches.isLocation(it.watches) }.map { it.circleId }.toSet()
         } catch (e: Exception) {
             Log.e(TAG, "Failed to read inactivity circles", e); emptySet()
         }
@@ -658,6 +739,10 @@ class MonitoringManager @Inject constructor(
                 // would have to raise it (everyone else's) do not hold
                 // it. Those are still decided server-side.
                 if (rule.isSelfAlert) continue
+                // A check-in rule is judged by check-ins ([evaluateCheckInRules]): judged by
+                // location updates, it would go off when location stops and never when
+                // check-ins do. So is any kind this build doesn't know.
+                if (!InactivityWatches.isLocation(rule.watches)) continue
                 val refreshed = refreshedByCircle[rule.circleId] ?: continue
                 val members = circleMemberDao.getByCircle(rule.circleId)
                 // No watcher spec means the rule watches exactly ONE
@@ -776,7 +861,14 @@ class MonitoringManager @Inject constructor(
      * cancelled the request. Empty on any failure: a network blip must not
      * read as "nobody asked".
      */
-    suspend fun fetchCircleSelfAlerts(): List<CircleSelfAlertDto> =
+    suspend fun fetchCircleSelfAlerts(): List<CircleSelfAlertDto> = readCircleSelfAlerts().orEmpty()
+
+    /**
+     * [fetchCircleSelfAlerts], with a failure told apart: null. The check-in rules take back a
+     * missed check-in whose request is gone only from a list the server gave
+     * ([evaluateCheckInRules]); a failed read is not "the request is gone".
+     */
+    suspend fun readCircleSelfAlerts(): List<CircleSelfAlertDto>? =
         try {
             val response = tracksApi.getCircleSelfAlerts()
             if (response.isSuccessful) {
@@ -787,10 +879,10 @@ class MonitoringManager @Inject constructor(
                     cachedSelfAlertsAtMs = System.currentTimeMillis()
                 }
             } else {
-                Log.w(TAG, "circle-self-alerts returned ${response.code()}"); emptyList()
+                Log.w(TAG, "circle-self-alerts returned ${response.code()}"); null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to fetch circle self-alerts", e); emptyList()
+            Log.e(TAG, "Failed to fetch circle self-alerts", e); null
         }
 
     // The last successful circle-self-alerts answer, for [fetchCircleSelfAlertsCached].
@@ -811,10 +903,16 @@ class MonitoringManager @Inject constructor(
     suspend fun fetchCircleSelfAlertsCached(
         maxAgeMs: Long = SELF_ALERTS_CACHE_MS,
         nowMs: Long = System.currentTimeMillis(),
-    ): List<CircleSelfAlertDto> {
+    ): List<CircleSelfAlertDto> = readCircleSelfAlertsCached(maxAgeMs, nowMs).orEmpty()
+
+    /** [fetchCircleSelfAlertsCached], with a failure told apart, as [readCircleSelfAlerts]. */
+    suspend fun readCircleSelfAlertsCached(
+        maxAgeMs: Long = SELF_ALERTS_CACHE_MS,
+        nowMs: Long = System.currentTimeMillis(),
+    ): List<CircleSelfAlertDto>? {
         val cached = cachedSelfAlerts
         if (cached != null && selfAlertsCacheFresh(cachedSelfAlertsAtMs, nowMs, maxAgeMs)) return cached
-        return fetchCircleSelfAlerts()
+        return readCircleSelfAlerts()
     }
 
     /**
@@ -840,6 +938,8 @@ class MonitoringManager @Inject constructor(
             val now = System.currentTimeMillis()
             pruneNotSharingNotes(now)
             for (alert in alerts) {
+                // A check-in request is judged by check-ins ([evaluateCheckInRules]).
+                if (!alert.watchesLocation) continue
                 val refreshed = refreshedByCircle[alert.circleId] ?: continue
                 // The server excludes our own, and we check anyway: a rule about
                 // us is not one this device should be raising about us.
@@ -1051,6 +1151,254 @@ class MonitoringManager @Inject constructor(
         }
     }
 
+    // ── check-in rules ──────────────────────────────────────────────────────
+
+    /** When this phone last read each circle's check-ins whole for the check-in rules. */
+    private val checkInsReadAt = java.util.concurrent.ConcurrentHashMap<String, Long>()
+
+    /**
+     * When this process first saw each circle-mate's check-in request that came with no
+     * `armed_at`, as its start: never earlier than the request reached this phone. In memory: a
+     * new process starts it again, later, never earlier.
+     */
+    private val selfAlertsFirstSeen = java.util.concurrent.ConcurrentHashMap<String, Long>()
+
+    /** The check-in rules' clock. A seam for the tests. */
+    internal var checkInClock: () -> Long = System::currentTimeMillis
+
+    /**
+     * A check-in rule as a pass judges it: the member it watches, its limit, its start, whether it
+     * is that member's own request to be watched ([asked]), and a scheduled rule's [schedule] (null:
+     * one-time, judged by its hours).
+     */
+    private class CheckInRule(
+        val id: String,
+        val circleId: String,
+        val memberId: String,
+        val timeoutHours: Int,
+        val armedAt: Long,
+        val asked: Boolean,
+        val schedule: CheckInSchedule? = null,
+    )
+
+    /** One member of a check-in rule, as a pass judges them: from the roster, with their open lapse. */
+    private class CheckInWatch(val rule: CheckInRule, val member: CircleMemberEntity, val open: LocalInactivityEventEntity?)
+
+    /**
+     * Judge the check-in rules: an alert when a member hasn't checked in (the "Check in" button)
+     * within a one-time rule's hours, or by a scheduled rule's time ([scheduledVerdict]). This
+     * account's own active rules about others, and the circle-mates' requests to be watched
+     * ([selfAlerts]: null when they couldn't be read); never a rule about this account's own user.
+     * A missed check-in open for a rule this phone no longer judges (ended, turned off or deleted,
+     * or a request that is gone) is taken back first ([takeBackUnjudged]).
+     *
+     * Judged by the check-ins this phone opens with the circle's key, as the location rules are by
+     * the locations: the server only wakes the phones that might have to say something. Per
+     * circle, its check-ins are read first ([CheckInRepository.refreshRecentCheckIns]): always on
+     * a [wake] (alerts_check); in the background pass only when what this phone holds says a rule
+     * would go off, or every [CHECK_IN_LAPSE_REFRESH_MS] while a lapse is open, back to the
+     * earliest window a scheduled rule there counts from, if that is further back than a day. An alert goes off
+     * only after a read in the same pass that came back whole: a read that failed, or met a
+     * check-in it couldn't open, judges nobody in that circle (a failed read is not "no check-in").
+     *
+     * A member a rule watches is skipped when they aren't an active member of the circle here, and,
+     * for this account's rules, when this phone knows they've turned off alerts about them (the
+     * location rules' source: their latest location's allow_alerts_on_me; unknown allows); their own
+     * request to be watched is their consent. Not while they've paused or turned off location
+     * sharing: a check-in goes without a position. Then the rule's verdict on their newest check-in
+     * here (one more than [LiveTime.MAX_FUTURE_SKEW_MS] ahead of this phone's clock doesn't count):
+     * [onceVerdict] or [scheduledVerdict]. An alert once per lapse, against the location rules'
+     * local store, keyed by rule and member. A lapse ends when the verdict says so, and is taken
+     * back with no "back" notice (a check-in tells the circle itself).
+     */
+    suspend fun evaluateCheckInRules(selfAlerts: List<CircleSelfAlertDto>?, wake: Boolean) {
+        val now = checkInClock()
+        // Never throws, as the other evaluators: its caller goes on to the location rules.
+        val rules = try {
+            val selfId = sessionManager.getUserId() ?: return
+            val own = inactivityAlertDao.getActive()
+                .filter { InactivityWatches.isCheckIn(it.watches) && !it.isSelfAlert }
+                // Stored with its start (InactivityAlertRepository.withStart); one without is judged by
+                // nobody, and so is a scheduled one whose schedule doesn't read.
+                .mapNotNull { r ->
+                    val armedAt = r.armedAt ?: return@mapNotNull null
+                    val schedule = CheckInSchedule.of(r)
+                    if (CheckInModes.isScheduled(r.checkInMode) && schedule == null) return@mapNotNull null
+                    CheckInRule(r.id, r.circleId, r.targetUserId, r.timeoutHours, armedAt, asked = false, schedule = schedule)
+                }
+            val asked = selfAlerts.orEmpty().filter { it.watchesCheckIns }.mapNotNull { a ->
+                val schedule = CheckInSchedule.of(a)
+                if (CheckInModes.isScheduled(a.checkInMode) && schedule == null) return@mapNotNull null
+                // A start that is missing, or doesn't read, is when this phone first saw the request.
+                val armedAt = ServerTime.epochMs(a.armedAt) ?: selfAlertsFirstSeen.getOrPut(a.id) { now }
+                CheckInRule(a.id, a.circleId, a.userId, a.timeoutHours, armedAt, asked = true, schedule = schedule)
+            }
+            // The server leaves this user's own requests out of the circle's, and this checks anyway:
+            // a rule about this phone's own user is never this phone's to raise.
+            val self = AccountIds.storeKey(selfId)
+            (own + asked).filter { AccountIds.storeKey(it.memberId) != self }
+        } catch (e: Exception) {
+            Log.e(TAG, "Check-in rules not read", e)
+            return
+        }
+        try {
+            takeBackUnjudged(rules.mapTo(mutableSetOf()) { it.id }, requestsRead = selfAlerts != null, now = now)
+        } catch (e: Exception) {
+            Log.e(TAG, "Missed check-ins of ended rules not taken back", e)
+        }
+        for ((circleId, inCircle) in rules.groupBy { it.circleId }) {
+            try {
+                evaluateCheckInCircle(circleId, inCircle, wake, now)
+            } catch (e: Exception) {
+                Log.e(TAG, "Check-in rule evaluation failed in a circle", e)
+            }
+        }
+    }
+
+    /**
+     * Take back each open missed check-in whose rule this phone no longer judges ([judged]): this
+     * account's rule ended (a one-time rule turns itself off at the check-in), turned off or
+     * deleted, or a circle-mate's request that is gone. A lapse whose rule isn't one of this
+     * account's here may be a request's, so it goes only when the requests were read
+     * ([requestsRead]). No "back" notice: nothing came back, the rule just stopped.
+     */
+    private suspend fun takeBackUnjudged(judged: Set<String>, requestsRead: Boolean, now: Long) {
+        val open = localInactivityEventDao.getOpenByWatches(InactivityWatches.CHECK_IN)
+        if (open.isEmpty()) return
+        val own = inactivityAlertDao.getAll().mapTo(mutableSetOf()) { it.id }
+        for (lapse in open) {
+            if (lapse.inactivityAlertId in judged) continue
+            if (lapse.inactivityAlertId !in own && !requestsRead) continue
+            localInactivityEventDao.resolve(lapse.id, now)
+            alertHandler.cancelInactivity(lapse.inactivityAlertId, lapse.targetUserId)
+        }
+    }
+
+    /** [evaluateCheckInRules] in one circle. */
+    private suspend fun evaluateCheckInCircle(circleId: String, rules: List<CheckInRule>, wake: Boolean, now: Long) {
+        val roster = circleMemberDao.getByCircle(circleId).associateBy { AccountIds.storeKey(it.userId) }
+        // CONSENT (allow_alerts_on_me), from the location rules' source: an explicit FALSE on the
+        // member's latest location here says nothing goes off about them. Unknown allows: the
+        // server holds its wake-ups to the same consent. A member's own request to be watched is
+        // their consent, as on the server (a rule whose target is its creator passes there) and in
+        // [evaluateCircleSelfAlerts].
+        val optedOut = locationDao.observeLatestByCircle(circleId).first()
+            .filter { it.allowAlertsOnMe == false }
+            .mapTo(mutableSetOf()) { AccountIds.storeKey(it.userId) }
+        val watches = rules.mapNotNull { rule ->
+            val key = AccountIds.storeKey(rule.memberId)
+            val member = roster[key] ?: return@mapNotNull null
+            if (!rule.asked && key in optedOut) return@mapNotNull null
+            CheckInWatch(rule, member, localInactivityEventDao.getOpen(rule.id, member.userId))
+        }
+        if (watches.isEmpty()) return
+
+        val checkIns = checkInRepository.get()
+        fun verdicts(last: Map<String, Long>) = watches.map { w ->
+            val newest = last[AccountIds.storeKey(w.member.userId)]
+            val openSince = w.open?.let { lapseStart(it) }
+            val schedule = w.rule.schedule
+            w to if (schedule != null) {
+                scheduledVerdict(newest, w.rule.armedAt, openSince, schedule.latest(now))
+            } else {
+                onceVerdict(newest, w.rule.armedAt, openSince, w.rule.timeoutHours.coerceAtLeast(1) * 3_600_000L, now)
+            }
+        }
+        // What this phone holds can only miss a check-in, never invent one: when it says nobody's
+        // silence is over the limit, a read wouldn't say otherwise. It may end a lapse unread (a
+        // check-in it holds, or a rule started again, is as true before a read as after one).
+        val held = verdicts(checkIns.lastCheckIns(circleId, now))
+        val read = wake || held.any { (_, verdict) -> verdict.fire } ||
+            (watches.any { it.open != null } && now - (checkInsReadAt[circleId] ?: 0L) >= CHECK_IN_LAPSE_REFRESH_MS)
+        val judged = if (!read) held else {
+            // A scheduled rule's occurrence counts the check-ins since its window opened, which a
+            // weekly one puts days back: the read reaches the earliest such window, a day at least.
+            val earliestWindow = watches.mapNotNull { it.rule.schedule?.latest(now)?.windowStart }.minOrNull()
+            val windowMs = maxOf(CheckInRepository.RECENT_MS, earliestWindow?.let { now - it } ?: 0L)
+            val fresh = checkIns.refreshRecentCheckIns(circleId, now, windowMs).getOrNull()
+            if (fresh == null || !fresh.whole) return
+            checkInsReadAt[circleId] = now
+            verdicts(checkIns.lastCheckIns(circleId, now))
+        }
+        for ((w, verdict) in judged) {
+            if (verdict.resolve && w.open != null) {
+                localInactivityEventDao.resolve(w.open.id, now)
+                alertHandler.cancelInactivity(w.rule.id, w.member.userId)
+            }
+            // Never from what this phone held alone: only after this pass's whole read.
+            if (verdict.fire && read) notifyMissedCheckIn(w.rule, w.member, verdict.since, now)
+        }
+    }
+
+    /** When an open lapse's silence counted from: as it fired, else its firing less the silence. */
+    private fun lapseStart(event: LocalInactivityEventEntity): Long =
+        event.silentSince ?: (event.triggeredAt - event.inactiveSeconds * 1000L)
+
+    /**
+     * Post the missed check-in notification, and record it as [notifyInactive] records an
+     * inactivity alert: the open lapse (the fire-once marker, with when the silence counted from),
+     * the sealed copy for the account's other devices ([reportAlertEvent]), and the bell's row.
+     */
+    private suspend fun notifyMissedCheckIn(rule: CheckInRule, member: CircleMemberEntity, since: Long, now: Long) {
+        // A scheduled rule's by its time as set ("hasn't checked in by 9:00 PM"), a one-time one's by its hours.
+        val words = rule.schedule?.let { missedCheckInByWords(context, member.displayName, it.dueMinute) }
+            ?: missedCheckInWords(context, member.displayName, rule.timeoutHours)
+        alertHandler.handleAlert(
+            AlertHandler.TYPE_MISSED_CHECK_IN,
+            mapOf(
+                "user_name" to member.displayName,
+                AlertHandler.KEY_MISSED_CHECK_IN to words,
+                // Per (rule, member), as an inactivity alert's: a re-post replaces it, and the
+                // member's check-in takes this one back (cancelInactivity).
+                "alert_id" to alertHandler.inactivityDedupeKey(rule.id, member.userId)
+            )
+        )
+
+        val dayBucket = (now / 86_400_000L).toInt()
+        // "local-inact:": NotificationRepository keeps the bell row off the server.
+        val recordId = "local-inact:${rule.id}:${member.userId}:$now"
+        try {
+            // The lapse first: unresolved, it is the fire-once marker.
+            localInactivityEventDao.insert(
+                LocalInactivityEventEntity(
+                    id = recordId,
+                    inactivityAlertId = rule.id,
+                    circleId = rule.circleId,
+                    targetUserId = member.userId,
+                    targetDisplayName = member.displayName,
+                    timeoutHours = rule.timeoutHours,
+                    inactiveSeconds = (now - since) / 1000L,
+                    triggeredAt = now,
+                    triggeredDayBucket = dayBucket,
+                    watches = InactivityWatches.CHECK_IN,
+                    silentSince = since,
+                    dueMinute = rule.schedule?.dueMinute,
+                )
+            )
+            reportAlertEvent(
+                ruleId = rule.id,
+                targetUserId = member.userId,
+                alertType = AlertHandler.TYPE_MISSED_CHECK_IN,
+                triggeredAt = now
+            )
+            notificationDao.insert(
+                NotificationEntity(
+                    id = recordId,
+                    circleId = rule.circleId,
+                    notificationType = AlertHandler.TYPE_MISSED_CHECK_IN,
+                    title = context.getString(R.string.missed_check_in_title),
+                    body = words,
+                    metadata = null,
+                    isRead = false,
+                    createdDayBucket = dayBucket,
+                    createdAt = now
+                )
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to persist local missed check-in record", e)
+        }
+    }
+
     /**
      * Get the number of users currently being monitored.
      */
@@ -1073,3 +1421,21 @@ class MonitoringManager @Inject constructor(
 internal fun inactiveSince(context: Context, name: String, lastFixAt: Long): String =
     // A name not readable yet is "A member", as AlertHandler says it: never " hasn't shared…".
     context.getString(R.string.inactivity_since, name.ifBlank { "A member" }, SosPositionText.time(context, lastFixAt))
+
+/**
+ * "{name} hasn't checked in for {N} hours.": a missed check-in's words, in the shade, the bell
+ * and the history. [hours] is the rule's limit, not how long it has been: the words stay true
+ * however long after they're read. A name not readable yet is "A member", as above.
+ */
+internal fun missedCheckInWords(context: Context, name: String?, hours: Int): String =
+    context.resources.getQuantityString(
+        R.plurals.missed_check_in_body, hours, name?.takeIf { it.isNotBlank() } ?: "A member", hours,
+    )
+
+/**
+ * "{name} hasn't checked in by {time}.": a scheduled rule's missed check-in, by the rule's time as
+ * set ([dueMinute] after local midnight), in this phone's time format. As above, true however long
+ * after it's read.
+ */
+internal fun missedCheckInByWords(context: Context, name: String?, dueMinute: Int): String =
+    context.getString(R.string.missed_check_in_by, name?.takeIf { it.isNotBlank() } ?: "A member", CheckInRuleText.time(context, dueMinute))

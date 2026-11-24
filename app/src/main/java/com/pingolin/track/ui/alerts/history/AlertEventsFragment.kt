@@ -92,17 +92,22 @@ class AlertEventsFragment : Fragment() {
                 val inactCircle = inacts.associate { it.id to it.circleId }
                 val items = mutableListOf<AlertEventItem>()
 
-                // Map alert rule events
-                alertEvents.forEach { event ->
-                    val circleName = event.alertRuleId?.let { ruleCircle[it] }?.let { nameById[it] }
+                // Map alert rule events: each as what it was, where it opened here
+                // ("missed_check_in", "low_battery", …); a generic alert where it didn't.
+                alertEvents.forEach { (event, alertType, triggeredAt) ->
+                    // A battery rule's circle, or an inactivity or check-in rule's.
+                    val circleName = event.alertRuleId?.let { ruleCircle[it] ?: inactCircle[it] }?.let { nameById[it] }
                     items.add(
                         AlertEventItem(
                             id = event.id,
-                            type = "alert_rule",
-                            message = event.message,
+                            type = alertType ?: "alert_rule",
+                            // None on a firing a device reported: its words are sealed.
+                            message = event.message.orEmpty(),
                             dayBucket = event.dayBucket,
                             isAcknowledged = event.acknowledgedDayBucket != null,
-                            circleName = circleName
+                            circleName = circleName,
+                            // Its sealed time where it opened: the check-ins merge with it by time.
+                            timestampMillis = triggeredAt,
                         )
                     )
                 }
@@ -126,15 +131,22 @@ class AlertEventsFragment : Fragment() {
             }
 
             // Merge in device-local inactivity firings (client-only rules have no server
-            // event) and sort the combined list newest-first.
-            combine(serverItems, viewModel.localEventItems) { server, local ->
-                (server + local).sortedByDescending { it.dayBucket }
+            // event) and the watched people's past check-ins, newest first by time.
+            combine(serverItems, viewModel.localEventItems, viewModel.checkInItems) { server, local, checkIns ->
+                HistoryCheckIns.merged(server + local + checkIns)
             }.collectLatest { events ->
                 binding.swipeRefresh.isRefreshing = false
                 adapter.submitList(events)
 
                 UnreadableEmptyState.show(binding.emptyState, events.isEmpty())
                 binding.rvAlertEvents.visibility = if (events.isEmpty()) View.GONE else View.VISIBLE
+            }
+        }
+
+        // The alert entries stand without the check-ins; a line says those couldn't be loaded.
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.checkInsFailed.collectLatest { failed ->
+                binding.tvCheckInsFailed.visibility = if (failed) View.VISIBLE else View.GONE
             }
         }
 
